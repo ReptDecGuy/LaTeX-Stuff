@@ -1,0 +1,702 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage{titling}
+\title{Ultraproducts, Infinitesimals and a Proof of the Compactness Theorem}
+\author{Nicholas McConnell}
+\date{Dedicated to 01:640:461 Mathematical Logic}
+\setlength{\droptitle}{-12 em}
+\posttitle{\par\end{center}\vspace{-1em}}
+
+\def\A{\mathcal A}
+\def\B{\mathcal B}
+\def\F{\mathscr F}
+\def\Frec{\mathscr F_{\mathrm{Fr}}}
+\def\G{\mathscr G}
+\def\H{\mathscr H}
+\def\Lang{\mathcal L}
+\def\Nat{\mathcal N}
+\def\U{\mathscr U}
+\def\V{\mathscr V}
+
+\def\N{\mathbb N}
+\def\Z{\mathbb Z}
+\def\Q{\mathbb Q}
+\def\R{\mathbb R}
+\def\Rfin{\mathbb R_{\operatorname{fin}}}
+\def\C{\mathbb C}
+
+\def\cont{\mathfrak c}
+\def\denu{\aleph_0}
+
+\def\Mod{\operatorname{Mod}}
+\def\Th{\operatorname{Th}}
+\def\st{\operatorname{st}}
+\def\im{\operatorname{im}}
+
+\begin{document}
+\maketitle
+
+\newtheorem*{definition}{Definition}
+\newtheorem{axiom}{Axiom}
+\newtheorem{proposition}{Proposition}
+\newtheorem{exercise}{Exercise}
+\newtheorem{theorem}{Theorem}
+\newtheorem{propdef}{Proposition and definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+
+\section*{Filters and Ultrafilters}
+Ultrafilters will be our main important concept here.  To define them, we first introduce the general concept of a filter.  Elements of a filter are considered to be ``large enough that one can neglect what is lacked by them.''  The formal definition is as follows:
+
+\theoremstyle{definition}
+\begin{definition}
+Let $X$ be a set.  A nonempty subset $\F\subseteq P(X)$ is called a \textbf{filter} provided that:
+
+(i) For all $E_1,E_2\in\F$, we have $E_1\cap E_2\in\F$;
+
+(ii) Whenever $E_1\in\F$ and $E_1\subseteq E_2$, we have $E_2\in\F$.
+\end{definition}
+
+\noindent We first note that $X\in\F$ for every filter $\F$, because $\F$ is nonempty, and for any $E\in\F$, $E\subseteq X$, from which it follows from (ii).  Also, if $\varnothing\in\F$ then $\F=P(X)$ (take $E_1=\varnothing$ in (ii)).  Hence \emph{a filter $\F$ is a proper subset of $P(X)$ if and only if $\varnothing\notin\F$}.\footnote{Some authors require the condition $\varnothing\notin\F$ in order for $\F$ to be considered a filter.}  This is similar to the fact that if $I$ is an ideal in a ring $R$, then $I$ is proper if and only if $1\notin I$.
+
+Now that we have the definition of a filter, several examples are in order.\\
+
+\noindent\textbf{Examples:}
+
+(1) Fix a subset $Y\subseteq X$, and let $\F$ be the set of subsets of $X$ containing $Y$.  Then $\F$ is a filter; since $Y\subseteq E_1,Y\subseteq E_2\implies Y\subseteq E_1\cap E_2$, we have condition (i), and if $Y\subseteq E_1$ and $E_1\subseteq E_2$ then $Y\subseteq E_2$ by transitivity, hence (ii).  It is clear that $\F$ is the smallest filter containing $Y$.  $\mathcal F$ is called the \textbf{principal filter given by $Y$}.
+
+(2) Define a subset $E\subseteq X$ to be \textbf{cofinite} if $X\setminus E$ is a finite set.  Then the set $\F$ of cofinite subsets of $X$ is a filter.  After all, if $E_1,E_2\in\F$, then $E_1\cap E_2\in\F$ because $X\setminus(E_1\cap E_2)=(X\setminus E_1)\cup(X\setminus E_2)$, which is a finite set.  Also, if $E_1\in\F$ and $E_1\subseteq E_2$, then $E_2\in\F$ because $X\setminus E_2\subseteq X\setminus E_1$, hence is finite.
+
+This filter is denoted $\Frec$ and called the \textbf{Fr\'echet filter} of $P(X)$.  Note that $\Frec=P(X)\iff X$ is finite.
+
+(3) If $\F$ and $\G$ are filters, we define $\F\cdot\G=\{F\cap G:F\in\F,G\in\G\}$.  We claim that this is the smallest filter containing $\F$ and $\G$.  After all, if $E_1,E_2\in\F\cdot\G$, suppose $E_i=F_i\cap G_i$ for $i=1,2,F_i\in\F,G_i\in\G$.  Then $E_1\cap E_2=(F_1\cap F_2)\cap(G_1\cap G_2)$ by elementary set theory, hence $E_1\cap E_2\in\F\cdot\G$ (since $F_1\cap F_2\in\F$ and similarly for $\G$); this proves (i).  If $E_1=F_1\cap G_1\in\F\cdot\G$ and $E_1\subseteq E_2$, then $E_2\in\F\cdot\G$ because $E_2=(F_1\cup E_2)\cap(G_1\cup E_2)$ and the operands are in $\F$ and $\G$ respectively; this proves (ii).
+
+Hence, $\F\cdot\G$ is a filter.  It also contains $\F$ and $\G$, because for each $F\in\F$, $F=F\cap X\in\F\cdot\G$, and similarly for $G\in\G$.  If $\H$ is also a filter containing $\F$ and $\G$, then for any $F\in\F$ and $G\in\G$, $F,G\in\H$ and thus $F\cap G\in\H$: from this it follows that $\F\cdot\G\subseteq\H$.  We say that two filters $\F,\G$ are \textbf{compatible} if $\F\cdot\G\ne P(X)$, or equivalently, $F\cap G\ne\varnothing$ for all $F\in\F,G\in\G$.
+
+It is clear that $\F\cap\G$ is also a filter, and hence the largest filter contained in $\F$ and $\G$.  Verifications are left to the reader.
+
+(4) Let $X$ be a topological space.  For $x\in X$, define a subset $E\subseteq X$ to be a \textbf{neighborhood} of $x$ if there is an open set $U$ such that $x\in U\subseteq E$.  Equivalently, this means $x$ is in the interior of $E$.  Note that $E$ need not be open.  For example, in $\R$, the closed interval $[-1,1]$ is a neighborhood of $0$, since it contains the open interval $(-1,1)$; but $[0,1]$ is not a neighborhood of $0$ because $0$ is not an \emph{interior} point of the interval.
+
+For each $x\in X$, let $\V_x$ be the set of neighborhoods of $x$.  Then $\V_x$ is a proper filter, called the \textbf{neighborhood filter}.  [(i) holds because finite intersections of open sets are open.]  Note that $X$ is Hausdorff if and only if, for any $x\ne y$ in $X$, $\V_x$ and $\V_y$ are not compatible.  It can be shown that $X$ is compact if and only if every proper filter $\F$ is compatible with $\V_x$ for some $x\in X$.\\
+
+\noindent Filters on Boolean algebras normally arise from taking a set of logical premises and looking at the propositions they semantically imply (such as the disjunctive syllogism rule, from the premises $p\vee q$, $\neg p$ one gets $q$).  Thus it is natural to use an arbitrary subset of $P(X)$ to generate a filter.  This idea is made precise in the following proposition. %% "imply" was conjugated for the plural subject "premises", but I'll change it anyway
+\begin{proposition}\label{filtergen}\textbf{\emph{and Definition.}}
+Let $S\subseteq P(X)$ be a subset, and define $\F$ as follows:
+$$\F=\{E\in P(X):E\supseteq E_1\cap\cdots\cap E_n\text{ for some }E_1,\dots,E_n\in S\}.$$
+Then $\F$ is the smallest filter containing $S$.  $\F$ is denoted $\left<S\right>$ and called the \textbf{filter generated by $S$}.
+\end{proposition}
+\begin{proof}
+Suppose $E,E'\in\F$.  Then there exist $E_1,\dots,E_n\in S$ such that $E\supseteq E_1\cap\cdots\cap E_n$, and $E'_1,\dots,E'_m\in S$ such that $E'\supseteq E'_1\cap\cdots\cap E'_m$.  Moreover,
+$$E\cap E'\supseteq E_1\cap\cdots\cap E_n\cap E'_1\cap\cdots\cap E'_m,$$
+which implies that $E\cap E'\in\F$.  This proves condition (i) in the definition of a filter.  As for condition (ii), if $E\in\F$ and $E\subseteq E'$, then $E\supseteq E_1\cap\cdots\cap E_n$ for some $E_i\in S$, it follows that $E'\supseteq E_1\cap\cdots\cap E_n$, and hence that $E'\in\F$.
+
+Therefore, $\F$ is a filter.  $\F$ clearly contains $S$ because for each $E\in S$, one can take $E_1=E$ to get $E\supseteq E_1$ with $E_1\in S$.  Finally, if $\G$ is a filter containing $S$, then whenever $E_1,\dots,E_n\in S$, $E_1\cap\cdots\cap E_n\in\G$, hence $E\in\G$ for any $E\supseteq E_1\cap\cdots\cap E_n$; therefore $\F\subseteq\G$.  This proves that $\F$ is the smallest.
+\end{proof}
+\begin{exercise}\label{adjoinexer}
+Let $\F\subseteq P(X)$ be a filter and $Y\in P(X)$.  Then
+$$\G=\{E\in P(X):E\supseteq F\cap Y\text{ for some }F\in\F\}$$
+is the smallest filter containing $\F$ and $Y$.
+\end{exercise}
+
+\noindent We are now in a position to define ultrafilters.  They will serve an important role in defining an operation on models, and using it to prove the Compactness Theorem.  Intuitively, an ultrafilter is the largest kind of proper filter, and when considering filters on Boolean algebras, ultrafilters give complete and consistent truth values to logical propositions.
+\begin{proposition}\label{ultrafilterdef}\textbf{\emph{and Definition.}}
+Let $\F\subseteq P(X)$ be a proper filter.  Then the following are equivalent:
+
+(i) $\F$ is maximal in the set of proper filters; i.e., whenever $\G\supseteq\F$ is a filter, either $\G=\F$ or $\G=P(X)$.
+
+(ii) For every $E\subseteq X$, either $E\in\F$ or $X\setminus E\in\F$.
+
+(iii) For all $E_1,E_2\subseteq X$, if $E_1\cup E_2\in\F$, either $E_1\in\F$ or $E_2\in\F$.
+
+(iv) For $E_1,\dots,E_n\subseteq X$, if $\bigcup_{i=1}^nE_i\in\F$, then $E_i\in\F$ for some $i$.
+
+Such a filter $\F$ is called an \textbf{ultrafilter} of $P(X)$.
+\end{proposition}
+\begin{proof}
+(i) $\implies$ (ii). Take any $E\subseteq X$, we wish to show that either $E\in\F$ or $X\setminus E\in\F$.
+
+If $E\in\F$, there is nothing to prove.  If $E\notin\F$, set
+$$\G=\{E'\in P(X):E'\supseteq F\cap E\text{ for some }F\in\F\}.$$
+By Exercise \ref{adjoinexer}, $\G$ is a filter containing $\F$ and $E$.  Since $E\in\G$ but $E\notin\F$, we conclude $\F\subsetneqq\G$.  By (i) we must have $\G=P(X)$.  In particular, $\varnothing\in\G$, so that $\varnothing\supseteq F\cap E$ for some $F\in\F$.  Consequently, $F\cap E=\varnothing$, so that $F\subseteq X\setminus E$, from which $X\setminus E\in\F$ follows.
+
+(ii) $\implies$ (i). Suppose $\G\supsetneqq\F$ is a filter.  Then one can pick $E\in\G,E\notin\F$.  By (ii), $X\setminus E\in\F$, and therefore $X\setminus E\in\G$; moreover, since $\varnothing=E\cap(X\setminus E)$, we conclude $\varnothing\in\G$ and $\G=P(X)$.
+
+(ii) $\implies$ (iii). Suppose $E_1\cup E_2\in\F$.  We wish to show that $E_1\in\F$ or $E_2\in\F$.
+
+If $E_1\in\F$, there is nothing to prove.  If $E_1\notin\F$, then $X\setminus E_1\in\F$ by (ii), hence $(E_1\cup E_2)\cap(X\setminus E_1)\in\F$.  Yet
+$$(E_1\cup E_2)\cap(X\setminus E_1)\subseteq E_2,$$
+by elementary set theory.  Therefore $E_2\in\F$.
+
+(iii) $\implies$ (ii). Take $E_1=E$ and $E_2=X\setminus E$ in (iii), noting $E\cup(X\setminus E)=X\in\F$.
+
+(iii) $\iff$ (iv) by induction on $n$.
+\end{proof}
+\noindent Condition (ii) is the most common defining condition of an ultrafilter, due to its astonishing simplicity.
+\begin{exercise}\label{ultrabasics}
+Let $E,E_1,E_2\subseteq X$ and let $\U$ be an ultrafilter of $P(X)$.
+
+(i) $E_1\cap E_2\in\U$ if and only if $E_1\in\U$ and $E_2\in\U$.
+
+(ii) $E_1\cup E_2\in\U$ if and only if $E_1\in\U$ or $E_2\in\U$.
+
+(iii) $X\setminus E\in\U$ if and only if $E\notin\U$.
+\end{exercise}
+\noindent For a basic example of an ultrafilter, fix $x_0\in X$, and let $\U$ be the set of subsets of $X$ containing $x_0$.  This is the principal filter given by $\{x_0\}$, and it is clear from Proposition \ref{ultrafilterdef} that $\U$ is an ultrafilter.  It is denoted $(x_0)$ and called the \textbf{principal ultrafilter given by $x_0$}.
+
+However, principal ultrafilters will not catch our fancy, as we will see later their failure to give us interesting new structures.  It is thus natural to ask if nonprincipal ultrafilters exist.  If $X$ is infinite, the answer is yes, but the proof requires the Axiom of Choice.
+\begin{lemma}\label{freeultrafilter}
+If $\U\subseteq P(X)$ is an ultrafilter, then $\U$ is nonprincipal if and only if $\Frec\subseteq\U$.
+\end{lemma}
+\begin{proof}
+We will prove both directions by contraposition, thus proving the \emph{negations} of the statements above are equivalent:
+\begin{center}
+$\U$ is principal if and only if $\Frec\not\subseteq\U$.
+\end{center}
+If $\U$ is the principal ultrafilter $(x_0)$ with $x_0\in X$, set $E=X\setminus\{x_0\}$.  With that, $E\in\Frec$ but $E\notin\U$; therefore, $\Frec\not\subseteq\U$.  Conversely, suppose $\Frec\not\subseteq\U$; then pick $E\in\Frec,E\notin\U$.  With that, $F=X\setminus E$ is a finite set, and $F\in\U$ because $\U$ is an ultrafilter.  Write $F=\{a_1,a_2,\dots,a_n\}$.  Since $F\in\U$, we have $\bigcup_{i=1}^n\{a_i\}\in\U$, and hence by Proposition \ref{ultrafilterdef}(iv), $\{a_i\}\in\U$ for some $i$.  It is then clear that $\U$ contains every subset of $X$ containing $a_i$; hence $\U\supseteq(a_i)$ and therefore $\U=(a_i)$ by Proposition \ref{ultrafilterdef}(i).  Thus, $\U$ is principal.
+\end{proof}
+
+\noindent\emph{Remark}: Some call an ultrafilter $\U$ \textbf{free} if $\Frec\subseteq\U$.  This is because of the wide variety of subsets of $X$ which we know are definitely in $\U$ (the cofinite sets), even though $\U$ does not have an explicit construction.\\
+
+\noindent This criterion for an ultrafilter to be nonprincipal leads to the following result, which was first proven by Tarski in 1930, using the Axiom of Choice in the form of Zorn's Lemma.
+\begin{theorem}\label{filtembed}
+If $\F\subseteq P(X)$ is a proper filter, $\F$ is contained in an ultrafilter.  Moreover, nonprincipal ultrafilters exist if and only if $X$ is infinite.
+\end{theorem}
+\begin{proof}
+Let $\Sigma$ be the set of all proper filters of $P(X)$ containing $\F$.  Since $\F\in\Sigma$, $\Sigma$ is nonempty.  Whenever $\{\G_\alpha\}_{\alpha\in I}$ is a linearly ordered subset of $\Sigma$, we have $\G=\bigcup_{\alpha\in I}\G_\alpha\in\Sigma$:
+\begin{itemize}
+\item Suppose $E_1,E_2\in\G$.  Then there exist $\alpha,\beta\in I$ such that $E_1\in\G_\alpha$ and $E_2\in\G_\beta$.  Since $\{\G_\alpha\}_{\alpha\in I}$ is linearly ordered, we may assume $\G_\alpha\subseteq\G_\beta$ without loss of generality, so that $E_2\in\G_\beta$.  Hence $E_1,E_2\in\G_\beta$ and $E_1\cap E_2\in\G_\beta\subseteq\G$.  Therefore, $E_1\cap E_2\in\G$.
+
+\item If $E_1\in\G$ and $E_1\subseteq E_2$, then $E_1\in\G_\alpha$ for some $\alpha\in I$.  Hence since $\G_\alpha$ is a filter, $E_2\in\G_\alpha\subseteq\G$.
+
+\item We have now proved that $\G$ is a filter.  Moreover, $\varnothing\notin\G$ because $\varnothing\notin\G_\alpha$ for all $\alpha\in I$, so that $\G$ is a proper filter.
+\end{itemize}
+Therefore, every linearly ordered subset of $\Sigma$ has an upper bound; thus by Zorn's Lemma, $\Sigma$ has a maximal element $\U$.  It then follows from criterion (i) in Proposition \ref{ultrafilterdef} that $\U$ is an ultrafilter, proving the first statement.
+
+As for the second statement, we use Lemma \ref{freeultrafilter} to conclude that there is a nonprincipal ultrafilter $\iff$ there is an ultrafilter containing $\Frec$ $\iff$ $\Frec$ is a proper filter, i.e., $\varnothing\notin\Frec$ $\iff$ $X$ is infinite.
+\end{proof}
+\noindent We conclude this section with a corollary which will be used to prove the Compactness Theorem. %!/add a reference to the theorem in this writeup
+\begin{corollary}\label{finiteinter}
+If $S\subseteq P(X)$ is a subset, the following are equivalent:
+
+(i) $S$ is contained in an ultrafilter.
+
+(ii) $\left<S\right>$ is a proper filter.
+
+(iii) $S$ satisfies the \emph{finite intersection property}, i.e., whenever $E_1,\dots,E_n\in S$, we have $E_1\cap\cdots\cap E_n\ne\varnothing$.
+\end{corollary}
+\begin{proof}
+(i) $\implies$ (ii). If $S$ is contained in an ultrafilter $\U$, then $\left<S\right>\subseteq\U$, hence $\left<S\right>\ne P(X)$.
+
+(ii) $\implies$ (i). By Theorem \ref{filtembed}, $\left<S\right>$ is contained in an ultrafilter.
+
+(ii) $\iff$ (iii). Using the formula
+$$\left<S\right>=\{E\in P(X):E\supseteq E_1\cap\cdots\cap E_n\text{ for some }E_1,\dots,E_n\in S\}$$
+from Proposition \ref{filtergen}, it is clear that (iii) holds if and only if $\varnothing\notin\left<S\right>$.
+\end{proof}
+
+\section*{Ultraproducts of First-Order Structures}
+
+Given a first order language $\Lang$, one naturally asks how to combine structures to get new ones.  One could attempt to take products of structures; for algebraic structures with only equational constraints, that would be perfect, but such an idea is impractical for first order languages.
+
+For instance, if $\Lang$ has two binary operator symbols, $+,\cdot$, two constant symbols $0,1$ and no predicate symbols, then a field is a model for the following set of sentences:
+$$\forall x~\forall y~\forall z~(x+y)+z=x+(y+z)$$
+$$\forall x~\forall y~x+y=y+x$$
+$$\forall x~0+x=x$$
+$$\forall x~\exists y~x+y=0$$
+$$\forall x~\forall y~\forall z~(x\cdot y)\cdot z=x\cdot(y\cdot z)$$
+$$\forall x~\forall y~x\cdot y=y\cdot x$$
+$$\forall x~\forall y~\forall z~x\cdot(y+z)=x\cdot y+x\cdot z$$
+$$\forall x~1\cdot x=x$$
+$$1\ne 0$$
+$$\forall x~(x\ne 0\to\exists y~x\cdot y=1)$$
+However, note that if $K$ and $L$ are fields, then $K\times L$, with addition and multiplication defined componentwise, is \emph{not} a field, because $(1,0)$ is a nonzero element with no multiplicative inverse.
+
+Another example arises when $\Lang$ has a binary predicate symbol $\le$; then a linearly ordered set is a model for the following set of sentences:
+$$\forall x~\forall y~x\le y\vee y\le x$$
+$$\forall x~\forall y~(x\le y\wedge y\le x)\to x=y$$
+$$\forall x~\forall y~\forall z~(x\le y\wedge y\le z)\to x\le z$$
+If $L_1$ and $L_2$ are linearly ordered sets, it is unclear how to define an ordering relation on $L_1\times L_2$.  There are two natural ideas, neither of which gives a linear order in general:
+\begin{itemize}
+\item If $(a,b)\le(a',b')$ means that $a\le a'$ in $L_1$ and $b\le b'$ in $L_2$, then we have a partial order which may not be a linear order.  For example, if $L_1=L_2=\N$ with the usual ordering, $(1,0)\not\le(0,1)$ and $(0,1)\not\le(1,0)$.
+
+\item If $(a,b)\le(a',b')$ means that $a\le a'$ \emph{or} $b\le b'$, then the relation may not be transitive.  For example, if $L_1=L_2=\N$, then $(3,3)\le(4,0)$ and $(4,0)\le(1,1)$, but $(3,3)\not\le(1,1)$.
+\end{itemize}
+An experienced reader may have suggested the lexicographical ordering, where $(a,b)\le(a',b')$ means $a<a'\vee(a=a'\wedge b\le b')$.  This is indeed a linear ordering on $L_1\times L_2$, but it does not give us a general way to define, for any first order language, a structure on the product that should satisfy everything the operands satisfy.
+
+Ultraproducts are the typical operation on structures to keep properties intact:
+
+\begin{definition}
+Let $\Lang$ be a first order language.  Let $I$ be an index set, $\U\subseteq P(I)$ an ultrafilter.  Finally, for each $\alpha\in I$, let $\A_\alpha$ be a structure for $\Lang$.
+
+On the product $\prod_{\alpha\in I}A_\alpha$, define an equivalence relation $\Phi_\U$ as follows:
+$$(a_\alpha)_{\alpha\in I}~\Phi_\U~(b_\alpha)_{\alpha\in I}~~~~\iff~~~~\{\alpha\in I:a_\alpha=b_\alpha\}\in\U.$$
+Set $A=\left(\prod_{\alpha\in I}A_\alpha\right)/\Phi_\U$.  Denote the equivalence class of $(a_\alpha)_{\alpha\in I}$ as $[a_\alpha]_{\alpha\in I}$.
+
+For each constant symbol $c$, set $c^\A=[c^{\A_\alpha}]_{\alpha\in I}\in A$.  For each $n$-place function symbol $f$, and $a^i=[a^i_\alpha]_{\alpha\in I}\in A$ for $i=1,2,\dots,n$, define
+$$f^\A(a^1,\dots,a^n)=[f^{\A_\alpha}(a^1_\alpha,\dots,a^n_\alpha)]_{\alpha\in I}$$
+Finally, for each $n$-place predicate symbol $P$ and $a^i=[a^i_\alpha]_{\alpha\in I}\in A$ for $i=1,2,\dots,n$, define
+$$\left<a^1,\dots,a^n\right>\in P^\A~~~~\iff~~~~\{\alpha\in I:\left<a^1_\alpha,\dots,a^n_\alpha\right>\in P^{\A_\alpha}\}\in\U.$$
+This gives the set $A$ a structure $\A$ for $\Lang$.  $\A$ is called the \textbf{ultraproduct} of the structures $\A_\alpha$ with respect to the ultrafilter $\U$.
+\end{definition}
+
+\noindent Before proceeding, we must verify that the definition is reasonable.  First, we show that $\Phi_\U$ is indeed an equivalence relation on $\prod_{\alpha\in I}A_\alpha$.
+
+$(a_\alpha)_{\alpha\in I}~\Phi_\U~(a_\alpha)_{\alpha\in I}$ because $\{\alpha\in I:a_\alpha=a_\alpha\}=I\in\U$; hence, $\Phi_\U$ is reflexive.  If $(a_\alpha)_{\alpha\in I}~\Phi_\U~(b_\alpha)_{\alpha\in I}$, then $\{\alpha\in I:b_\alpha=a_\alpha\}=\{\alpha\in I:a_\alpha=b_\alpha\}\in\U$; hence, $(b_\alpha)_{\alpha\in I}~\Phi_\U~(a_\alpha)_{\alpha\in I}$ and $\Phi_\U$ is symmetric.  Finally, suppose $(a_\alpha)_{\alpha\in I}~\Phi_\U~(b_\alpha)_{\alpha\in I}$ and $(b_\alpha)_{\alpha\in I}~\Phi_\U~(c_\alpha)_{\alpha\in I}$.  Then set $E_1=\{\alpha\in I:a_\alpha=b_\alpha\}$, $E_2=\{\alpha\in I:b_\alpha=c_\alpha\}$ and $E_3=\{\alpha\in I:a_\alpha=c_\alpha\}$.  By hypothesis, $E_1$ and $E_2$ are in $\U$.  But it is easy to see that $E_1\cap E_2\subseteq E_3$; therefore, since $\U$ is a filter, $E_3\in\U$, so that $(a_\alpha)_{\alpha\in I}~\Phi_\U~(c_\alpha)_{\alpha\in I}$ and $\Phi_\U$ is transitive.
+
+We then show that the structure defined on $A$ above is well defined.  Let $f$ be an $n$-place function symbol.  Since $[a^i_\alpha]_{\alpha\in I}\in A$ may have many different representatives, we need to verify that $f^\A(a^1,\dots,a^n)$ depends only on the elements of $A$, not the representatives used.  For that, suppose for each $i$, that $[a^i_\alpha]_{\alpha\in I}=[b^i_\alpha]_{\alpha\in I}$.  Then $(a^i_\alpha)_{\alpha\in I}~\Phi_\U~(b^i_\alpha)_{\alpha\in I}$, so that if we set $E_i=\{\alpha\in I:a^i_\alpha=b^i_\alpha\}$, the $E_i$ are in $\U$.  Now set
+$$E=\{\alpha\in I:f^{\A_\alpha}(a^1_\alpha,\dots,a^n_\alpha)=f^{\A_\alpha}(b^1_\alpha,\dots,b^n_\alpha)\}.$$
+It is clear that $\bigcap_{i=1}^nE_i\subseteq E$, because if $a^i_\alpha=b^i_\alpha$ for all $i$, then $f^{\A_\alpha}(a^1_\alpha,\dots,a^n_\alpha)=f^{\A_\alpha}(b^1_\alpha,\dots,b^n_\alpha)$ by substitution.  Since every $E_i$ is in $\U$ and $\U$ is a filter, we conclude $E\in\U$.  Therefore, $[f^{\A_\alpha}(a^1_\alpha,\dots,a^n_\alpha)]_{\alpha\in I}=[f^{\A_\alpha}(b^1_\alpha,\dots,b^n_\alpha)]_{\alpha\in I}$, so that changing any of the representatives of the $a^i$ does not change the value of $f^\A(a^1,\dots,a^n)$.
+
+Now we show that the definition of the $n$-ary relation $P$ is well defined: in other words, if $[a^i_\alpha]_{\alpha\in I}=[b^i_\alpha]_{\alpha\in I}$, then
+$$\{\alpha\in I:\left<a^1_\alpha,\dots,a^n_\alpha\right>\in P^{\A_\alpha}\}\in\U~~~~\iff~~~~\{\alpha\in I:\left<b^1_\alpha,\dots,b^n_\alpha\right>\in P^{\A_\alpha}\}\in\U,$$
+so that the question of whether $\left<a^1,\dots,a^n\right>\in P^\A$ is independent of the representatives.  It clearly suffices to show the implication
+$$\{\alpha\in I:\left<a^1_\alpha,\dots,a^n_\alpha\right>\in P^{\A_\alpha}\}\in\U~~~~\implies~~~~\{\alpha\in I:\left<b^1_\alpha,\dots,b^n_\alpha\right>\in P^{\A_\alpha}\}\in\U,$$
+as the converse will follow by switching the roles of the variables.  So suppose $F=\{\alpha\in I:\left<a^1_\alpha,\dots,a^n_\alpha\right>\in P^{\A_\alpha}\}\in\U$, and let $E_i=\{\alpha\in I:a_\alpha=b_\alpha\}$ for every $\alpha$; we have $E_i\in\U$ by hypothesis.  Finally, set $F'=\{\alpha\in I:\left<b^1_\alpha,\dots,b^n_\alpha\right>\in P^{\A_\alpha}\}$.  One can readily show that $F\cap\bigcap_{i=1}^nE_i\subseteq F'$; therefore, $F'\in\U$, proving our claim.
+
+Thus everything in the definition is well defined.
+
+We remark that if $\U$ is a principal ultrafilter, say $\U=(\alpha_0)$, then $(a_\alpha)_{\alpha\in I}~\Phi_\U~(b_\alpha)_{\alpha\in I}$ if and only if $a_{\alpha_0}=b_{\alpha_0}$, from which it readily follows that $\A\cong\A_{\alpha_0}$.  Thus when the ultrafilter is principal, the ultraproduct involves no innovation or imagination: it is merely an isomorphic copy of one of the operands.  This is why we care about the existence of nonprincipal ultrafilters, which requires $I$ to be infinite.  We will see later what general ultraproducts over infinite sets can do.
+
+We now get to our main result:
+\begin{theorem}\label{transferprinciple}
+\emph{(\L o\'s Transfer Principle.)} Let $\Lang$ be a first order language, $I$ an index set, $\U\subseteq P(I)$ an ultrafilter, and $\A_\alpha$ a structure for each $\alpha\in I$.  Let $\A$ be the ultraproduct of the $\A_\alpha$'s with respect to $\U$.
+
+Let $s_\alpha:V\to A_\alpha$ be variable assignments, and define $s:V\to A$ via $s(v)=[s_\alpha(v)]_{\alpha\in I}$.
+
+(i) For any term $t$, $\overline s(t)=[\overline{s_\alpha}(t)]_{\alpha\in I}$.
+
+(ii) For any formula $\varphi$, $\A\models\varphi[s]$ if and only if $\{\alpha\in I:\A_\alpha\models\varphi[s_\alpha]\}\in\U$.  In particular, if $\varphi$ is a sentence, $\A\models\varphi$ if and only if $\{\alpha\in I:\A_\alpha\models\varphi\}\in\U$.
+\end{theorem}
+\begin{proof}
+In each case the strategy is to use induction on the complexity of $t$ or $\varphi$.  As per the usual, we may assume that formulas are made up of atomic formulas, negation $(\neg\psi)$, implication $(\psi\to\theta)$, and universal quantifiers $\forall x\psi$, in view of:
+$$(\psi\wedge\theta)=(\neg(\psi\to(\neg\theta)))$$
+$$(\psi\vee\theta)=((\neg\psi)\to\theta)$$
+$$(\psi\leftrightarrow\theta)=((\psi\to\theta)\wedge(\theta\to\psi))$$
+$$\exists x\psi=(\neg\forall x(\neg\psi))$$
+(i) First we assume $t$ is a variable $v\in V$.  Then we have $\overline s(v)=s(v)=[s_\alpha(v)]_{\alpha\in I}=[\overline{s_\alpha}(v)]_{\alpha\in I}$ (using the definitions of $s$ in terms of $s_\alpha$, and $\overline s$ in terms of $s$).  Therefore, $\overline s(t)=[\overline{s_\alpha}(t)]_{\alpha\in I}$ in this case.
+
+Next, we assume $t$ is a constant symbol $c$.  Then $\overline s(c)=c^\A=[c^{\A_\alpha}]_{\alpha\in I}=[\overline{s_\alpha}(c)]_{\alpha\in I}$ by definition of $c^\A$, hence again $\overline s(t)=[\overline{s_\alpha}(t)]_{\alpha\in I}$.
+
+Finally, suppose $t=(ft_1t_2\dots t_n)$ where $f$ is an $n$-place function symbol and the $t_i$ are terms, and assume inductively that $\overline s(t_i)=[\overline{s_\alpha}(t_i)]_{\alpha\in I}$ for every $i$.  Then
+\begin{align*}
+\overline s(t)
+&=\overline s(ft_1t_2\dots t_n)\\
+&=f^\A(\overline s(t_1),\dots,\overline s(t_n))\\
+&=f^\A\left([\overline{s_\alpha}(t_1)]_{\alpha\in I},\dots,[\overline{s_\alpha}(t_n)]_{\alpha\in I}\right)\\
+&\overset{(*)}=\left[f^{\A_\alpha}\left(\overline{s_\alpha}(t_1),\dots,\overline{s_\alpha}(t_n)\right)\right]_{\alpha\in I}\\
+&=\left[\overline{s_\alpha}(ft_1t_2\dots t_n)\right]_{\alpha\in I}=[\overline{s_\alpha}(t)]_{\alpha\in I},
+\end{align*}
+where $(*)$ uses the definition of $f^\A$ in the ultraproduct.\\
+
+\noindent(ii) First, assume $\varphi$ is an atomic formula.  This means $\varphi$ is either of the form $(=\,t_1\,t_2)$ or $(Pt_1t_2\dots t_n)$, where the $t_i$ are terms and $P$ is an $n$-place predicate symbol.
+
+Suppose $\varphi$ is of the form $(=\,t_1\,t_2)$.  Then we have
+\begin{align*}
+\A\models\varphi[s]
+&\iff\A\models(=\,t_1\,t_2)[s]\\
+&\iff\overline s(t_1)=\overline s(t_2)\\
+&\iff[\overline{s_\alpha}(t_1)]_{\alpha\in I}=[\overline{s_\alpha}(t_2)]_{\alpha\in I}\text{ (by (i))}\\
+&\iff(\overline{s_\alpha}(t_1))_{\alpha\in I}~\Phi_\U~(\overline{s_\alpha}(t_2))_{\alpha\in I}\\
+&\iff\{\alpha\in I:\overline{s_\alpha}(t_1)=\overline{s_\alpha}(t_2)\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\models(=\,t_1\,t_2)[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\models\varphi[s_\alpha]\}\in\U.
+\end{align*}
+Next suppose $\varphi$ is of the form $(Pt_1t_2\dots t_n)$.  Then we argue
+\begin{align*}
+\A\models\varphi[s]
+&\iff\A\models(Pt_1t_2\dots t_n)[s]\\
+&\iff\left<\overline s(t_1),\dots,\overline s(t_n)\right>\in P^\A\\
+&\iff\left<[\overline{s_\alpha}(t_1)]_{\alpha\in I},\dots,[\overline{s_\alpha}(t_n)]_{\alpha\in I}\right>\in P^\A\text{ (by (i))}\\
+&\iff\{\alpha\in I:\left<\overline{s_\alpha}(t_1),\dots,\overline{s_\alpha}(t_n)\right>\in P^{\A_\alpha}\}\in\U\text{ (definition of }P^\A\text{)}\\
+&\iff\{\alpha\in I:A_\alpha\models(Pt_1t_2\dots t_n)[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:A_\alpha\models\varphi[s_\alpha]\}\in\U.
+\end{align*}
+This proves the principle when $\varphi$ is an atomic formula.
+
+Now suppose inductively that the principle holds for $\psi$ and that $\varphi=(\neg\psi)$.  Then we have
+\begin{align*}
+\A\models\varphi[s]
+&\iff\A\models(\neg\psi)[s]\\
+&\iff\A\not\models\psi[s]\\
+&\iff\{\alpha\in I:A_\alpha\models\psi[s_\alpha]\}\notin\U\text{ (inductive hypothesis)}\\
+&\iff I\setminus\{\alpha\in I:A_\alpha\models\psi[s_\alpha]\}\in\U\text{ (Exercise \ref{ultrabasics}(iii))}\\
+&\iff\{\alpha\in I:A_\alpha\not\models\psi[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:A_\alpha\models(\neg\psi)[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:A_\alpha\models\varphi[s_\alpha]\}\in\U.
+\end{align*}
+proving the principle for $\varphi$.
+
+Exercise \ref{ultrabasics} can also be used to show the principle for $\varphi=(\psi\to\theta)$ when it is inductively assumed for $\psi$ and $\theta$:
+\begin{align*}
+\A\models\varphi[s]
+&\iff\A\models(\psi\to\theta)[s]\\
+&\iff\A\not\models\psi[s]\text{ or }\A\models\theta[s]\\
+&\iff\{\alpha\in I:\A_\alpha\models\psi[s_\alpha]\}\notin\U\text{ or }\{\alpha\in I:\A_\alpha\models\theta[s_\alpha]\}\in\U\\
+&\iff I\setminus\{\alpha\in I:\A_\alpha\models\psi[s_\alpha]\}\in\U\text{ or }\{\alpha\in I:\A_\alpha\models\theta[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\not\models\psi[s_\alpha]\}\in\U\text{ or }\{\alpha\in I:\A_\alpha\models\theta[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\not\models\psi[s_\alpha]\}\cup\{\alpha\in I:\A_\alpha\models\theta[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\not\models\psi[s_\alpha]\text{ or }\A_\alpha\models\theta[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\models(\psi\to\theta)[s_\alpha]\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\models\varphi[s_\alpha]\}\in\U.
+\end{align*}
+The remaining case to consider is when $\varphi=\forall x\psi$.  To do this, we first show that if $x,y\in V$ and $a=[a_\alpha]_{\alpha\in I}$ are elements of $A$, then $s(x|a)(y)=[s_\alpha(x|a_\alpha)(y)]_{\alpha\in I}$.  After all, if $y=x$, then $s(x|a)(y)=a=[a_\alpha]_{\alpha\in I}=[s_\alpha(x|a_\alpha)(y)]_{\alpha\in I}$.  On the other hand, if $y\ne x$, then $s(x|a)(y)=s(y)=[s_\alpha(y)]_{\alpha\in I}=[s_\alpha(x|a_\alpha)(y)]_{\alpha\in I}$.
+
+Now we start our argument as follows:
+\begin{align*}
+\A\models\varphi[s]
+&\iff\A\models\forall x\psi[s]\\
+&\iff\A\models\psi[s(x|a)]\text{ for all }a\in A\\
+&\iff\A\models\psi\left[s\left(x|[a_\alpha]_{\alpha\in I}\right)\right]\text{ for all }a_\alpha\in A_\alpha,\alpha\in I\\
+&\iff\{\alpha\in I:\A_\alpha\models\psi\left[s_\alpha\left(x|a_\alpha\right)\right]\}\in\U\text{ for all }a_\alpha\in A_\alpha,\alpha\in I
+\end{align*}
+using the inductive hypothesis and the observation in the preceding paragraph.  Now consider the collection of subsets of $I$ of the form
+\begin{equation}\tag{*}\{\alpha\in I:\A_\alpha\models\psi\left[s_\alpha\left(x|a_\alpha\right)\right]\},~~~~a_\alpha\in A_\alpha,\alpha\in I.\end{equation}
+If one takes $E=\{\alpha\in I:\A_\alpha\models\psi\left[s_\alpha\left(x|a_\alpha\right)\right]\text{ for all }a_\alpha\in A_\alpha\}$, it is clear that every set of the form (*) contains $E$.  Moreover, by choosing for each $\alpha\in I\setminus E$ an element $a_\alpha\in A_\alpha$ for which $\A_\alpha\not\models\psi\left[s_\alpha\left(x|a_\alpha\right)\right]$ (this uses the Axiom of Choice), we get that $E$ itself is of the form (*).  Since $E$ is one of the sets (*) and every set (*) contains $E$, we conclude that the sets (*) are all in $\U$ if and only if $E\in\U$.  Thus
+\begin{align*}
+&\{\alpha\in I:\A_\alpha\models\psi\left[s_\alpha\left(x|a_\alpha\right)\right]\}\in\U\text{ for all }a_\alpha\in A_\alpha,\alpha\in I\\
+&\iff E=\{\alpha\in I:\A_\alpha\models\psi\left[s_\alpha\left(x|a_\alpha\right)\right]\text{ for all }a_\alpha\in A_\alpha\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\models\forall x\psi\left[s_\alpha\right]\}\in\U\\
+&\iff\{\alpha\in I:\A_\alpha\models\varphi\left[s_\alpha\right]\}\in\U,
+\end{align*}
+completing the proof of the transfer principle.
+\end{proof}
+\begin{corollary}\label{modelsclosed}
+For a set of sentences $T$ in a first order language $\Lang$, an ultraproduct of models is a model.
+\end{corollary}
+\begin{proof}
+Suppose $\A_\alpha\in\Mod(T)$ for every $\alpha\in I$.  Then for each $\varphi\in T$, $A_\alpha\models\varphi$ for every $\alpha$, so that $\{\alpha\in I:\A_\alpha\models\varphi\}=I\in\U$.  Therefore $\A\models\varphi$ by Theorem \ref{transferprinciple}(ii).  It follows that $\A$ is a model for $T$.
+\end{proof}
+\noindent In particular, it follows that an ultraproduct of fields is a field, despite that not being true for products.  Similar arguments show that integral domains, linear orders, ordered abelian groups and 2-colorable graphs are closed under ultraproducts.
+
+The \L o\'s transfer principle has many consequences:
+\begin{proposition}\label{arblargefinites}
+If a set of sentences $T$ in a first order language $\Lang$ has arbitrarily large finite models, then $T$ has an infinite model.
+\end{proposition}
+\begin{proof}
+For each $n\in\N$, let $\A_n$ be a finite model with at least $n$ elements.  Let $I=\N$ and $\U\subseteq P(\N)$ a nonprincipal ultrafilter.  Then the ultraproduct $\A$ is in $\Mod(T)$ by Corollary \ref{modelsclosed}.  We claim that $\A$ is infinite, and that will complete the proof.  For each $m\ge 2$, the sentence
+$$\Theta_m=\exists x_1~\exists x_2~\cdots~\exists x_m~\bigwedge_{1\le i<j\le m}(x_i\ne x_j)$$
+states that a structure has at least $m$ elements.  Clearly $\A_n\models\Theta_m$ for all $n\ge m$.  Thus, $\{n\in\N:\A_n\models\Theta_m\}\supseteq\{n\in\N:n\ge m\}$, hence is in $\U$ because it is cofinite.  By the \L o\'s transfer principle, it follows that $\A\models\Theta_m$.  Since this holds for every $m$, we conclude that $\A$ is infinite.
+\end{proof}
+\begin{proposition}\label{countabletocontinuum}
+If a set of sentences $T$ in a first order language $\Lang$ has a countably infinite model $\A^*$, then $T$ has a model $\A$ with cardinality $\cont=|\R|$ such that $\A^*\equiv\A$.
+\end{proposition}
+\begin{proof}
+Let $I=\N$ and $\U\subseteq P(\N)$ a nonprincipal ultrafilter as before.  Let $\A^*$ be a countably infinite model.  We may assume $A^*=\N$ by relabeling the elements.  Moreover, suppose $\A_n=\A^*$ for every $n\in\N$ and let $\A$ be the ultraproduct, so that $A=\N^{\N}/\Phi_\U$.  By the transfer principle, $\A$ is a model, and for any sentence $\varphi$, $A\models\varphi$ if and only if $\{n\in\N:\A_n\models\varphi\}\in\U$.  Yet every $\A_n=\A^*$, hence this is equivalent to saying $\A^*\models\varphi$.  Therefore, $\A^*\equiv\A$.  We need only show that $|A|=\cont$ to complete the proof.
+
+To begin with, $\left|\N^\N\right|=\denu^{\denu}$ and $\cont=2^{\denu}\le\denu^{\denu}\le(2^{\denu})^{\denu}=2^{\denu\cdot\denu}=2^{\denu}=\cont$; hence, $\denu^{\denu}=\cont$ by the Schroeder-Bernstein Theorem; i.e., $\left|\N^\N\right|=\cont$.  Therefore, $|A|\le\cont$, because it is a quotient set of $\N^\N$.
+
+To show the reverse inequality, we define a function $\varphi:\{0,1\}^\N\to A$ as follows:
+$$\varphi(f)=\left[\sum_{k=0}^n2^kf(k)\right]_{n\in\N}\in A.$$
+We claim that $\varphi$ is injective: if $f\ne g$ in $\{0,1\}^\N$, let us take any $n_0\in\N$ such that $f(n_0)\ne g(n_0)$.  Then for all $n\ge n_0$, $f|_{\{0,1,\dots,n\}}\ne g|_{\{0,1,\dots,n\}}$, and therefore
+$$\sum_{k=0}^n2^kf(k)\ne\sum_{k=0}^n2^kg(k),$$
+because the two integers have different representations in binary.  Consequently, $\left\{n\in\N:\sum_{k=0}^n2^kf(k)=\sum_{k=0}^n2^kg(k)\right\}$ is bounded above by $n_0$, hence is finite, hence not in $\U$.  Therefore, $\varphi(f)\ne\varphi(g)$.
+
+Since $\varphi$ is injective, we get $|A|\ge\left|\{0,1\}^\N\right|=2^{\denu}=\cont$.  Therefore, $|A|=\cont$.
+\end{proof}
+
+\noindent In the proof of Proposition \ref{countabletocontinuum}, we have taken an ultraproduct of copies of the \emph{same} structure and noted that the result was elementarily equivalent to the original structure.  This will be the main theme of the next section.
+
+\begin{exercise}
+Let $\Lang$ be a first order language, and let $\Sigma$ be the set of sentences made up of only atomic formulas, conjunctions $(\alpha\wedge\beta)$, and quantifiers $\forall x\psi$, $\exists x\psi$.  Then if $\A_\alpha,\alpha\in I$ are structures and $\F\subseteq P(I)$ is a filter (which need not be an ultrafilter), one can define an equivalence relation $\Phi_\F$ and get a structure on $A=\left(\prod_{\alpha\in I}A_\alpha\right)/\Phi_\F$ exactly as in the definition of an ultraproduct.  Moreover, for $\varphi\in\Sigma$, $\A\models\varphi$ if and only if $\{\alpha\in I:\A_\alpha\models\varphi\}\in\F$.
+
+In particular, taking $\F=\{I\}$, we have that for any $T\subseteq\Sigma$, the product of models is a model.
+\end{exercise}
+
+\section*{Ultrapowers. Hyperreal Numbers}
+
+An \textbf{ultrapower} of a structure $\A$ is an ultraproduct of copies of $\A$, i.e., the case where $\A_\alpha=\A$ for every $\alpha\in I$.  This can be defined by letting $\Phi_\U$ be the equivalence relation on $A^I$ given by
+$$f~\Phi_\U~g~~~~\iff~~~~\{\alpha\in I:f(\alpha)=g(\alpha)\}\in\U,$$
+and setting $\widehat A=A^I/\Phi_\U$.  There is a natural map $\iota:A\to\widehat A$ where $\iota(a),a\in A$ is the equivalence class of the constant function $c_a\in A^I$ sending every $\alpha\mapsto a$.  It is clear that $\iota$ is injective, because if $a\ne b$, then $\{\alpha\in I:c_a(\alpha)=c_b(\alpha)\}=\varnothing\notin\U$, and hence $(c_a,c_b)\notin\Phi_\U$ and $\iota(a)\ne\iota(b)$.  $\iota$ is called the \textbf{inclusion into the ultrapower}.
+
+Let $s:V\to A$ be a variable assignment, let $\widehat s=\iota\circ s:V\to\widehat A$, and let $\varphi$ be a formula.  Then it is clear that
+$$\A\models\varphi[s]\implies\{\alpha\in I:\A\models\varphi[s]\}=I\in\U;$$
+$$\A\not\models\varphi[s]\implies\{\alpha\in I:\A\models\varphi[s]\}=\varnothing\notin\U.$$
+Therefore, by the \L o\'s transfer principle, $\widehat\A\models\varphi[\widehat s]$ if and only if $\A\models\varphi[s]$.  In particular, if $\varphi$ is a sentence, $\widehat\A\models\varphi$ if and only if $\A\models\varphi$.  Therefore, \emph{$\widehat\A$ is elementarily equivalent to $\A$}.
+
+We now note two trivial cases:
+\begin{itemize}
+\item If $\U$ is a principal ultrafilter (which is always the case when $I$ is finite), $\widehat\A\cong\A$ and $\iota$ gives an isomorphism.  Indeed, if $\U=(\alpha_0)$, then for $f,g\in A^I$, $f~\Phi_\U~g\iff f(\alpha_0)=g(\alpha_0)$, hence for any $f\in A^I$ we have $f~\Phi_U~c_{f(\alpha_0)}$.  This implies $\iota$ is surjective.  The verification that $\iota$ is an isomorphism is clear and left to the reader.
+
+\item If $A$ is finite, again $\widehat\A\cong\A$ and $\iota$ gives an isomorphism.  After all, if $A=\{x_1,\dots,x_n\}$ and $f\in A^I$, set $E_i=f^{-1}(\{x_i\})\subseteq I$ for each $i$.  Then $I=\bigcup_{i=1}^nE_i$, which implies $E_i\in\U$ for some $i$ by Proposition \ref{ultrafilterdef}(iv).  But $E_i=\{\alpha\in I:f(\alpha)=c_{x_i}(\alpha)\}$, and therefore $f~\Phi_U~c_{x_i}$.
+
+More generally, if $A$ is finite, any structure which is elementarily equivalent to $\A$ is isomorphic to $\A$.  Indeed, if $\A=\{a_1,\dots,a_n\}$ (distinct elements), one may assume that, for each constant symbol $c$, $c^\A=a_{k(c)}$, for each $m$-place function $f$, $f^\A(a_{i_1},\dots,a_{i_m})=a_{\widetilde f(i_1,\dots,i_m)}$ with $\widetilde f$ a predefined function on finite sets, and for each $m$-place predicate $P$,
+$$(M_Pi_1\dots i_m)=\begin{cases}(Px_{i_1}\dots x_{i_m})&\left<a_{i_1},\dots,a_{i_m}\right>\in P^\A\\\neg(Px_{i_1}\dots x_{i_m})&\left<a_{i_1},\dots,a_{i_m}\right>\notin P^\A\end{cases}$$
+Then the following first order sentence determines $\A$ up to isomorphism (all big conjunctions are over predefined finite enumerations):
+$$\exists x_1~\cdots~\exists x_n~\left[\bigwedge_{1\le i<j\le n}(x_i\ne x_j)~\wedge~\forall y\bigvee_{i=1}^n(y=x_i)~\wedge~\bigwedge_{c\text{ constant sym}}(c=x_{k(c)})\right.$$
+$$\left.\wedge~\underset{1\le i_j\le n}{\bigwedge_{f\text{ function sym}}}\left((fx_{i_1}\dots x_{i_m})=x_{\widetilde f(i_1,\dots,i_m)}\right)~\wedge~\underset{1\le i_j\le n}{\bigwedge_{P\text{ predicate sym}}}(M_Pi_1\dots i_m)\right]$$
+\end{itemize}
+Thus, ultrapowers are only innovative when the sets $A$ and $I$ are both infinite and $\U$ is nonprincipal.
+
+For the remainder of this section, we will assume $I=\N$, $\U$ is a fixed nonprincipal ultrafilter, and a function $f:\N\to A$ is denoted as a sequence via
+$$f=(f(0),f(1),f(2),\dots).$$
+The equivalence class of this sequence modulo $\Phi_\U$ is denoted likewise, but with square brackets:
+$$[f(0),f(1),f(2),\dots]$$
+Thus, for any structure $\A$, one can immediately speak of $\widehat\A$, and think of its elements as equivalence classes of sequences.  The main examples arise when $\Lang$ involves binary operators $+,\cdot$, constant symbols $0,1$ and a binary relation $\le$.  $\N$, $\Z$, $\Q$ and $\R$ are all structures for this language, and hence one can take their ultrapowers, $\widehat\N$, $\widehat\Z$, $\widehat\Q$, $\widehat\R$.  Elements of $\widehat\R$ are known as \textbf{hyperreal numbers} (with respect to $\U$), and elements of $\widehat\N$ are called \textbf{hypernatural numbers}.  In the rest of this section, we will study $\widehat\R$.\\
+
+\noindent We note that $\R$ has many finitary operators besides $+,\cdot$, such as subtraction, the absolute value $|\cdot|$, and even the exponential $x\mapsto e^x$.  We will allow ourselves to add any of these as an operation, noting that $\widehat\R$ will still be elementarily equivalent to $\R$.  [For example, since $e^{x+y}=e^x\cdot e^y$ and $|x+y|\le|x|+|y|$ hold for $x,y\in\R$, they must also hold for $x,y\in\widehat\R$.]
+
+Moreover, suppose $X\subseteq\R$ is a subset (such as $\N$).  Then we have an injective map $\widehat X\hookrightarrow\widehat\R$ for which $[a_0,a_1,a_2,\dots]$ is in the image if and only if $\{n\in\N:a_n\in X\}\in\U$.  If $P$ is a unary predicate such that $P^\R=X$ (the predicate of being in $X$), it follows that $P^{\widehat\R}$ is the image of said map.  Thus, we may identify $\widehat X$ with the subset $P^{\widehat\R}$ of $\widehat\R$ given by the transferred version of the predicate.
+
+Furthermore, if $X$ is any \emph{predefined} subset of $\R$, $(t\in X)$ is a valid formula when $t$ is a term, and the \L o\'s transfer principle will still hold, as long as $\widehat X$ is used instead of $X$ in the transferred version of a sentence (since $(t\in X)$ is equivalent to $(Pt)$).\footnote{This principle works more generally for any structure in place of $\R$, but for our purposes we shall stick to $\R$ as we study the hyperreal numbers.}
+
+To illustrate this principle, consider the following sentence:
+\begin{equation}\tag{1}\forall x~\exists y~(y\in\N\wedge y>x)\end{equation}
+It is certainly true in $\R$, since there is a natural number exceeding any given real number.  Thus by the transfer principle, one would expect it to hold for $\widehat\R$.  However, sentence (1) is \emph{not} the correct sentence for $\widehat\R$ from the transfer principle; this one is:
+\begin{equation}\tag{2}\forall x~\exists y~(y\in\widehat\N\wedge y>x)\end{equation}
+To see why this is the case, consider $a=[1,2,3,\dots]\in\widehat\R$.  For any $y\in\N$, the set $\{n\in\N:a_n>y\}$ is cofinite, hence is in $\U$ (since $\U$ is nonprincipal), and therefore $a>y$ in $\widehat\R$ (since $y$ is identified with $[y,y,y,\dots]$).  Therefore $a$ is greater than every ordinary natural number, and (1) is false for $x=a$.  However, there exists $y\in\widehat\N$ such that $y>a$: namely, $y=[2,3,4,\dots]$.
+
+Thus one mistake when using the transfer principle is to forget to transfer the subsets involved.  Another is when you attempt to transfer a statement which is not first order, such as the \emph{least upper bound property}:
+\begin{center}
+\emph{Whenever $S\subseteq\R$ is a nonempty subset which is bounded above, $S$ has a least upper bound.}
+\end{center}
+This is not a first order logic statement, since it involves a universal quantifier over subsets of $\R$, whereas first order logic only allows quantifiers over $\R$.\footnote{First order logic can also have quantifiers over a predefined subset $X$, in view of the facts that $(\forall x\in X)\varphi$ is equivalent to $\forall x~(x\in X)\to\varphi$, and $(\exists x\in X)\varphi$ is equivalent to $\exists x~(x\in X)\wedge\varphi$.}
+
+And indeed, the least upper bound property does not hold in $\widehat\R$: to see why, define
+$$\Rfin=\left\{a\in\widehat\R:|a|<n\text{ for some }n\in\N\right\},$$
+where $\N$ is the ordinary set of natural numbers (not the ultrapower).  Then it is easy to show that $\Rfin$ is a nonempty subset of $\widehat\R$, and $a=[1,2,3,\dots]$ is an upper bound of $\Rfin$.  However, $\Rfin$ has no least upper bound, because if $c\in\widehat\R$ is any upper bound of $\Rfin$, $c-1$ is a smaller upper bound (because for any $r\in\Rfin$, $r+1$ is also in $\Rfin$ and therefore $c>r+1$, which implies $c-1>r$).
+
+Hence the least upper bound property is an example of a \emph{second} order logic statement which holds in $\R$ but fails in $\widehat\R$.  In fact, one can prove that $\R$ is the only complete ordered field up to isomorphism; in view of this statement, $\widehat\R$ would not be able to be another one, yet $\widehat\R$ is an ordered field (ordered fields are a first order model)\----hence it is not a complete one.\\
+
+\noindent An interesting thing about hyperreal numbers is that there are various concepts which do not generalize to ultrapowers of arbitrary structures, and they can be used to study calculus and topology.  A hyperreal number $a\in\widehat\R$ is said to be \textbf{finite} if $|a|<n$ for some $n\in\N$, or equivalently if $|a|<r$ for some $r\in\R$.  Hyperreals that do not satisfy this property (such as $[1,2,3,\dots]$) are said to be \textbf{infinite}.  The set of finite hyperreals is denoted $\Rfin$, and we leave it to the reader to show that it is a subring of $\widehat\R$; i.e., closed under addition, subtraction and multiplication.
+
+A hyperreal number $a\in\widehat\R$ is said to be \textbf{infinitesimal} if $|a|<r$ for every ordinary real number $r\in\R$ such that $r>0$.  [This means ``infinitely small.'']  If $a\in\R$, this would clearly imply $a=0$; however, there are nonzero infinitesimal elements of $\widehat\R$, one of them being:
+$$\varepsilon=\left[1,\frac 12,\frac 13,\dots\right]$$
+Infinitesimals are closed under addition, because if $a$ and $b$ are infinitesimals, then for any $r>0$ in $\R$, $|a+b|<r$ because $|a+b|\le|a|+|b|<\frac r2+\frac r2=r$.  The product of any finite hyperreal and any infinitesimal is an infinitesimal; if $a$ is a finite hyperreal and $b$ is an infinitesimal, then $|a|<r$ for some $r>0$ in $\R$.  Yet for any $s>0$ in $\R$, $|b|<\frac sr$, and therefore $|ab|=|a||b|<s$.  Thus the infinitesimals form an \emph{ideal} in $\Rfin$.
+
+We now see the fundamental fact about hyperreals; every finite hyperreal can be uniquely represented as the sum of an ordinary real and an infinitesimal:
+\begin{proposition}\label{realplusinftes}\textbf{\emph{and Definition.}}
+For each $a\in\Rfin$, there are unique elements $b\in\R$ and $c$ infinitesimal such that $a=b+c$.  $b$ is called the \textbf{standard part} of $a$ (denoted $\st(a)$), and $c$ the \textbf{infinitesimal part}.
+\end{proposition}
+\begin{proof}
+Throughout this proof we note that this first order sentence holds for $\widehat\R$, since it holds for $\R$:
+$$\forall x~\forall y~(-y<x<y)\iff(|x|<y)$$
+Set $S=\{r\in\R:r\le a\}$.  Since $a$ is finite, $|a|<u$ for some $u\in\R$.  This implies that $-u<a<u$.  Therefore $-u\in S$, so $S$ is nonempty.  For any $r\in S$, $r\le a<u$; hence $u$ is an upper bound of $S$.  Since $\R$ satisfies the least upper bound property, it follows that $S$ has a least upper bound $b\in\R$.
+
+We claim that $a-b$ is infinitesimal.  Indeed, let $s>0$ be any ordinary real number.  If $a-b\ge s$ in $\widehat\R$, we would have $a\ge b+s$ and hence $b+s\in S$; this contradicts the fact that $b$ is an upper bound of $S$ and $b<b+s$.  Therefore, $a-b<s$.  Furthermore, since $b$ is the \emph{least} upper bound, $b-s$ is not an upper bound of $S$, so one can take $b'\in S$ such that $b'>b-s$.  Moreover, $b'\le a$ (definition of $S$), so that $b-s<a$, from which $a-b>-s$ follows.  We have just shown that $-s<a-b<s$; therefore, $|a-b|<s$.  Since $s$ is arbitrary, $a-b$ is therefore an infinitesimal.
+
+Thus, we take $c=a-b$ and we get the desired summation $a=b+c$ with $b\in\R$ and $c$ infinitesimal.  To show that $b$ and $c$ are unique, suppose $a=b'+c'$ with $b'\in\R$ and $c'$ infinitesimal.  Then $b-b'=c'-c$ is an infinitesimal element of $\R$, and is therefore zero.  Hence $b=b'$ and $c=c'$, proving uniqueness.
+\end{proof}
+\noindent\emph{Remark}: One can readily show that in the proof above, either $S=(-\infty,b)$ or $S=(-\infty,b]$, but it is impossible to determine which!
+\begin{exercise}
+If $a_0,a_1,a_2,\dots,a\in\R$ such that $\lim_{n\to\infty}a_n=a$, then $[a_0,a_1,a_2,\dots]$ is a finite hyperreal number and $\st([a_0,a_1,a_2,\dots])=a$.
+\end{exercise}
+\noindent In the remainder of this section, we will assume that $\R$ is equipped with the standard topology, where the open intervals $(a,b)$ form a basis.  We do not intend to topologize $\widehat\R$ (that would involve second order logic); however, some topological concepts in $\R$ can be studied by transferring the material to the hyperreal numbers!  The following proposition does this for a subset of $\R$.
+\begin{proposition}\label{topsubset}
+Suppose $X\subseteq\R$ and $x\in\R$.
+
+(i) $x\in\overline X$ if and only if $x+c\in\widehat X$ for some infinitesimal~$c$.
+
+(ii) $x$ is an interior point of $X$ if and only if $x+c\in\widehat X$ for every infinitesimal~$c$.
+
+(iii) $x$ is a limit point of $X$ if and only if $x+c\in\widehat X$ for some \emph{nonzero} infinitesimal~$c$.
+
+(iv) $X$ is bounded if and only if $\widehat X\subseteq\Rfin$.
+
+(v) $X$ is closed if and only if, for every $r\in\Rfin$, if $r\in\widehat X$ then $\st(r)\in X$.
+
+(vi) $X$ is open if and only if, for every $r\in\Rfin$, if $\st(r)\in X$ then $r\in\widehat X$.
+
+(vii) $X$ is compact if and only if $\widehat X\subseteq\Rfin$ and $\st(r)\in X$ for every $r\in\widehat X$.
+\end{proposition}
+\begin{proof}
+(i) Suppose $x\in\overline X$.  Then for any open set $U$ containing $x$, $U\cap X\ne\varnothing$ (because $U\cap X=\varnothing$ would imply $\mathbb R\setminus U$ is a closed set containing $X$, hence it would contain $\overline X$, which is a contradiction because $x\notin\mathbb R\setminus U$).  In particular, for each positive integer $n$, $(x-1/n,x+1/n)\cap X\ne\varnothing$, so one can pick an element $a_n\in(x-1/n,x+1/n)\cap X$.  Consequently, $c=[a_1-x,a_2-x,\dots]\in\widehat\R$ is infinitesimal (since $|c|<[1,1/2,1/3,\dots]$) and $x+c\in\widehat X$.
+
+Conversely, suppose $x+c\in\widehat X$ for some infinitesimal~$c$, say
+$$c=[c_0,c_1,c_2,\dots].$$
+Then let $U$ be any open set containing $x$.  $U$ must contain $(x-r,x+r)$ for some $r>0$ in $\R$.  Moreover, since $c$ is infinitesimal, $|c|<r$, which means that $E_1=\{n\in\N:|c_n|<r\}\in\U$.  Moreover, since $x+c\in\widehat X$, the set $E_2=\{n\in\N:x+c_n\in X\}$ is also in $\U$.  In particular, $E_1\cap E_2\in\U$, hence is nonempty, so one can take $m\in E_1\cap E_2$; it follows that $|c_m|<r$ and $x+c_m\in X$.  Hence $x+c_m\in(x-r,x+r)\cap X\subseteq U\cap X$ and $U\cap X$ is nonempty.  Therefore, $x\in\overline X$.
+
+(ii) Apply (i) with $\R\setminus X$ in place of $X$; note that $\widehat{\R\setminus X}=\widehat\R\setminus\widehat X$ by the transfer principle.
+
+(iii) If $x$ is a limit point of $X$, repeat the argument of part (i), picking $a_n\in\left[(x-1/n,x+1/n)\cap X\right]\setminus\{x\}$ for each $n$.  Then the infinitesimal~$c$ will be nonzero.
+
+Conversely, suppose $x+c\in\widehat X$ for some nonzero infinitesimal $c=[c_0,c_1,c_2,\dots]$.  Let $U$ be any open set containing $x$.  $U$ must contain $(x-r,x+r)$ for some $r>0$ in $\R$.  As in part (i), $E_1=\{n\in\N:|c_n|<r\}$ and $E_2=\{n\in\N:x+c_n\in X\}$ are in $\U$, but since $c\ne 0$, the set $E_3=\{n\in\N:c_n\ne 0\}$ is also in $\U$.  Pick $m\in E_1\cap E_2\cap E_3$; it follows that $x+c_m\in(x-r,x+r)\cap X\subseteq U\cap X$ and $x+c_m\ne x$.  Hence, $x$ is a limit point of $X$.
+
+(iv) If $X$ is bounded, say $X\subseteq[-M,M]$ with $M\in\R$, then the sentence $\forall(x\in X)~|x|\le M$ holds in $\R$.  By the transfer principle, $\forall(x\in\widehat X)~|x|\le M$ holds in $\widehat\R$, which particularly implies that every element of $\widehat X$ is finite.
+
+(v) $X$ is closed if and only if every $x\in\overline X$ is in $X$; now use part (i).
+
+(vi) $X$ is open if and only if every $x\in X$ is an interior point of $X$; now use part (ii).
+
+(vii) By the Heine-Borel Theorem, $X$ is compact if and only if it is closed and bounded.  Now use (iv) and (v).
+\end{proof}
+\noindent Now we transfer the material to functions.  We recall that a function $f:\R\to\R$ may be regarded as a unary operator symbol which can be added to the language.  As such, it extends to a function $\widehat f:\widehat\R\to\widehat\R$ given by $\widehat f([a_0,a_1,a_2,\dots])=[f(a_0),f(a_1),f(a_2),\dots]$.
+
+More generally, if $X\subseteq\R$ and $f:X\to\R$ is a function (such as $f(x)=1/x$ when $X=\R\setminus\{0\}$), we define $\widehat f:\widehat X\to\widehat\R$ likewise: when the $a_i$ are all in $X$, $\widehat f([a_0,a_1,a_2,\dots])=[f(a_0),f(a_1),f(a_2),\dots]$.  We will see how topological properties of $f$ are equivalent to simpler properties of $\widehat f$.
+
+Before doing so, let us define $f:X\to\mathbb R$ to be \textbf{bounded} if $f(X)$ is a bounded set, and \textbf{locally bounded} if $f([a,b])$ is a bounded set for all $a,b\in\R$.  Moreover, if $x_0\in X$ and $y_0\in\R$, we say that $\lim_{x\to x_0}f(x)=y_0$ provided that:
+$$(\forall\varepsilon>0)~(\exists\delta>0)~(\forall x\in X)~0<|x-x_0|<\delta\to|f(x)-y_0|<\varepsilon$$
+(Note that this is not a sentence because $x$ is a free variable.)  It is routine to show that when $f$ and $x_0$ are given, there is at most one $y_0$ satisfying the above condition, even though there may not be one.  $f$ is said to be \textbf{continuous at $x_0$} if $\lim_{x\to x_0}f(x)=f(x_0)$.  Finally, $f$ is said to be \textbf{continuous} if it is continuous at every $x\in X$.
+
+Finally, we define $\im f=\{f(x):x\in X\}$, which is a subset of $\R$, and $\ker f=\{(x,y)\in X:f(x)=f(y)\}$, which is a binary relation on $X$.
+\begin{proposition}\label{topfunction}
+Suppose $X\subseteq\R$ and $f:X\to\R$ is a function.
+
+(i) $\im\widehat f=\widehat{\im f}$.  In particular, $f$ is surjective $\iff$ $\widehat f$ is surjective, and $f$ is bounded $\iff$ $\widehat f$ maps $\widehat X$ into $\Rfin$.
+
+(ii) $\ker\widehat f=\widehat{\ker f}$, where for $R$ a binary relation, $\widehat R$ is defined by
+$$[x_0,x_1,x_2,\dots]~\widehat R~[y_0,y_1,y_2,\dots]~~~~\iff~~~~\{n\in\N:x_n~R~y_n\}\in\U.$$
+In particular, $f$ is injective $\iff$ $\widehat f$ is injective.
+
+(iii) $f$ is locally bounded if and only if $\widehat f$ maps $\widehat X\cap\Rfin$ into $\Rfin$.
+
+(iv) If $x_0\in X$ and $y_0\in\R$, then $\lim_{x\to x_0}f(x)=y_0$ if and only if, for every nonzero infinitesimal~$c$ such that $x_0+c\in\widehat X$, we have that $\widehat f(x_0+c)\in\Rfin$ and $\st(\widehat f(x_0+c))=y_0$.
+
+(v) If $x\in X$, $f$ is continuous at $x$ if and only if, for every infinitesimal~$c$ such that $x+c\in\widehat X$, $\widehat f(x+c)\in\Rfin$ and $\st(\widehat f(x+c))=f(x)$.  In particular, $f$ is continuous if and only if whenever $r\in\widehat X$ and $\st(r)\in X$, we have $\widehat f(r)\in\Rfin$ and $\st(\widehat f(r))=f(\st(r))$.
+\end{proposition}
+\noindent Note that in (iv), it is convenient to assume $x_0$ is an interior point of $X$.  Then for every infinitesimal~$c$, $x_0+c\in\widehat X$ by Proposition \ref{topsubset}(ii).  Hence, the words ``such that $x_0+c\in\widehat X$'' would not be needed in the statement of (iv).
+\begin{proof}
+(i) Take any $x=[x_0,x_1,x_2,\dots]\in\widehat X$.  We may assume $x_n\in X$ for every $n$, because $E=\{n\in\N:x_n\in X\}\in\U$, so we can change each $x_n$ for $n\in\N\setminus E$ to an element of $X$, without affecting the hyperreal number.  Moreover, $\widehat f(x)=[f(x_0),f(x_1),f(x_2),\dots]$, hence is in $\widehat{\im f}$ because every term is in $\im f$.  Therefore, $\im\widehat f\subseteq\widehat{\im f}$.
+
+Conversely, suppose $a=[a_0,a_1,a_2,\dots]\in\widehat{\im f}$.  Then $E=\{n\in\N:a_n\in\im f\}\in\U$.  Choose elements $x_n\in X$ such that for each $n\in E$, $f(x_n)=a_n$, and for each $n\notin E$, $x_n$ can be any element of $X$.  Then if $x=[x_0,x_1,x_2,\dots]$, we have $\widehat f(x)=a$ (the sequences agree at all the indices in $E$); hence $a\in\im\widehat f$.
+
+This proves that $\im\widehat f=\widehat{\im f}$.  Moreover, if $Y\subseteq\R$, then $\widehat Y=\widehat\R\iff Y=\R$ by applying the transfer principle to the sentence $\forall x~(x\in Y)$.  Taking $Y=\im f$, we conclude that $f$ is surjective $\iff$ $\widehat f$ is surjective.  Finally, $f$ is bounded $\iff$ $\im f$ is a bounded set $\iff$ $\widehat{\im f}\subseteq\Rfin$ (by Proposition \ref{topsubset}(iv)) $\iff$ $\im\widehat f\subseteq\Rfin$.
+
+(ii) Suppose $x,y\in X$, with $x=[x_0,x_1,x_2,\dots]$ and $y=[y_0,y_1,y_2,\dots]$.  As in part (i), we may assume that the $x_i,y_i$ are all in $X$.  Then we have
+\begin{align*}
+(x,y)\in\ker\widehat f
+&\iff\widehat f(x)=\widehat f(y)\\
+&\iff[f(x_0),f(x_1),\dots]=[f(y_0),f(y_1),\dots]\\
+&\iff\{n\in\N:f(x_n)=f(y_n)\}\in\U\\
+&\iff\{n\in\N:(x_n,y_n)\in\ker f\}\in\U\\
+&\iff(x,y)\in\widehat{\ker f},\\
+\end{align*}
+proving that $\ker\widehat f=\widehat{\ker f}$.  Moreover, suppose $Y\subseteq X\times X$ is a binary relation, and for any set $Z$, $\Delta_Z$ is the diagonal $\{(z,z):z\in Z\}$.  Then $\widehat Y=\Delta_{\widehat X}\iff Y=\Delta_X$ by applying the transfer principle to the sentence $\forall x~\forall y~(x~Y~y\leftrightarrow x=y)$.  Taking $Y=\ker f$, we conclude that $f$ is injective $\iff$ $\widehat f$ is injective.
+
+(iii) Suppose $f$ is locally bounded.  Then for any $x\in\widehat X\cap\Rfin$, we may write $x=[x_0,x_1,x_2,\dots]$ where the $x_i$ are all in $X$.  Since $x\in\Rfin$, $|x|\le M$ for some $M\in\R$, and hence $E=\{n\in\N:|x_n|\le M\}\in\U$.  Since $f$ is locally bounded, $f([-M,M])$ is a bounded set, say $f([-M,M])\subseteq[-N,N]$ with $N\in\R$.  Consequently, $f(x_n)\in[-N,N]$ for all $n\in E$, so that setting
+$$E'=\{n\in\N:|f(x_n)|\le N\},$$
+we have $E\subseteq E'$ and hence $E'\in\U$.  Therefore, $|\widehat f(x)|\le N$ and $\widehat f(x)\in\Rfin$.
+
+Conversely, suppose $f$ is not locally bounded.  Then for some $a,b\in\R$, $f([a,b])$ is unbounded, whence $f([-M,M])$ is unbounded for $M=\max(|a|,|b|)$.  With that, for each $n\in\N$, one can pick $x_n\in X\cap[-M,M]$ such that $|f(x_n)|>n$.  Then $x=[x_0,x_1,x_2,\dots]\in\Rfin$ because $|x|\le M$, but $\widehat f(x)$ is an infinite hyperreal.  Thus $x\in\widehat X\cap\Rfin$ but $\widehat f(x)\notin\Rfin$.
+
+(iv) Suppose $\lim_{x\to x_0}f(x)=y_0$.  Let $c=[c_0,c_1,c_2,\dots]$ be a nonzero infinitesimal such that $x_0+c\in\widehat X$.  We may assume that $x_0+c_n\in X$ for all $n$ (since $\{n\in\N:x_0+c_n\in X\}\in\U$, we can change the $c$'s outside this set).  Consider $a=\widehat f(x_0+c)-y_0$.  One can thus write
+$$a=[f(x_0+c_0)-y_0,f(x_0+c_1)-y_0,f(x_0+c_2)-y_0,\dots]$$
+For any $\varepsilon>0$, there exists $\delta>0$ such that for all $x\in X$, $0<|x-x_0|<\delta\implies|f(x)-y_0|<\varepsilon$.  Since $c$ is infinitesimal, however, $0<|c|<\delta$, so $E=\{n\in\N:0<|c_n|<\delta\}\in\U$.  If $0<|c_n|<\delta$ then $|f(x_0+c_n)-y_0|<\varepsilon$, hence if $E'=\{n\in\N:|f(x_0+c_n)-y_0)|<\varepsilon\}$, we conclude $E'\in\U$ because it contains $E$.  Therefore, $|a|<\varepsilon$.  Since $\varepsilon$ is arbitrary, $a$ is infinitesimal.
+
+The infinitesimality of $\widehat f(x_0+c)-y_0$ thus implies that $\widehat f(x_0+c)\in\Rfin$ and its standard part is $y_0$.
+
+Conversely, suppose $\lim_{x\to x_0}f(x)=y_0$ is false.  Then there exists $\varepsilon>0$ such that for all $\delta>0$, there exists $x\in X$ with $0<|x-x_0|<\delta$ but $|f(x)-y_0|\ge\varepsilon$.  In other words, for all $\delta>0$, there exists $u\in\R$ such that $0<|u|<\delta$ but $|f(x_0+u)-y_0|\ge\varepsilon$.  For each positive integer $n$, let $c_n$ be an element of $\R$ such that $0<|c_n|<1/n$ and $|f(x_0+c_n)-y_0|\ge\varepsilon$; then $c=[c_1,c_2,c_3,\dots]$ is a nonzero infinitesimal and $x+c\in\widehat X$, but $|\widehat f(x_0+c)-y_0|\ge\varepsilon$, so $\widehat f(x+c)-y_0$ is not an infinitesimal and the conclusion of this statement is false.
+
+(v) If $f$ is continuous at $x$, applying (iv) with $x$ in place of $x_0$ and $f(x)$ in place of $y_0$ shows that for any nonzero infinitesimal~$c$ with $x+c\in\widehat X$, $\widehat f(x+c)\in\Rfin$ and $\st(\widehat f(x+c))=f(x)$.  Clearly this also holds if $c=0$.  Therefore, we have proven $\Rightarrow$ of the first statement.  Conversely, if $\st(\widehat f(x+c))=f(x)$ for every infinitesimal~$c$ such that $x+c\in\widehat X$, then taking $y_0=f(x)$ in part (iv) shows that $\lim_{h\to x}f(h)=f(x)$, hence $f$ is continuous at $x$.
+
+To get the second statement, universally quantify both parts of the first statement over $x\in X$.
+\end{proof}
+\noindent Now, we shall finally cover a calculus concept using infinitesimals in $\widehat\R$.  From this point onwards, we assume $X$ is open.
+
+If $f:X\to\R$, $x\in X$ and the limit $\lim_{h\to 0}\frac{f(x+h)-f(x)}h$ exists, it is denoted $f'(x)$ and called the \textbf{derivative} of $f$ at $x$, and $f$ is said to be \textbf{differentiable} at $x$.  By Proposition \ref{topfunction}(iv), it follows that for any nonzero infinitesimal~$c$, $\st\left(\frac{\widehat f(x+c)-f(x)}c\right)=f'(x)$.  In other words, when one makes an infinitesimal change to the input, $f'(x)$ is the standard part of the ratio of the change in $\widehat f$ to the input change.  We have thus described the derivative of $f$ using infinitesimals instead of limits.
+
+This infinitesimal change is how a derivative is typically motivated in calculus.  Furthermore, $f$ is differentiable at $x$ if and only if, for every nonzero infinitesimal~$c$, $\frac{\widehat f(x+c)-f(x)}c\in\Rfin$ and its standard part is independent of $c$.  If this is so, we have that $\widehat f(x+c)=f(x)+c\left[f'(x)+(\cdots)\right]$, where $(\cdots)$ is an infinitesimal.  Since $c(\cdots)$ is infinitely smaller than $cf'(x)$, we may quotient out modulo it, giving us $\widehat f(x+c)=f(x)+cf'(x)$: in other words, \emph{$f$ is linear infinitesimally close to $x$, and its slope is $f'(x)$}.
+
+Finally we note that since $\frac{\widehat f(x+c)-f(x)}c\in\Rfin$, $\widehat f(x+c)-f(x)$ is an infinitesimal (the product of a finite hyperreal and an infinitesimal is an infinitesimal), and therefore $\st(\widehat f(x+c))=f(x)$.  By Proposition \ref{topfunction}(v), we conclude that \emph{if $f$ is differentiable at $x$, then $f$ is continuous at $x$} (the converse is false: take $f(x)=|x|,x=0$).
+
+The final concept in this section will show how, when $c$ is infinitesimal, $f(x+c)$ can be realized as a power series in $c$.  Consider the Taylor series of $f$ centered at $x$:
+$$f(x+h)\sim f(x)+f'(x)h+\frac{f''(x)}{2!}h^2+\frac{f'''(x)}{3!}h^3+\cdots$$
+Suppose the series has radius of convergence $r>0$, and for $|h|<r$ the series converges to $f(x+h)$.\footnote{Even if the series has infinite radius of convergence, it may converge to something different from $f$.  The well-known example occurs when $f(x)=e^{-1/x^2}$ for $x\ne 0$, and $f(0)=0$.  This $f$ is infinitely differentiable at origin, and its Taylor series is zero there, so it certainly doesn't converge to $f$ on any neighborhood of the origin!}  Then for any infinitesimal~$c$,
+$$\widehat f(x+c)=f(x)+f'(x)c+\frac{f''(x)}{2!}c^2+\frac{f'''(x)}{3!}c^3+\cdots,$$
+since $\{n\in\N:|c_n|<r\}\in\U$, and the desired convergence happens for all such $c_n$.  This gives a complete formula for $f(x+c)$ in terms of the derivatives of $f(x)$, with no standard-part taking.  By starting at $f(x+c)$ and repeatedly dividing the infinitesimal part by $c$, the derivatives $f^{(n)}(x)$ can be obtained.
+
+\section*{The Compactness Theorem}
+
+The Compactness Theorem states that, given any set of sentences, if there is a model for any finite number of them, then there is a model for all of them together.  It is a common way to prove facts when given (or already knowing) that their ``finite versions'' are true.  It leads to many consequences in model theory, such as the existence of nonstandard arithmetic models, and models with arbitrarily large cardinality for any language with infinite models.
+
+Let $\Lang$ be a first order language, and let $T$ be a set of formulas.  If $\A$ is a structure and $s:V\to A$ is a variable assignment such that $\A\models\varphi[s]$ for every $\varphi\in T$, then $\A$ is said to \textbf{satisfy} $T$.  $T$ is said to be \textbf{satisfiable} if there exists a structure which satisfies it.  $T$ is said to be \textbf{finitely satisfiable} if every finite subset of $T$ is satisfiable.
+
+We note that if $T$ consists entirely of sentences, we would not need a variable assignment; a structure $\A$ would satisfy $T$ if and only if $\A\models\varphi$ for all $\varphi\in T$\----in other words, $\A\in\Mod(T)$.  Moreover, $T$ would be satisfiable if and only if $\Mod(T)$ is nonempty.
+
+If $T$ is a set of formulas and $\varphi$ is a formula, we say that $T\models\varphi$ (read \textbf{$T$ semantically implies $\varphi$}) if for every structure $\A$ and variable assignment $s:V\to A$ which satisfies $T$, we have $\A\models\varphi[s]$.  For example, the formulas $3+3<10$, $10<2\cdot 7$ and $\forall x~\forall y~\forall z~(x<y\wedge y<z)\to x<z$ semantically imply $3+3<2\cdot 7$ (why?).  It is clear that $T\models\varphi$ if and only if $T\cup\{\neg\varphi\}$ is not satisfiable.
+
+\begin{theorem}\label{compactness}
+\emph{(Compactness Theorem.)} Let $\Lang$ be a first order language, and let $T$ be a set of formulas.  If $T$ is finitely satisfiable, then it is satisfiable.
+\end{theorem}
+\begin{proof}
+Let $I$ be the set of all finite subsets of $T$.  For each $\varphi\in T$, set $V_\varphi=\{F\in I:\varphi\in F\}$, i.e., the set of finite subsets of $T$ containing $\varphi$.  Finally, let $S=\{V_\varphi:\varphi\in T\}$.  Then $S\subseteq P(I)$, and $S$ satisfies the finite intersection property, because for any $\varphi_1,\dots,\varphi_n\in T$, $\{\varphi_1,\dots,\varphi_n\}\in V_{\varphi_1}\cap\cdots\cap V_{\varphi_n}$.  By Corollary \ref{finiteinter}, $S$ is contained in an ultrafilter $\U\subseteq P(I)$.
+
+Since $T$ is finitely satisfiable, for each $F\in I$, there exists a structure $\A_F$ and variable assignment $s_F:V\to A_F$ which satisfies $F$.  Now let $\A$ be the ultraproduct of the $A_F,F\in I$ with respect to $\U$, and define $s:V\to A$ via $s(v)=[s_F(v)]_{F\in I}$.  For any $\varphi\in T$, the \L o\'s transfer principle tells us
+$$\A\models\varphi[s]~~~~\iff~~~~\{F\in I:\A_F\models\varphi[s_F]\}\in\U.$$
+We claim that, in fact, $E_\varphi=\{F\in I:\A_F\models\varphi[s_F]\}$ \emph{is} in $\U$.  After all, for any $F\in V_\varphi$, since $\varphi\in F$ and $(\A_F,s_F)$ satisfies $F$, we know that $\A_F\models\varphi[s_F]$.  Therefore $V_\varphi\subseteq E_\varphi$.  Since $V_\varphi\in\U$ and $\U$ is a filter, we conclude $E_\varphi\in\U$.  Hence, $\A\models\varphi[s]$ for every $\varphi\in T$, which means that $(\A,s)$ satisfies $T$.
+\end{proof}
+\noindent\emph{Remark}: We did not explicitly demand that $\U$ be nonprincipal, since we did not need that in the proof.  However, given the conditions $V_\varphi\in\U$, we can easily work out when it is.
+
+If $T$ is finite, say $T=\{\varphi_1,\dots,\varphi_m\}$, then $\U$ contains $V_{\varphi_1}\cap\cdots\cap V_{\varphi_m}=\{T\}$ and therefore $\U=(T)$.  Hence, $\U$ must be principal given by $T$ in this case, so that $\A\cong\A_T$.  This is a manifestation of the triviality of the Compactness Theorem when $T$ is finite: if there is a model for every finite subset of $T$, one of them is a model for $T$ itself.
+
+On the other hand, if $T$ is infinite, $\U$ is necessarily nonprincipal.  Indeed, if $\U=(F)$, then one can pick $\varphi\in T\setminus F$ ($F\subsetneqq T$ because $T$ is infinite); it will follow that $V_\varphi\notin\U$, contradicting the hypotheses.  In this case, the proof requires the existence of a specific kind of ultrafilter to get a specific kind of model.\\
+
+\noindent From the Compactness Theorem we get several corollaries:
+\begin{corollary}\label{compcor1}
+Let $\Lang$ be a first order language, let $T$ be a set of formulas, and let $\varphi$ be a formula.  If $T\models\varphi$, then $T_0\models\varphi$ for some finite subset $T_0\subseteq T$.
+\end{corollary}
+\begin{proof}
+Suppose $T\models\varphi$.  Then $T\cup\{\neg\varphi\}$ is not satisfiable.  By the Compactness Theorem (or more directly, its contrapositive), $T\cup\{\neg\varphi\}$ is not finitely satisfiable, hence there exists a finite subset $F\subseteq T\cup\{\neg\varphi\}$ which is not satisfiable.  Now take $T_0=F\setminus\{\neg\varphi\}$; this is a finite subset of $T$ such that $T_0\models\varphi$.
+\end{proof}
+\begin{corollary}\label{compcor2}
+Let $\Lang$ be a first order language, and let $T$ be a set of sentences.  If $\Mod(T)$ is finitely axiomatizable, then $\Mod(T)=\Mod(T_0)$ for some finite subset $T_0\subseteq T$.
+\end{corollary}
+\begin{proof}
+The hypothesis states that $\Mod(T)=\Mod(F)$ for some finite set of sentences $F$, though $F$ may not consist of sentences from $T$.  For each $\varphi\in F$, $T\models\varphi$ because, whenever $\A$ is a structure that satisfies $T$, $\A\in\Mod(T)=\Mod(F)$ and therefore $\A\models\varphi$.  Consequently, by Corollary \ref{compcor1}, there exists a finite subset $T_\varphi\subseteq T$ such that $T_\varphi\models\varphi$.  Now take $T_0=\bigcup_{\varphi\in F}T_\varphi$; this is a finite subset of $T$, being a finite union of finite sets.
+
+It is clear that every structure which satisfies $T$ satisfies $T_0$.  Conversely, if $\A$ satisfies $T_0$, then for each $\varphi\in F$, $\A$ satisfies $T_\varphi$ and therefore $\A\models\varphi$.  Hence $\A$ satisfies $F$, which means $\A\in\Mod(F)=\Mod(T)$.  Therefore, $\Mod(T)=\Mod(T_0)$.
+\end{proof}
+\noindent The Compactness Theorem provides an alternate proof of Proposition \ref{arblargefinites}: for each $m\ge 2$, let $\Theta_m=\exists x_1~\cdots~\exists x_m~\bigwedge_{1\le i<j\le m}(x_i\ne x_j)$ be the statement that a structure has at least $m$ elements.  Then if $T$ has arbitrarily large finite models, $T'=T\cup\{\Theta_m:m\ge 2\}$ is finitely satisfiable, for if $F\subseteq T'$ is a finite subset, it uses only finitely many of the $\Theta$'s, say $\Theta_{m_1},\dots,\Theta_{m_t}$, and a finite model for $T$ with cardinality $\ge\max(m_1,\dots,m_t)$ will satisfy $F$.  By the Compactness Theorem, it will follow that $T'$ is satisfiable.  Yet a model for $T'$ is clearly an infinite model for $T$.
+
+We further have:
+\begin{theorem}\label{upwardsls}
+\emph{(Upwards L\"owenheim-Skolem Theorem.)} Let $\Lang$ be a first order language, and let $T$ be a set of sentences.  If $T$ has arbitrary large finite models, or has an infinite model, then $T$ has a model of size $\ge\gimel$ for any cardinal number~$\gimel$.
+\end{theorem}
+\begin{proof}
+By Proposition \ref{arblargefinites}, if $T$ has arbitrary large finite models, it has an infinite model.  Hence, the hypotheses of this statement imply that $T$ must have an infinite model.
+
+Let $X$ be a fixed set such that $|X|=\gimel$.  Assuming $T$ only consists of formulas in the alphabet $V$, let $V'=V\sqcup X$ be a new alphabet and set $T'=T\cup\{(x\ne y):x\ne y\text{ in }X\}$.  Then $T'$ is finitely satisfiable, since any finite subset $F\subseteq T'$ will use only finitely many elements of $X$ in the formulas, and an infinite model for $T$ will therefore satisfy $F$ when a variable assignment passes said elements of $X$ to distinct elements of the model.  By the Compactness Theorem, $T'$ is satisfiable; yet a structure that satisfies $T'$ is clearly a model for $T$ with cardinality $\ge\gimel$, as $X$ maps injectively into it.
+\end{proof}
+\begin{exercise}\label{upwards2}
+If $T$ has an infinite model $\A$, then for every cardinal number $\gimel$ there is a model $\A^*$ such that $\A^*\equiv\A$ and $|A^*|\ge\gimel$.  [Follow the proof of the Compactness Theorem.]
+\end{exercise}
+
+\noindent These results show the existence of nonstandard models of arithmetic; i.e., structures larger than $\N$ which are elementarily equivalent to $\N$.  Here, we assume $\Lang=(+,\cdot,0,1,\le)$ and $\Nat$ is the structure $\N$ with the usual meaning of those symbols.  We let $\Th(\Nat)$ be the \textbf{omniscient theory of the natural numbers}:
+$$\Th(\Nat)=\{\varphi\text{ sentence in }\Lang:\Nat\models\varphi\}$$
+[This set contains \emph{all} sentences satisfied by the natural numbers, including many that no mathematician has ever proved.]  Then any model for $\Th(\Nat)$ will be elementarily equivalent to $\Nat$.
+
+Now fix $x\in V$ and for each positive integer $n$, let $\Delta_n$ be the formula
+$$\overset{n\text{ summands}}{\overbrace{1+1+\cdots+1}}\le x.$$
+$T=\Th(\Nat)\cup\{\Delta_n:n>0\}$ is a finitely satisfiable set of formulas, because a finite subset $F\subseteq T$ uses only finitely many of the $\Delta$'s, say $\Delta_{m_1},\dots,\Delta_{m_t}$; then sending $x\mapsto\max(m_1,\dots,m_t)$ in $\Nat$ will result in a structure satisfying $F$.  Therefore, $T$ is satisfiable by the Compactness Theorem.  However, $(\A,s)$ is a structure satifying $T$, then although $\A\equiv\Nat$, the $\Delta_n$ imply that $s(x)$ is greater than or equal to every element of $\N$, so that it is a \emph{nonstandard natural number}\----it is infinite in size.
+
+Of course, we already know an example of a model with this property: the hypernatural numbers $\widehat\N$.  However, the existence of $\A$ can be shown without using ultraproducts if the Compactness Theorem is proven some other way or otherwise just accepted.
+\begin{exercise}
+Let $\A$ be a nonstandard model of arithmetic; i.e., $\A\equiv\Nat$ and there is a nonstandard natural number $c\in A$.
+
+(i) For every nonstandard natural number $c$ there is a $\Z$-block, $\{c+n:n\in\Z\}$.  [Since $\Nat\models\forall x~(x\ne 0\to\exists y~(y+1=x))$, you can take predecessors of $c$ an unlimited number of times and never reach zero.]
+
+(ii) Any two $\Z$-blocks are either identical, or disjoint with one of them entirely greater than the other.  Use this to get an ordering relation on $\Z$-blocks.
+
+(iii) The set of $\Z$-blocks is a dense linear order without endpoints.  [Given a $\Z$-block, one can get a lower $\Z$-block by using the sentence $\forall x~\exists y~(x=2y\vee x+1=2y)$.]  Hence, if $\A$ is countable, the set of $\Z$-blocks is order isomorphic to $\Q$ (Cantor's theorem), which determines the ordered set $(\A,\le)$ up to (order) isomorphism.
+
+(iv) We say that $p\in\A$ is \textbf{prime} if the sentence $p>1\wedge\forall x~\forall y~(xy=p\to(x=1\vee y=1))$ holds.  Then there exists a nonstandard prime.  [Since there are infinitely many primes in ordinary arithmetic, $\Nat\models\forall x~\exists p~(p\ge x\wedge p\text{ is prime})$.]
+
+(v) There is a nonstandard natural number with infinitely many divisors, and moreover it cannot be factored into primes.
+
+(vi) Assume that if $T$ is countable and finitely satisfiable, it can always be satisfied by a \emph{countable} structure.  [This is a consequence of the downwards L\"owenheim-Skolem theorem.]
+
+Though the assumption that $\A$ is countable determines $(\A,\le)$ up to isomorphism, it does not determine $(\A,+,\cdot)$ up to isomorphism: in fact, there are uncountably many nonisomorphic countable nonstandard arithmetic models $(\A,+,\cdot)$.
+
+[Let $X$ be the set of primes in $\N$.  Then for each $E\subseteq P(X)$, the set of formulas (in one free variable, $x$)
+$$\Th(\Nat)\cup\{p\mid x:p\in E\}\cup\{p\nmid x:p\in X\setminus E\}$$
+is finitely satisfiable, and therefore satisfied by a countable structure $(\A,+,\cdot)$ by the Compactness Theorem.  This assigns an arithmetic model to each subset of $X$.  $P(X)$ is uncountable, but each isomorphism class of models can only be obtained by countably many subsets of $X$ (why?).]
+\end{exercise}
+
+\clearpage
+\begin{center}
+\Large{Bibliography}
+\end{center}
+\quad
+\small{
+\begin{enumerate}[label={[\arabic*]}]
+\item Insall, Matt.~``Ultraproduct.''~From \emph{MathWorld}\----A Wolfram Web Resource, created by Eric W.~Weisstein.
+
+\item \emph{Basic Algebra II}, by Nathan Jacobson, 2nd ed., Dover Publications, Inc., 2009, pp.~75–78. 
+\end{enumerate}
+}
+
+\end{document}

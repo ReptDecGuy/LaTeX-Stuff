@@ -1,0 +1,46 @@
+\documentclass[leqno]{book}
+\usepackage[small,nohug,heads=vee]{diagrams}
+\diagramstyle[labelstyle=\scriptstyle]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage{mathabx}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[utf8]{inputenc}
+
+\makeatletter
+\newcommand*\bcd{\mathpalette\bcd@{.5}}
+\newcommand*\bcd@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+\begin{document}
+
+\addcontentsline{toc}{section}{\textbf{Introduction}}
+\section*{Introduction}
+
+Geometry dates back thousands of years.  It was first recorded as early as the 2nd millennium BC in ancient Egypt, where it was used in finding area and volume, as well as in construction and astronomy.  This book serves as a course in many different kinds of geometry, namely, Euclidean, projective, hyperbolic and spherical.  It studies each type of geometry in depth and compares and contrasts them.  Here is an example typifying the three kinds of geometry: % https://en.wikipedia.org/wiki/Geometry
+\begin{center}
+\includegraphics[scale=.18]{SphDodecahedron.png}
+\includegraphics[scale=.45]{Tilings_Hex.png}
+\includegraphics[scale=.2]{HeptagonalTiling.png}\\
+Spherical~~~~~~~~~~~~~~~~~~~~Euclidean~~~~~~~~~~~~~~~~~~~~Hyperbolic
+\end{center}
+
+The first chapter is a preliminary course on the abstract algebra concept of group theory.  Its purpose is to get the reader familiar with groups, as the study of geometry deals with many of them, such as isometry groups.  Isometry groups give ways that a space can be rigidly moved without stretches or bends.  It also has a few specific statements (such as Proposition 1.9) that build on abstract algebra for the benefit of proofs later in the book.  The last section covers group actions.  It has a guided exercise studying symmetric groups in detail, along with alternating groups, which we will need, for example, when we study the icosahedron.
+
+The book then delves into Euclidean geometry, starting with a crash course on pure plane geometry from the axioms.  That is what geometry technically is, so what would a geometry book be without it?  The book then goes into the work of defining coordinates, then studies tilings of polygons, as well as straightedge and compass constructions (along with a brief exercise on fields).  Afterwards, it introduces Euclidean space in higher dimensions, and studies Euclidean isometry groups, identifying, for example, the isometry groups of all the Platonic solids.  The chapter concludes with a classification of finite point groups in 3-space.
+
+Next, projective geometry is covered briefly, and used to cover certain subtle results which hold in the Euclidean plane, such as Desargues' Theorem.  This chapter precedes the one on hyperbolic geometry, so that it can be used when we study the Beltrami-Klein model.  Next, Sections 4.1-4.2 cover stereographic projection, central inversion and M\"obius transforms.  Sections 4.3-4.9 deal with hyperbolic geometry, where lines curve inwards to the Euclidean eye, and the sum of the angles of a triangle is less than two right angles.  Triangle patterns are also introduced in Chapter 4, for the aid of constructing various uniform tilings in the hyperbolic plane, and performing certain computations involving them.  The chapter concludes by bringing in various models of the hyperbolic plane and relating them to one another.
+
+Chapter 5 covers the third kind of geometry, namely spherical geometry, the only one of our three geometries which takes place on a compact surface of finite area.  After spherical tilings and spherical polyhedra are covered, the final result of Chapter 2 is then used to classify the 13 Archimedean solids, along with their duals, the Catalan solids.  The chapter concludes with a section which links the sphere to the projective plane and studies single elliptic geometry. % Yes, it is the name, see Wikipedia!
+
+The sixth and final chapter, goes into deeper mathematical waters than the earlier chapters.  It introduces differential geometry, where one uses multivariable calculus to study geometric constructions on various surfaces.  The concepts of the first and second fundamental forms, Gaussian curvature, equations of compatibility and geodesics are effectively covered most of the chapter.  The last section introduces open sets of the Euclidean plane with customized metrics, and brings back the spherical, Euclidean and hyperbolic geometries from previous chapters, proving new things about them, such as the circumference of a circle.
+
+This book has been in the making since January 2019.  Credit is due to Professors Claire Burrin and Sagun Chanillo of Rutgers University, where I learned some of this material. % You think first person is suitable?
+
+This book assumes the reader has a background in complex numbers, linear algebra, and, occasionally, basic topology.  It is meant to be suitable for high school / college level and beyond, except for a few elective exercises in Chapter 6.  Each section is followed by exercises, most of which are guided if they might be difficult for an average reader.  It is strongly recommended that the conscientious reader work out the exercises, as their statements are sometimes used in later parts of the book. % "When I WAS a child, and this child WAS-" > "Stevie Nix ignored the subjunctive."
+
+\end{document}

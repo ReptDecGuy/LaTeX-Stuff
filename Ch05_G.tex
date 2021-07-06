@@ -1,0 +1,1264 @@
+\documentclass[leqno]{book}
+\usepackage[small,nohug,heads=vee]{diagrams}
+\diagramstyle[labelstyle=\scriptstyle]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage{mathabx}
+\usepackage{enumitem}
+\usepackage{multicol}
+%\usepackage[utf8]{inputenc}
+
+\makeatletter
+\newcommand*\bcd{\mathpalette\bcd@{.5}}
+\newcommand*\bcd@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+\begin{document}
+
+\chapter{Spherical Geometry}
+
+Spherical geometry is geometry which takes place on a sphere.  It is particularly common to navigation and astronomy, since the planet Earth is sphere-shaped.  It is similar to hyperbolic geometry, but rather ``opposite.''  For example, in hyperbolic geometry, there are numerous lines through a point parallel to a given line; whereas in spherical geometry, there are no parallel lines, as we will see.
+
+The distinguishing feature of this geometry is that unlike Euclidean and hyperbolic geometry, line segments are not free to be as long as they want.  After a finite distance, they close upon themselves.  Thus, the study of the distance between points will be slightly different than expected.  For each point there will be another significant point called the \emph{antipode}, and these two points will relate in many ways.
+
+Spherical geometry enables one to study and classify polyhedra, which essentially arise from tilings.  The spherical plane has the unique property that it is \emph{compact}, and its tilings consist of finitely many faces in total, unlike the Euclidean and hyperbolic geometries.  Spherical tilings will be covered in the second section.  The third and fourth sections will introduce polyhedra, and classify the Archimedean solids with the aid of Chapter 2's last result.  This chapter will end with asim kind of geometry ilar to spherical geometry which relates to projective space.
+
+\subsection*{5.1. Basic Geometry and Stereographic Projection}
+\addcontentsline{toc}{section}{5.1. Basic Geometry and Stereographic Projection}
+We take our spherical plane to be the unit sphere $x^2+y^2+z^2=1$ in $\mathbb R^3$, and we denote it as $S^2(\mathbb R)$.  We shall start by defining certain terms directly on the sphere, and then we will pass the material to the extended plane $\overline{\mathbb R^2}=\mathbb R^2\sqcup\{\infty\}$ via stereographic projection.
+
+In $S^2(\mathbb R)$, a \textbf{line} is defined to be a great circle: this is a circle (of radius $1$) centered at the origin in the ambient $\mathbb R^3$, and is a set of the form $S^2(\mathbb R)\cap\Pi$ with $\Pi$ a plane through the origin (i.e., a two-dimensional vector subspace of $\mathbb R^3$).  A \textbf{line segment} is defined to be a segment of the arc of such a circle.  These concepts are illustrated below.
+\begin{center}
+\includegraphics[scale=.2]{SphLine.png}~~~~
+\includegraphics[scale=.2]{SphLineSeg.png}\\
+~~~~~~Spherical Line~~~~~~~~~Spherical Line Segment
+\end{center}
+Note that each point of $S^2(\mathbb R)$ determines a radius: namely, the Euclidean line segment from that point to $\vec 0\in\mathbb R^3$.  We define the \textbf{distance} between $a,b\in S^2(\mathbb R)$, denoted as $ab$ or $\rho(a,b)$, to be the angle between the radii corresponding to $a$ and $b$ (in radians), as illustrated below.  Note that this is also the arc length of the shorter (spherical) line segment connecting the points.  Moreover, \emph{this distance is always $\leqslant\pi$}.  This strongly contrasts with the Euclidean and hyperbolic geometries, where line segments can be arbitrarily long.
+\begin{center}
+\includegraphics[scale=.2]{SphDistance.png}
+\end{center}
+Since a line is a great circle by definition, the radii from the points on a line all lie in one Euclidean plane.  From the angle addition postulate in Euclidean geometry, we \emph{almost} have the segment addition postulate for spherical geometry: if $a,b,c$ are on a line with $b$ between $a$ and $c$, and $\rho(a,b)+\rho(b,c)\leqslant\pi$, then $\rho(a,c)=\rho(a,b)+\rho(b,c)$.  However, the assumption that $\rho(a,b)+\rho(b,c)\leqslant\pi$ is crucial, and the statement may be false without it (why?).
+
+Just like the Poincar\'e disk model of the hyperbolic plane, this geometry is conformal.  In other words, the \textbf{angle measure} between two intersecting lines is the Euclidean angle measure between them.  Again the angle addition postulate is clear, but we do not have an analogue of Axiom 2.9.
+
+We may now cover basic starting theorems about spherical geometry.  They are surprisingly easier to prove than they were in hyperbolic geometry.  Points $p,q\in S^2(\mathbb R)$ are said to be \textbf{antipodes} if $p=-q$ as vectors in $\mathbb R^3$.\\
+
+\noindent\textbf{Proposition 5.1.} \emph{In the spherical plane,}
+
+(i) \emph{Two points are antipodes if and only if their (spherical) distance is equal to $\pi$.} % No, the Euclidean distance would be 2, the diameter of the sphere.
+
+(ii) \emph{Any two lines intersect in exactly two points which are antipodes.  Hence, no parallel lines exist.}
+
+(iii) \emph{Two points determine a line, unless the points are antipodes, in which case every line through one point also goes through the other.}\\
+
+\noindent Here is an illustration of (ii):
+\begin{center}
+\includegraphics[scale=.2]{SphLines.png}
+\end{center}
+\begin{proof}
+(i) is clear from the definitions, as straight angles (i.e., where the two rays are part of a common line) are precisely the angles with measure $\pi=180^\circ$.
+
+(ii) Let $\ell_1$ and $\ell_2$ be distinct lines in $S^2(\mathbb R)$.  By definition, we may write $\ell_j=S^2(\mathbb R)\cap V_j$ where $V_1,V_2$ are planes through the origin.  With that, $V_1$ and $V_2$ are two-dimensional subspaces of the vector space $\mathbb R^3$.  Since $V_1\not\subset V_2$ (for obvious reasons), $V_1\cap V_2\subsetneq V_1$, so that $\dim(V_1\cap V_2)<2$.  If $\dim(V_1\cap V_2)=0$, then $V_1+V_2=V_1\oplus V_2$ and its dimension is $4$; contradiction, because no subspace of $\mathbb R^3$ can have dimension $4$.  Therefore, $\dim(V_1\cap V_2)=1$.  With that, the subspace $V_1\cap V_2$ can be written as the span of a unit vector $\vec u\in\mathbb R^3$.  From this it follows readily that $\ell_1\cap\ell_2=\{\vec u,-\vec u\}$. % Then I don't understand why it didn't here.  I've used \oplus all along.
+
+(iii) Let $p,q\in S^2(\mathbb R)$ be distinct points.  Suppose first that they are not antipodes.  Then they are linearly independent vectors in $\mathbb R^3$, hence span a two-dimensional subspace $V$.  With that, $\ell=S^2(\mathbb R)\cap V$ is a spherical line through $p$ and $q$.  There are many ways to see that this line is unique: for instance, if $\ell'$ is another line through $p$ and $q$, then $p,q$ are both in $\ell\cap\ell'$: this contradicts part (ii), which states that $\ell\cap\ell'$ consists of a point and its antipode.
+
+If $p$ and $q$ are antipodes, however, then $p=-q$.  With that, it is clear that any subspace of the vector space $\mathbb R^3$ \---- and hence any spherical line \---- contains $p$ if and only if it contains $q$. % How much more?  It proves that every line through either p or q also goes through the other, which is part of the last phrase.
+\end{proof}
+
+\noindent Note that there are no such thing as rays in spherical geometry, since they would close upon themselves and be lines.
+
+Just as in the previous kinds of geometry, a spherical line segment has well-defined endpoints.  It can also have any length \emph{less than $2\pi$} \---- $2\pi$ is the circumference of an entire line, as a circle of radius $1$ in $\mathbb R^3$.  However, if its length is a number $\alpha$ with $\pi<\alpha<2\pi$, then $\alpha$ is \emph{not} the distance between the endpoints: $2\pi-\alpha$ is, since there is a shorter line segment connecting the same points.
+
+Axiom 2.4(ii) and (iii) have already been covered for spherical geometry [(ii) is \emph{almost} true]; and as for Axiom 2.4(i), the closest true statement in the spherical case is this one which the reader may verify:
+\begin{center}
+\textbf{If $\ell$ is a line containing a point $a$, and $r$ is a real number such that $0<r<\pi$, there are exactly two points on $\ell$ whose distance from $a$ is equal to $r$.}
+\end{center}
+The well-known parallel postulate, however, is one of the axioms that differs in all three types of geometry.  Up to now, we have established that:
+\begin{itemize}
+\item \textbf{In Euclidean geometry}: Given a line and a point not on the line, there is exactly one line through the point parallel to the given line.  [Axiom 2.5.]
+
+\item \textbf{In hyperbolic geometry}: Given a line and a point not on the line, there are multiple lines through the point parallel to the given line.  [Proposition 4.5.]
+
+\item \textbf{In spherical geometry}: Given a line and a point not on the line, there is no line through the point parallel to the given line.  [By Proposition 5.1(ii), there are no parallel lines at all.]
+\end{itemize}
+Recall the remarks given immediately after Axiom 2.5.  These differences between the types of geometry are the main starting point of the matter.
+
+In addition, we \emph{almost} have the perpendicular postulate, but there is an exception to it that must be noted.  If $p\in S^2(\mathbb R)$, we define its \textbf{attention line} to be the set $\{\vec v\in S^2(\mathbb R):\vec v\cdot\vec p=0\}$.  It is clear that this is a line, and that all of its points have a distance from $p$ of exactly $\pi/2$.  Each line is the attention line of two points which are antipodes, and these points are called the line's \textbf{center points}.\\
+
+\noindent\textbf{Proposition 5.2.} (i) \emph{Lines $\ell_1,\ell_2$ are perpendicular if and only if $\ell_2$ contains the center points of $\ell_1$.}
+
+(ii) \textsc{(Perpendicular postulate)} \emph{Given a line $\ell$ and a point $p$, if $p$ is not a center point of $\ell$ then there is a unique line through $p$ perpendicular to $\ell$.  However, if $p$ is a center point of $\ell$, every line through $p$ is perpendicular to $\ell$.}\\
+
+\noindent It is worth remarking that part (i) is similar to Proposition 4.21 about the Beltrami-Klein model, which states that two lines are perpendicular if and only if one of them contains the pole point of the other.
+\begin{proof}
+(i) Let $\ell_j=S^2(\mathbb R)\cap V_j$ with the $V_j$ two-dimensional subspaces of $\mathbb R^3$.  Let $p$ be a center point of $\ell_1$.  Then by definition, $V_1=\{\vec v\in\mathbb R^3:\vec p\cdot\vec v=0\}$, so that $\vec p$ is a unit normal vector to $V_1$.  Consequently, $\ell_1\perp\ell_2\iff V_1\perp V_2\iff\vec p\in V_2\iff p\in\ell_2$.
+
+(ii) Let $q$ be a center point of $\ell$.  By part (i), the lines perpendicular to $\ell$ are precisely the lines through $q$.  Thus, if $p$ is not a center point, then $p\ne q$ and $p,q$ are not antipodes; hence there is a unique line through them by Proposition 5.1(iii), and this is also the unique line through $p$ perpendicular to $\ell$.  If $p$ is a center point, then either $p=q$ or $p,q$ are antipodes; by Proposition 5.1 every line through $p$ also goes through $q$.
+\end{proof}
+
+\noindent Similar to Theorem 4.7, we also have this curious fact:\\
+
+\noindent\textbf{Proposition 5.3.} \textsc{(Common Perpendicular Theorem)} \emph{If $\ell_1$ and $\ell_2$ are distinct lines, there is a unique line $\ell$ simultaneously perpendicular to both $\ell_1$ and $\ell_2$.}
+\begin{proof}
+If $p_1,p_2$ are center points of $\ell_1,\ell_2$ respectively, then $p_1,p_2$ are distinct non-antipodes.  The simultaneous perpendicularity is equivalent to saying $\ell$ goes through $p_1,p_2$: now use Proposition 5.1(iii).
+\end{proof}
+
+\noindent We now introduce triangles.  As before, a triangle consists of three noncollinear points, and (spherical) line segments connecting each pair of them.  Note that three noncollinear points cannot contain a point and its antipode: points are collinear if and only if they are linearly dependent vectors of $\mathbb R^3$, which is always the case if two of them are negatives of each other.  Thus, if $a,b,c$ are noncollinear points, each pair of them is connected by exactly two line segments, and either of them can be taken to be the side of the triangle between them.  Whenever we say $\triangle abc$, the sides will be the \emph{shorter} line segments between the points, unless otherwise specified.
+\begin{center}
+\includegraphics[scale=.2]{SphTriangle.png}
+\end{center}
+It is now natural to cover the triangle congruence theorems, and see how the sum of the angles of a triangle compares to $\pi=180^\circ$.  However, it may feel awkward to do these directly on the sphere, where every point ``faces a different direction'' and has a different tangent plane.  For the more general case, we would like to use a model which takes place (mostly) in the flat plane $\mathbb R^n$.  We have done this for hyperbolic geometry, anyway, and there is a curiously basic way to view spherical geometry using the results from Section 4.1 and 4.2.
+The \textbf{stereographic projection model} is obtained as follows: let $N=(0,0,1)$ and $\Pi$ be the $xy$-plane, then use stereographic projection $S^2(\mathbb R)\to\Pi\sqcup\{\infty\}$ (where $N$ maps to $\infty$) to convert from the sphere to the plane:
+\begin{center}
+\includegraphics[scale=.2]{SphereLines1.png}~~~~
+\includegraphics[scale=.2]{SphereLines2.png}%\\Three lines in the spherical plane.~~~~~~Stereographic projection.~~~~
+\end{center}
+We shall regularly identify $\Pi$ with the complex plane $\mathbb C$.  The following facts readily follow:
+\begin{itemize}
+\item Lines in the stereographic projection model are Euclidean lines through the origin, and circles with radius $r$ and center $a\in\mathbb C$, such that $r^2-|a|^2=1$.  [Exercise 7 of Section 4.2.]
+
+\item Angle measures are the Euclidean angle measures.  [Exercise 4(b) of Section 4.1 shows that stereographic projection is conformal.]
+
+\item When $z_1,z_2\in\mathbb C$ are viewed in the stereographic projection model of the spherical plane, their distance is $2\tan^{-1}\frac{|z_1-z_2|}{|\overline{z_1}z_2+1|}.$
+In particular, the distance between $z$ and $0$ is $2\tan^{-1}|z|$.  [Exercise 2.  Note the similarity with Exercises 4 and 10 of Section 4.3; e.g., Exercise 10 shows that the distance between points $z_1,z_2$ in the Poincar\'e disk model is $2\tanh^{-1}\frac{|z_1-z_2|}{|\overline{z_1}z_2-1|}$.]
+\end{itemize}
+The main purpose of switching to stereographic projection is to be able to prove complicated results, and to note their similarities with hyperbolic geometry.  As seen above, basic geometry is surprisingly easy to do directly on the sphere itself.
+
+For a first example, we will show that the angles of a triangle add to greater than $\pi$, or $180^\circ$.  This can actually be shown directly on the sphere, using tangent planes [Exercise 3]; however, we will not use this strategy; it steers away from the setting of (spherical) plane geometry.\\
+
+\noindent\textbf{Proposition 5.4.} \emph{The measures of the angles of a spherical triangle add to $>180^\circ$.}
+\begin{proof}
+As in the proof of Proposition 4.8, we may assume we are in the stereographic projection model, and $a=0$.
+\begin{center}
+\includegraphics[scale=.3]{SphTriangleAngles.png}
+\end{center}
+The Euclidean triangle $\triangle abc$ shares the same line segments $\overline{ab},\overline{ac}$, but the Euclidean line segment from $b$ to $c$ lies inside the triangle, with the spherical triangle's side curving outwards.  The reason is that the spherical line $\overset{\longleftrightarrow}{bc}$ is a circle with a center $u$ and radius $r$ such that $r^2-|u|^2=1$.  The interior of such a circle is given by the equation $|z-u|<r$, hence contains the origin $0$ (because $r^2-|u|^2=1>0\implies|u|<r$); this implies that the Euclidean circle everywhere curves away from the origin.  Hence, the angles at $b$ and $c$ are larger than the corresponding angles of the Euclidean triangle; yet the angle at $a$ is the same.  This completes the proof since the Euclidean triangle's angles add to $180^\circ$, and the spherical triangle's angles have a larger sum.
+\end{proof}
+
+\noindent Moreover, we have the same concept of triangle congruence from Euclidean and hyperbolic geometry, $\triangle abc\cong\triangle a'b'c'$ if $\overline{ab}\cong\overline{a'b'}$, $\angle bac\cong\angle b'a'c'$, etc.  We have the same congruence theorems from the hyperbolic case; in particular, the angles determine the triangle up to congruence:\\
+
+\noindent\textbf{Proposition 5.5.} (i) \textsc{(Side-side-side / SSS)} \emph{If $\overline{ab}\cong\overline{a'b'},\overline{bc}\cong\overline{b'c'},\overline{ca}\cong\overline{c'a'}$, then $\triangle abc\cong\triangle a'b'c'$.}
+
+(ii) \textsc{(Side-angle-side / SAS)} \emph{If $\overline{ab}\cong\overline{a'b'}$, $\overline{ac}\cong\overline{a'c'}$, and $\angle a\cong\angle a'$, then $\triangle abc\cong\triangle a'b'c'$.}
+
+(iii) \textsc{(Hypotenuse-leg / HL / RHS)} \emph{If $\angle b,\angle b'$ are right angles, $\overline{ab}\cong\overline{a'b'}$ and $\overline{ac}\cong\overline{a'c'}$, then $\triangle abc\cong\triangle a'b'c'$.}
+
+(iv) \textsc{(Angle-side-angle / ASA)} \emph{If $\angle a\cong\angle a'$, $\overline{ab}\cong\overline{a'b'}$, $\angle b\cong\angle b'$, then $\triangle abc\cong\triangle a'b'c'$.}
+
+(v) \textsc{(Angle-angle-angle / AAA)} \emph{If $\angle a\cong\angle a'$, $\angle b\cong\angle b'$, and $\angle c\cong\angle c'$, then $\triangle abc\cong\triangle a'b'c'$.}\\
+
+\noindent Notice that AAS is missing.  Exercise 4 shows that, in fact, AAS is generally false in spherical geometry.
+\begin{proof}
+Each of these can be proved by applying convenient isometries to the triangles, which cause certain corresponding parts to coincide.  We have illustrated this in the hyperbolic case in Proposition 4.9; here, we shall leave it to the reader.
+\end{proof}
+\noindent\textbf{Proposition 5.6} \textsc{(Isosceles Triangle Theorem)} \emph{If $\triangle abc$ is a triangle, then $\overline{ab}\cong\overline{ac}$ if and only if $\angle b\cong\angle c$.}
+\begin{proof}
+Copy the proof of Proposition 2.15, using Proposition 5.5 in place of Axiom 2.13.
+\end{proof}
+
+\noindent We can take the attention point of two lines (which must meet anyway).  If $\ell_1,\ell_2$ are distinct lines, we may let $\ell$ be the unique line perpendicular to both of them (Proposition 5.3).  If $p_j\in \ell\cap\ell_j$ for $j=1,2$, there are two line segments occurring between $p_1$ and $p_2$ (those points can't be antipodes, because that would imply $\ell_1=\ell_2$).  The midpoints of these segments are antipodes which are not centers of $\ell_1$ or $\ell_2$; we call these points \textbf{attention points} of the pair of lines.  We again have the nice properties of transversals:\\
+
+\noindent\textbf{Proposition 5.7.} \emph{Let $\ell_1$ and $\ell_2$ be distinct lines, $\ell_3$ a transversal, and $p$ an attention point of $\ell_1,\ell_2$.  Then the following are equivalent:}
+
+(i) \emph{$p\in\ell_3$.}
+
+(ii) \emph{Corresponding angles are congruent.}
+
+(iii) \emph{Corresponding exterior angles are supplementary.}
+
+(iv) \emph{Alternate exterior angles are congruent.}
+
+(v) \emph{Corresponding interior angles are supplementary.}
+
+(vi) \emph{Alternate interior angles are congruent.}
+\begin{proof}
+(i) $\iff$ (vi). Copy the argument in Proposition 4.11, using Proposition 5.2 in place of 4.6, and Proposition 5.5 in place of Proposition 4.9.
+
+As usual, (ii) - (vi) are equivalent because angles in linear pairs are supplementary.
+\end{proof}
+
+\noindent We conclude this section by discussing circles.  The conscientious reader may be aware that isometries have not been covered yet, the way they were in Section 4.3 before the basic geometric results.  However, the isometry group of the sphere has already been studied in Chapter 2, and there is not much difficulty in understanding it in the spherical geometry setting.  See Exercise 1.
+
+As before, if $r$ is a positive real number between $0$ and $\pi$, and $o\in S^2(\mathbb R)$, then the set of points $a$ whose distance to $o$ equals $r$ is called a circle.  [Technically, one can arrange for this to work with $r\geqslant\pi$, by traveling in each direction from $o$, geodesically a distance of $r$.  This will get them a circle all the same, but there could be useless looping.]  $r$ is called the \text{radius} of the circle and $o$ is called a \textbf{center}.
+
+We note that for $\vec p\in S^2(\mathbb R)$, we get (since the distance $\rho(\vec p,\vec o)$ is the angle between the vectors),
+$$\rho(\vec p,\vec o)=\cos^{-1}\frac{\vec p\cdot\vec o}{\|\vec p\|\|\vec o\|}=\cos^{-1}(\vec p\cdot\vec o),$$
+from which it follows that with $0<r<\pi$, the circle is given by the equation $\vec p\cdot\vec o=\cos r$.  If this equation were for all vectors $\vec p\in\mathbb R^3$, it would give a plane perpendicular to $\vec o$ (not necessarily through the origin).  Restricting this to $S^2(\mathbb R)$, we get a circle on the sphere in the usual sense.
+
+Thus the circles in spherical geometry are merely the circles in the usual sense (the intersection of $S^2(\mathbb R)$ with planes).  It is clear that, conversely, every circle on the sphere is a circle in spherical geometry.  Note that this means that \textbf{lines are circles in spherical geometry} \---- specifically, circles with radius $\pi/2$.  This is similar to the fact that ``hypercycles'' (Section 4.4) in the Euclidean plane are lines.
+
+Since stereographic projection preserves (generalized) circles by Lemma 4.2, we conclude that the circles in the stereographic projection model are the generalized circles of $\overline{\mathbb C}$.  Every generalized circle is a circle; it's only a line if it's either a Euclidean line through the origin, or a circle with center $r$ and radius $a$ such that $r^2-|a|^2=1$.
+
+\subsection*{Exercises 5.1. (Basic Geometry and Stereographic Projection)} % Start by going over spherical geometry directly on the sphere, introducing points and lines.
+%attention point theorem => circles
+% POTENTIAL: the isometry group----it's O(n+1) in this particular geometry, [while the stabilizer of a point in all three kinds of geometry is O(n)]
+\begin{enumerate}
+\item The isometries of $S^2(\mathbb R)$ are precisely the elements of $O(3)$, transforming the unit sphere in $\mathbb R^3$ in the usual sense.  The elements of $SO(3)$ are called \textbf{orientation-preserving isometries}, and the rest are called \textbf{orientation-reversing isometries}.
+
+(a) Explain why isometries preserve distances, lines and angles.
+
+(b) Show that the isometries act transitively on the set of points; and also on the set of lines.
+
+(c) In the stereographic projection model, show that the orientation-preserving isometries are precisely the M\"obius transforms which commute with the map $z\mapsto -1/\overline z$.  Use this to show that they are the M\"obius transforms of the form $z\mapsto\frac{az-b}{\overline bz+\overline a}$.  What are the orientation-reversing isometries?
+
+\item (a) Let $z\in\mathbb C$, regarded as a point in the stereographic projection model of the spherical plane.  Show that the distance between $z$ and $0$ is $2\tan^{-1}|z|$.  [Find the corresponding points on the sphere, then it should be fairly easy.]
+
+(b) If $z_1,z_2\in\mathbb C$ are viewed in the stereographic projection model, show that their distance is
+$$\rho(z_1,z_2)=2\tan^{-1}\frac{|z_1-z_2|}{|\overline{z_1}z_2+1|}.$$
+[By Exercise 1(b), the transformation $z\mapsto\frac{z-z_1}{\overline{z_1}z+1}$ is an isometry.  Pass $z_1,z_2$ through this isometry, then use part (a).]
+
+(c) It is possible for the expression in (b) to be undefined.  When does this happen?  What is the distance between the points in this case? % Referring to when z_1,z_2 are antipodes, which entails that \overline{z_1}z_2 + 1 = 0, and the expression has a division by zero.  In this case, the distance is \pi; this makes sense in view of \tan(\pi/2) being undefined.
+
+\item Here is an alternate proof of Proposition 5.4, using tangent planes.  Let $\triangle abc$ be a triangle in $S^2(\mathbb R)$.  Construct the tangent planes $\Pi_a,\Pi_b,\Pi_c$ to the sphere at the points $a,b,c$ respectively.
+
+(a) Let $\ell_1=\Pi_a\cap\Pi_b$.  Show that $\ell_1$ is a line which is perpendicular to the Euclidean plane through the origin containing $\overline{ab}$.  [Use basic linear algebra and the fact that the tangent plane to a point is perpendicular to the radius at that point.]  Similarly with $\ell_2=\Pi_b\cap\Pi_c$ and $\ell_3=\Pi_c\cap\Pi_a$.
+
+(b) The planes $\Pi_a,\Pi_b,\Pi_c$ have a common intersection point $p$ (in $\mathbb R^3$, not the sphere), and for each plane there is an angle at $p$ between the lines established in part (a).  Show that the angle on $\Pi_a$ is supplementary to the angle of $a$ in the spherical triangle, and similarly for the other angles.  [The angle between two lines on the sphere is the dihedral angle between the planes through the origin containing them: why?]
+
+(c) Show that the angles between the planes sum to less than $2\pi=360^\circ$.  [Think of the planes as three hinged pieces of rigid, flat material; remove one hinge and flatten everything.]
+
+(d) Conclude from parts (b) and (c) that the sum of the angles of $\triangle abc$ exceeds $\pi=180^\circ$.
+
+\item Let $0<\alpha<\pi$ be any real number.
+
+(a) Construct a triangle $\triangle abb'$ for which $m\angle b=\alpha$ and $m\angle b'=\pi-\alpha$.  [Remember, lines always meet no matter what.]
+
+(b) Extend $\overline{bb'}$ on one side and let $c$ be a point on the line with $b'$ between $b,c$.  Show that $m\angle abc=m\angle ab'c=\alpha$, $\angle acb\cong\angle acb'$ and $\overline{ac}\cong\overline{ac}$, but $\triangle abc\not\cong\triangle ab'c$.  This is a counterexample to the assertion of AAS congruence in spherical geometry.
+
+\item Show that a circle centered at $o$ with radius $r,0<r<\pi$ is also a circle centered at the antipode of $o$.  What is the radius in this situation?
+
+\item\emph{(Lambert azimuthal equal-area projection.)} \---- The Lambert azimuthal equal-area projection is a projection of $S^2(\mathbb R)$ on a disk of radius $2$, obtained as follows.   Let the plane $\Pi$ be tangent to the sphere at the south pole $S=(0,0,-1)$, and identify $(x,y)$ with $(x,y,-1)$ on this plane.
+
+Take any point $\vec p\in S^2(\mathbb R)$.  If $\vec p=S$, then $\vec p$ just maps to the origin $(0,0)$.  If $\vec p=N=(0,0,1)$, the north pole, then $\vec p$ does not map to any well-defined point; thus the north pole is excluded.  Otherwise, let $\Pi_1$ be the plane through $\vec p$ and the $z$-axis, and rotate the Euclidean line segment from $S$ to $\vec p$ in $\Pi_1$, centered at $S$, away from the $z$-axis, until it lies in the plane $\Pi$.  The following diagram illustrates:
+\begin{center}
+\includegraphics[scale=.3]{LAEAP_diagram.png}
+\end{center}
+Thus the projection of $\vec p$ is the point in $\Pi_1\cap\Pi$ whose distance from $S$ is the Euclidean distance from $S$ to $\vec p$ in the ambient $\mathbb R^3$.
+
+(a) Show that the formula $\varphi:S^2(\mathbb R)-\{N\}\to\Pi$ for Lambert azimuthal equal-area projection is given by
+$$\varphi(x,y,z)=\left(\sqrt{\frac 2{1-z}}x,\sqrt{\frac 2{1-z}}y\right),$$
+and that its range is the origin-centered open disk of radius $2$, henceforth to be called $D_2(0)$.  [The distance from $(x,y,z)$ to $S$ is $\sqrt{x^2+y^2+(z+1)^2}=\sqrt{2(1+z)}$; show that this is also the distance from $S$ to the given point.  The rest should be clear.  As for the statement about the range, the diameter of $S^2(\mathbb R)$ is $2$.]
+
+(b) Show that the inverse of $\varphi$, $\varphi^{-1}:D_2(0)\to S^2(\mathbb R)-\{N\}$ is given by
+$$\varphi^{-1}(u,v)=\left(\sqrt{1-\frac{u^2+v^2}4}u,\sqrt{1-\frac{u^2+v^2}4}v,\frac{u^2+v^2}2-1\right).$$
+[It suffices to show that this formula gives a two-sided inverse for the one in part (a).]
+
+(c) Show that this projection is \emph{not} conformal.  [Exercise 4(a) of Section 4.1.]  The projection, however, preserves area; see Exercise 8 of Section 6.3.
+
+(d) Show that at the origin \---- and only at the origin \---- lines are Euclidean straight lines, and angle measures are the Euclidean angle measures.  [This is what ``azimuthal'' means.  Note that this is also true for the stereographic projection model of the sphere, and the Poincar\'e disk and Beltrami-Klein models of the hyperbolic plane.]
+
+Here is an illustration of two lines in the Lambert azimuthal equal-area projection of the spherical plane.  Note that the origin-centered one is a Euclidean circle, but the other one is not.
+\begin{center}
+\includegraphics[scale=.25]{LAEAP1.png}
+\end{center}
+\end{enumerate}
+
+\subsection*{5.2. Triangles, Polygons and Tilings}
+\addcontentsline{toc}{section}{5.2. Triangles, Polygons and Tilings}
+Now that we have covered basic geometry, we wish to study triangles, exactly as we did in the Euclidean and hyperbolic planes.  The trigonometric laws for spherical triangles will be similar to those in Proposition 4.13, but they will not use the hyperbolic functions.  Instead, they will use the trigonometric functions.
+
+Thus, we wish to remind ourselves of plenty of properties of trigonometric functions:
+\begin{itemize}
+\item $\cos x$ and $\sec x$ are even functions; $\sin x,\tan x,\cot x,\csc x$ are all odd functions.
+
+\item $\sin^2x+\cos^2x=1$ (the Pythagorean identity).
+
+\item $\tan x=\frac{\sin x}{\cos x}$.
+
+\item $\cot x=\frac 1{\tan x}$; $\sec x=\frac 1{\cos x}$; $\csc x=\frac 1{\sin x}$.
+
+\item $\cos(x\pm y)=\cos x\cos y\mp\sin x\sin y$, and $\sin(x\pm y)=\sin x\cos y\pm\cos x\sin y$.  (Therefore, taking $x=y$, we get $\cos(2x)=\cos^2x-\sin^2x=2\cos^2x-1=1-2\sin^2x$, and $\sin(2x)=2\sin x\cos x$.)
+
+\item $\tan(x\pm y)=\frac{\tan x\pm\tan y}{1\mp\tan x\tan y}$.  In particular, taking $x=y$, $\tan(2x)=\frac{2\tan x}{1-\tan^2x}$.
+
+\item $\tan^2x+1=\sec^2x$, and $\cot^2x+1=\csc^2x$.
+\end{itemize}
+For the conscientious reader who would like to prove these identities, several strategies are applicable: one could (i) recall that most of the identities have been proven in the early sections of Chapter 2, and then readily derive the rest; or (ii) recall the expressions for the trigonometric functions in terms of the exponential function and the imaginary unit (given in Section 4.5); then the proofs use basic algebra.
+
+Throughout this chapter, a triangle is assumed to have side lengths and angles strictly between $0$ and $\pi$, and is given as $\triangle ABC$ where the vertices are capital letters, $A,B,C$ denote the angle measures, and $a,b,c$ denote the side lengths opposite those respective vertices:
+\begin{center}
+\includegraphics[scale=.25]{SphTriangleSample.png}
+\end{center}
+As previously mentioned, the spherical triangle laws imitate the hyperbolic triangle laws:\\
+
+\noindent\textbf{Proposition 5.8.} \emph{For the above triangle,}
+
+(i) \emph{The \textbf{spherical law of cosines} holds: $\cos c=\cos a\cos b+\sin a\sin b\cos C$.}
+
+(ii) \emph{The \textbf{spherical law of sines} holds: $\frac{\sin a}{\sin A}=\frac{\sin b}{\sin B}=\frac{\sin c}{\sin C}$.}
+
+(iii) \emph{The \textbf{second spherical law of cosines} holds: $\cos C=-\cos A\cos B+\sin A\sin B\cos c$.}\\
+
+\noindent As before, (i) derives the angle measures from the side lengths, and (iii) derives the side lengths from the angle measures.  The special case of (i) where $C=\pi/2$ shows that if $a,b,c$ are the sides of a spherical right triangle with $c$ the hypotenuse, $\cos c=\cos a\cos b$.  Again we have that if $C=\pi$ then $c=a+b$ by part (i), and if $C=0$ then $c=|a-b|$ \---- the manifestation of the segment addition postulate.
+\begin{proof}
+(i) By applying an isometry, we may assume we are in the stereographic projection model, vertex $C$ is at $0$ and vertex $A$ is at a positive real number $r$.  Then sides $\overline{AC},\overline{BC}$ are Euclidean line segments and $C$ is the Euclidean angle measure between them; hence the location of vertex $B$ is of the form $se^{iC}$ where $s$ is a positive real number.
+
+By Exercise 2 of the previous section, $a=2\tan^{-1}s$, $b=2\tan^{-1}r$ and $c=2\tan^{-1}\frac{|r-se^{iC}|}{|rse^{iC}+1|}$.  Thus, $\tan(c/2)=\frac{|r-se^{iC}|}{|rse^{iC}+1|}$, from which $\tan^2(c/2)=\frac{|r-se^{iC}|^2}{|rse^{iC}+1|^2}$ follows.  Yet,
+$$\cos c=\frac{\cos c}1=\frac{\cos^2(c/2)-\sin^2(c/2)}{\cos^2(c/2)+\sin^2(c/2)}=\frac{1-\tan^2(c/2)}{1+\tan^2(c/2)}$$
+$$=\frac{|rse^{iC}+1|^2-|r-se^{iC}|^2}{|rse^{iC}+1|^2+|r-se^{iC}|^2}$$
+Since $|z|^2=z\overline z$ for $z\in\mathbb C$, we have $|rse^{iC}+1|^2=(rse^{iC}+1)\overline{(rse^{iC}+1)}=(rse^{iC}+1)(rse^{-iC}+1)=r^2s^2+2rs\cos C+1$, and similarly, $|r-se^{iC}|^2=(r-se^{iC})(r-se^{-iC})=r^2-2rs\cos C+s^2$.  Therefore
+$$\cos c=\frac{(r^2s^2+2rs\cos C+1)-(r^2-2rs\cos C+s^2)}{(r^2s^2+2rs\cos C+1)+(r^2-2rs\cos C+s^2)}$$
+$$=\frac{r^2s^2-r^2-s^2+1+4rs\cos C}{r^2s^2+r^2+s^2+1}=\frac{(1-r^2)(1-s^2)+4rs\cos C}{(1+r^2)(1+s^2)};$$
+since Exercise 1(b) shows that $\cos a=\frac{1-s^2}{1+s^2}$, $\sin a=\frac{2s}{1+s^2}$, $\cos b=\frac{1-r^2}{1+r^2}$ and $\sin b=\frac{2r}{1+r^2}$, we conclude $\cos c=\cos a\cos b+\sin a\sin b\cos C$ as desired.
+
+(ii) As in Proposition 4.13(ii) it suffices to show that $\frac{\sin a}{\sin A}=\frac{\sin b}{\sin B}$.  Let $\alpha=\cos a,\beta=\cos b,\gamma=\cos c$.  Then by the Pythagorean identity, we get $\sin^2a=1-\alpha^2$ and $\sin^2b=1-\beta^2$.  By part (i), $\cos c=\cos a\cos b+\sin a\sin b\cos C$, or what is the same thing, $\gamma=\alpha\beta+\sin a\sin b\cos C$.  Hence, $\sin a\sin b\cos C=\gamma-\alpha\beta$.  Squaring throughout,
+$$(\gamma-\alpha\beta)^2=\sin^2a\sin^2b\cos^2C$$
+and hence
+$$\sin^2a\sin^2b\sin^2C=\sin^2a\sin^2b(1-\cos^2C)=\sin^2a\sin^2b-\sin^2a\sin^2b\cos^2C$$
+$$=(1-\alpha^2)(1-\beta^2)-(\gamma-\alpha\beta)^2=1-\alpha^2-\beta^2-\gamma^2+2\alpha\beta\gamma$$
+The expression on the right-hand side is symmetric in $\alpha,\beta,\gamma$; hence by repeating the argument with $a,b,c$ permuted, it is also equal to $\sin^2a\sin^2c\sin^2B$ and $\sin^2b\sin^2c\sin^2A$.  Therefore, $\sin^2a\sin^2c\sin^2B=\sin^2b\sin^2c\sin^2A$.  Dividing by $\sin^2c$ throughout, $\sin^2a\sin^2B=\sin^2b\sin^2A$.  Taking square roots, and noting that everything is positive (because $a,b,A,B\in(0,\pi)$, we get $\sin a\sin B=\sin b\sin A$, and therefore $\frac{\sin a}{\sin A}=\frac{\sin b}{\sin B}$.
+
+(iii) As in part (ii), let $\alpha=\cos a,\beta=\cos b,\gamma=\cos c$.  We have shown that $\Delta=\sqrt{1-\alpha^2-\beta^2-\gamma^2+2\alpha\beta\gamma}$ is equal to
+$$\Delta=\sin a\sin b\sin C=\sin a\sin c\sin B=\sin b\sin c\sin A.$$
+Moreover, by part (i),
+$$\sin a\sin b\cos C=\gamma-\alpha\beta$$
+$$\sin a\sin c\cos B=\beta-\alpha\gamma$$
+$$\sin b\sin c\cos A=\alpha-\beta\gamma$$
+and as before, $\sin^2c=1-\gamma^2$.  Therefore
+$$\frac{\cos C+\cos A\cos B}{\sin A\sin B}=\frac{(1-\gamma^2)(\gamma-\alpha\beta)-(\beta-\alpha\gamma)(\alpha-\beta\gamma)}{\Delta^2},$$
+as can be seen by multiplying the numerator and denominator of the left-hand side by $\sin^2c\sin a\sin b$.  Yet as before, the right-hand side readily simplifies to $\gamma=\cos c$, proving (iii).
+\end{proof}
+
+\noindent Now that we have the fundamental properties, we can analyze many other properties of spherical triangles.  For example, if $\triangle ABC$ is equilateral (i.e., has three equal sides), it has three equal angles by the Isosceles Triangle Theorem.  We can let $s$ be its side length and $\theta$ its angle.  By Proposition 5.8(i),
+$$\cos s=\cos^2s+\sin^2s\cos\theta$$
+This, along with the fact that $\sin^2s=1-\cos^2s$, entails
+$$(1-\cos\theta)\cos^2s-\cos s+\cos\theta=0$$
+When $\theta$ is fixed, this is a quadratic equation in $u=\cos s$, and it is readily seen that the roots are $u=1,\frac{\cos\theta}{1-\cos\theta}$.  Yet $u=1$ entails $s=0$, absurd.  Therefore, we have $\cos s=\frac{\cos\theta}{1-\cos\theta}$.  Incidentally, since $\cos s<1$, we get $\cos\theta<\frac 12$, so that $\theta>60^\circ=\frac{\pi}3$ \---- the reader should be able to see how this is inferred.  Either using Proposition 5.8(iii) or directly deriving from that equation, we get $\cos\theta=\frac{\cos s}{1+\cos s}$.  Hence\\
+
+\noindent\textbf{Proposition 5.9.} \emph{If a spherical equilateral triangle has side length $s$ and angle measure $\theta$, then $\cos s=\frac{\cos\theta}{1-\cos\theta}$ and $\cos\theta=\frac{\cos s}{1+\cos s}$.}\\
+
+\noindent Now we turn our attention to right triangles.  We assume $\triangle ABC$ is a right triangle with $\angle C$ the right angle, so that $a,b$ are the lengths of the legs and $c$ is the length of the hypotenuse.  As previously stated, $\cos c=\cos a\cos b$.  Furthermore, by Proposition 5.8(iii), we get
+$$\cos A=-\cos B\cos C+\sin B\sin C\cos a=\sin B\cos a$$
+(because $C$ is a right angle), and hence $\cos a=\frac{\cos A}{\sin B}$, and we have a formula for one of the lengths of the legs.  Moreover, $\cos b=\frac{\cos B}{\sin A}$ by symmetry considerations, and hence $\cos c=\cos a\cos b=\frac{\cos A\cos B}{\sin A\sin B}=\cot A\cot B$.  [This is $<1$ this time, because $A+B>90^\circ=\pi/2$.  For a hyperbolic right triangle, those inequalities would be opposite.]
+
+By Proposition 5.8(ii), $\frac{\sin a}{\sin A}=\frac{\sin c}{\sin C}=\sin c$, from which we get $\sin A=\frac{\sin a}{\sin c}$.  This shows that the sine of an angle in a right triangle is the quotient of the \emph{sine} of the opposite leg over that of the hypotenuse.  Moreover, the reader is encouraged to verify these, by imitating the arguments in Section 4.5:
+\begin{itemize}
+\item $\cos A=\frac{\tan b}{\tan c}$.
+
+\item $\tan A=\frac{\tan a}{\sin b}$.
+\end{itemize}
+There are many other interesting identities for spherical triangles, which will be covered in Exercise 3.  However, in practice, we will only deal with a few at a time.\\
+
+\noindent\textbf{Proposition 5.10.} \emph{Let $\triangle ABC$ be a spherical right triangle with $\angle C$ the right angle, and let $a,b,c$ be the side lengths opposite $A,B,C$ respectively.  Then:}
+
+(i) \emph{$\cos c=\cos a\cos b$.}
+
+(ii) \emph{$\cos b=\frac{\cos B}{\sin A}$, $\cos a=\frac{\cos A}{\sin B}$ and $\cos c=\cot A\cot B$.}
+
+(iii) \emph{$\sin A=\frac{\sin a}{\sin c}$, $\cos A=\frac{\tan b}{\tan c}$ and $\tan A=\frac{\tan a}{\sin b}$.}\\
+
+\noindent As before, we can define more general polygons.  An $n$-gon consists of an ordered $n$-tuple of points $A_1,\dots,A_n$ (called \textbf{vertices}) equipped with the $n$ line segments $\overline{A_1A_2},\dots,\overline{A_{n-1}A_n},\overline{A_nA_1}$ (called \textbf{edges} or \textbf{sides}), such that no two segments intersect with each other unless they share a vertex.  As before, we restrict ourselves to convex polygons.  By adapting Proposition 2.30 and using Proposition 5.4, one readily shows that the measures of the angles of a regular $n$-gon add to $>180(n-2)^\circ=\pi(n-2)$.  The definitions of an equilateral/equiangular/regular polygon are identical to those of Section 2.3.
+
+It can also be shown that if $A_1,\dots,A_n$ is a regular $n$-gon, then one can form the \textbf{circumscribed circle} and the \textbf{inscribed circle}, and that every circle which is not a line has regular $n$-gons inscribed in the circle and circumscribed around.\\
+
+\noindent\textbf{TILINGS}\\
+
+\noindent As usual, now that we have studied triangles and polygons in detail, we may show how they cover the spherical plane.  For this, we recall the concept of a triangle pattern from Section 4.5.
+
+Let $a,b,c$ be integers $\geqslant 2$.  We start with a triangle whose angle measures are exactly $\pi/a,\pi/b,\pi/c$.  Depending on how $\pi/a+\pi/b+\pi/c$ compares with $\pi$ (i.e., how $\frac 1a+\frac 1b+\frac 1c$ compares with $1$), the triangle exists in either spherical, Euclidean or hyperbolic geometry: spherical if the sum is greater than $\pi$ (in view of Proposition 5.4), hyperbolic if the sum is less than $\pi$ (in view of Proposition 4.8), and Euclidean if the sum equals $\pi$ (in view of Proposition 2.11).  Given this triangle, we may reflect it over its edges, as shown below, and then reflect all subsequently formed triangles over their own edges until they cover the plane.
+\begin{center}\includegraphics[scale=.4]{TriangleReflecting.png}\end{center}
+As previously shown, the only Euclidean ones ($\frac 1a+\frac 1b+\frac 1c=1$) are, up to ordering, $[2,4,4]$, $[2,3,6]$ and $[3,3,3]$.  These give the isosceles right triangle, the 30-60-90 right triangle (which is half the equilateral triangle), and the equilateral triangle.  However, there are infinitely many possible triangles in the hyperbolic case, where $a,b,c$ can be arbitrarily large.  There are also infinitely many in the spherical case, but they can be more simply classified.
+
+If $a,b,c$ are integers $\geqslant 2$ such that $\frac 1a+\frac 1b+\frac 1c>1$, then one of the integers must be $2$: if they were all $\geqslant 3$, we would have $\frac 1a+\frac 1b+\frac 1c\leqslant\frac 13+\frac 13+\frac 13=1$.  Suppose, without loss of generality, that $a=2$.  Then $\frac 1b+\frac 1c>\frac 12$.  Either $b$ or $c$ must be $<4$ (if both were $\geqslant 4$, the inequality would fail); so suppose, again without loss of generality, that $b<4$.  Either $b=2$ or $b=3$.  If $b=2$, then $c$ can be anything, and the inequality will always hold.  If $b=3$, then we are left with $\frac 1c>\frac 16$, so that $c<6$.  From this it follows that the only possible unordered triples of $[a,b,c]$ are:
+$$[2,2,n]\text{ for integers }n\geqslant 2;~~~~~~~~[2,3,3],~~~~~~~~[2,3,4],~~~~~~~~[2,3,5].$$
+In the case $[2,2,n]$, we get a tiling of triangles with two right angles and an angle of $\pi/n$: it is obtained by taking the union of the sphere's equator with $2n$ equally spaced longitudes/meridians.  In the case $[2,3,3]$, we get a tiling of $24$ triangles; $[2,3,4]$, we get a tiling of $48$ triangles with octahedral symmetry, and in the case $[2,3,5]$ we get a tiling of $120$ triangles with icosahedral symmetry.
+
+Now that we have covered all three types of geometry, we may display an example of a triangle pattern in each one.  In each case, the numbers in the brackets refer to the valencies of the vertices divided by $2$.
+\begin{center}
+\includegraphics[scale=.18]{SphTrianglePattern.png}
+\includegraphics[scale=.2]{EucTrianglePattern.png}
+\includegraphics[scale=.2]{HypTrianglePattern.png}\\
+$[2,3,5]$ (spherical)~~~~~~~~~$[2,3,6]$ (Euclidean)~~~~~~~~~$[2,3,7]$ (hyperbolic)
+\end{center}
+We also recall how to use these to construct various uniform tilings: we do a simple, specific construction in one of the triangles, pass it over to the others by reflecting, then erase the original triangles (a.k.a, the Wythoff construction).  For instance, in the 30-60-90 triangle tiling in the Euclidean plane, constructing the altitude to the hypotenuse of a triangle then passing it over to the others gives the trihexagonal tiling (made up of hexagons and triangles):
+\begin{center}
+\includegraphics[scale=.18]{HexTilingForm2.png} % Sure, Space Structures is a relevant book, but I never used it to write this... so would it make sense to cite it?
+\end{center}
+We now apply this strategy in spherical geometry.
+\begin{itemize}
+\item Take the $[2,3,5]$ triangle pattern up above.  Draw only the short leg of each triangle, and you get the (spherical) dodecahedron, shown below.  It consists of twelve pentagons with $2\pi/3=120^\circ$ angles.  By Exercise 7(a), its side length is $\cos^{-1}\left(\frac{4\cos(2\pi/5)+1}{3}\right)\approx 0.729728$.
+
+Below are two perspectives of the spherical dodecahedron: the one on the left is directly based off of the former illustration of the triangle pattern, and the one on the right is naturally comprehensible.
+\begin{center}
+\includegraphics[scale=.2]{SphDodecahedron_Persp2.png}~~~~
+\includegraphics[scale=.2]{SphDodecahedron.png} % Fair point, the 2D projections are nearly rotations of one another.  Then again, people recognize a dodecahedron better with pentagons right at the bases, right?
+\end{center}
+Let us display the same tiling in the stereographic projection model and the Lambert azimuthal equal-area projection model (Exercise 6 of the previous section):
+\begin{center}
+\includegraphics[scale=.2]{Dodecahedron_StereoProj.png}~~~~
+\includegraphics[scale=.22]{Dodecahedron_LAEAP.png}
+\end{center}
+\item Start with the $[2,3,5]$ pattern again.  But this time, we do the following to the triangle: we start by considering the angle bisector of the $2\pi/3$-angle vertex, without constructing it.  At the point where it meets the long leg of the right triangle, we construct perpendicular line segments to the short leg and the hypotenuse.  [Due to the right angle, the line segment to the short leg is actually contained in the long leg.]  Thus the construction consists of two identical-length line segments.
+
+When we reflect it over the rest of the triangles, we get the \emph{truncated icosahedron}.  It consists of $20$ hexagons and $12$ pentagons, with one pentagon and two hexagons at each vertex.  As a spherical polyhedron, this is seen a lot in real life, as a soccer ball / buckyball.  As a soccer ball, its pentagons are black, and its hexagons are white, as shown on the right side.
+\begin{center}
+\includegraphics[scale=.2]{Buckyball.png}~~~~
+\includegraphics[scale=.2]{Buckyball2.png}
+\end{center}
+More uniform tilings which use the $[2,3,5]$ pattern are outlined in Exercises 9-10.
+
+\item We can do all of those things with the $[2,3,4]$ tiling as well:
+\begin{center}
+\includegraphics[scale=.2]{Sph234Pattern.png}
+\end{center}
+Drawing only the short leg of each triangle gives us the cube, and doing the construction of the previous bullet point gives us the \emph{truncated octahedron}, shown on the right.
+\begin{center}
+\includegraphics[scale=.2]{SphCube.png}~~~~
+\includegraphics[scale=.2]{SphTruncatedOctahedron.png}
+\end{center}
+
+\item For the $[2,2,n]$ tiling, many things can be constructed.  For instance, drawing only the longest sides of each triangle results in a ``digonal polyhedron,'' an exotic kind of structure which only exists nondegenerately on the sphere.  Taking the incenter of each triangle, and drawing perpendiculars to the sides, results in a $(2n)$-gonal prism.  The following diagrams assume $n=7$.
+\begin{center}
+\includegraphics[scale=.2]{SphAxialTiling1.png}~~~~
+\includegraphics[scale=.2]{SphAxialTiling2.png}
+\end{center}
+\end{itemize}
+Uniform tilings can actually be classified pretty easily, but in the next section, we will use spherical geometry to introduce a more general concept.  Then in Section 5.4, all of the Catalan and Archimedean solids will be classified.
+
+\subsection*{Exercises 5.2. (Triangles, Polygons and Tilings)} % Introduce triangles, establish all relations between them then recall triangle groups from Section 4.5.
+% Show how to mathematically construct certain (semi)-regular tilings.  Don't bother classifying (semi)-regular tilings; that will be done next section.
+\begin{enumerate}
+\item Let $x\in\mathbb R$.
+
+(a) Show that $\cos(\tan^{-1}x)=\frac 1{\sqrt{1+x^2}}$, and $\sin(\tan^{-1}x)=\frac x{\sqrt{1+x^2}}$.
+
+(b) Moreover, $\cos(2\tan^{-1}x)=\frac{1-x^2}{1+x^2}$ and $\sin(2\tan^{-1}x)=\frac{2x}{1+x^2}$.  [Use the double angle formulas.]
+
+\item (a) Show that:
+$$\cos x\cos y=\frac 12[\cos(x-y)+\cos(x+y)],~~~~\sin x\sin y=\frac 12[\cos(x-y)-\cos(x+y)]$$
+$$\sin x\cos y=\frac 12[\sin(x+y)+\sin(x-y)],~~~~\cos x\sin y=\frac 12[\sin(x+y)-\sin(x-y)]$$
+[Use the sum formulas for sine and cosine.]
+
+(b) Use part (a) to conclude that:
+$$\cos a+\cos b=2\cos\frac{a+b}2\cos\frac{a-b}2,~~~~\sin a+\sin b=2\sin\frac{a+b}2\cos\frac{a-b}2,$$
+$$\cos a-\cos b=2\sin\frac{b+a}2\sin\frac{b-a}2,~~~~\sin a-\sin b=2\sin\frac{a-b}2\cos\frac{a+b}2.$$
+
+\item Let $\triangle ABC$ be a triangle where $A,B,C$ are the angle measures of the vertices, and $a,b,c$ are the side lengths opposite the respective vertices.
+
+(a) Show that $\cos a\cos B=\cot c\sin a-\sin B\cot C$.  [This is called a \textbf{cotangent four-part formula.}]  [By Proposition 5.8(i), $\cos c=\cos a\cos b+\sin a\sin b\cos C=\cos a(\cos a\cos c+\sin a\sin c\cos B)+\sin a\sin b\cos C$, and by Proposition 5.8(ii) and cross-multiplying, $\sin b\sin C=\sin B\sin c$, and hence $\sin b\cos C=\sin B\sin c\frac{\cos C}{\sin C}=\sin B\sin c\cot C$.  Hence, $\cos c=\cos^2a\cos c+\cos a\sin a\sin c\cos B+\sin a\sin B\sin c\cot C$.  Now subtract $\cos^2a\cos c$ from both sides, and divide out $\sin a\sin c$.]
+
+(b) If $s=\frac{a+b+c}2$ and $S=\frac{A+B+C}2$, then show that
+$$\sin\left(\frac 12A\right)=\sqrt{\frac{\sin(s-b)\sin(s-c)}{\sin b\sin c}},~~~~\sin\left(\frac 12a\right)=\sqrt{\frac{-\cos S\cos(S-A)}{\sin B\sin C}}$$
+$$\cos\left(\frac 12A\right)=\sqrt{\frac{\sin s\sin(s-a)}{\sin b\sin c}},~~~~\cos\left(\frac 12a\right)=\sqrt{\frac{\cos(S-B)\cos(S-C)}{\sin B\sin C}}$$
+$$\tan\left(\frac 12A\right)=\sqrt{\frac{\sin(s-b)\sin(s-c)}{\sin s\sin(s-a)}},~~~~\tan\left(\frac 12a\right)=\sqrt{\frac{-\cos S\cos(S-A)}{\cos(S-B)\cos(S-C)}}$$
+
+[The double-angle formula $\cos(2x)=1-2\sin^2x$ entails $2\sin^2(A/2)=1-\cos A$.  Now use Proposition 5.8(i) to get $\cos A=\frac{\cos a-\cos b\cos c}{\sin b\sin c}$, and use this and the sum formula to get $2\sin^2(A/2)=\frac{\sin b\sin c+\cos b\cos c-\cos a}{\sin b\sin c}=\frac{\sin(b+c)-\cos a}{\sin b\sin c}$.  Now conclude, using the previous exercise, to get the expression for $\sin(A/2)$ given here.  Similar arguments apply for the rest.]
+
+\item If $A_1A_2\dots A_n$ is a spherical polygon, show that the following are equivalent:
+
+~~~~(i) The vertices are coplanar in the ambient $\mathbb R^3$;
+
+~~~~(ii) The polygon has a circumscribed circle (i.e., a circle meeting all the vertices);
+
+~~~~(iii) The tangent planes to the sphere at the vertices all meet at a common point.
+
+[(i) $\iff$ (ii) because planes intersect spheres to circles.  (i) $\iff$ (iii): recall the concept of pole points from the end of Section 4.8.]
+
+Moreover, show that regular polygons, and arbitrary triangles, always satisfy these conditions.  Such a polygon is said to be \textbf{flattenable}.
+
+\item A \textbf{lune} consists of antipodes $p,q$ and two line segments between them that do not lie in a common line.
+\begin{center}
+\includegraphics[scale=.2]{Lune.png}
+\end{center}
+(a) Explain why $p,q$ have to be antipodes.
+
+(b) Show that the lune consists of two angles of equal measure, and that this angle can have any measure between $0$ and $\pi$.
+
+(c) Explain why it is called a digon.
+
+\item We will show that if $0<\alpha,\beta,\gamma<\pi$ are real numbers, then a spherical triangle with angles $\alpha,\beta,\gamma$ exists if and only if:
+$$\alpha+\beta+\gamma>\pi=180^\circ,$$
+$$\alpha+\beta-\gamma<\pi,~~~~\beta+\gamma-\alpha<\pi,~~~~\gamma+\alpha-\beta<\pi.$$
+
+(a) Let $c$ be the length opposite $\gamma$.  With $\alpha,\beta,c$ given, the triangle is easy to construct.  Suppose $\alpha,\beta$ are fixed, but $c$ can vary, making the opposite angle vary.  As $c\to 0$, $\cos\gamma=-\cos(\alpha+\beta)$, and hence $\gamma\to\pi-\alpha-\beta$.  As $c\to\pi$, $\cos\gamma\to-\cos(\alpha-\beta)$.  [Use Proposition 5.8(iii).]
+
+(b) Conclude from part (a).
+
+(c) Show that spherical triangles exist for $[2,2,n],n\geqslant 2$, $[2,3,3]$, $[2,3,4]$ and $[2,3,5]$.  Show that for any $\frac{\pi}3<\theta<\pi$, an equilateral triangle with angle $\theta$ exists.
+
+(d) Show that the spherical triangle does \emph{not} exist if $\alpha+\beta-\gamma\geqslant\pi$.  [If $a,b,c$ are the side lengths opposite $\alpha,\beta,\gamma$ respectively, then by Proposition 5.8(iii), $\cos\alpha=-\cos\beta\cos\gamma+\sin\beta\sin\gamma\cos a$.  Use this to conclude that $\cos a\leqslant -1$ and derive a contradiction.]  By symmetry considerations, we have necessity of all the conditions at the beginning of the problem.
+
+\item Suppose a regular $n$-gon in the hyperbolic plane has side length $s$ and angle measure $\theta$.
+
+(a) Show that $\cos s=\frac{2\cos(2\pi/n)+1+\cos\theta}{1-\cos\theta}$.  [Use Proposition 5.8(iii) on suitable triangles.]
+
+(b) Determine the radii of the circumcircle and incircle of the polygon.
+
+\item The \textbf{area} of a spherical triangle is to be the sum of its angles minus $180^\circ=\pi$.  Show that this notion of area satisfies Lemma 2.29, so that one can define the area of a general polygon.  Moreover, show that the area of a spherical $n$-gon is the sum of its angles minus $\pi(n-2)$. % I'll remove the word "defined", kek, but remember, that integral requires the differential kind of metric, which is only covered in Section 6.10!
+
+\item For each of the following constructions in the $90^\circ-60^\circ-36^\circ$ triangle (used to build the $[2,3,5]$ triangle pattern), calculate and explain the resulting spherical tiling.
+
+(a) Construct the altitude to the hypotenuse; i.e., the perpendicular segment from the right angle to the opposite side.
+
+(b) Consider the angle bisector of the right angle, but don't construct it.  Let $p$ be the point where it meets the hypotenuse, and construct perpendiculars from $p$ to each of the legs of the right triangle.
+
+\item Explain how to construct each of the following tilings using the $[2,3,5]$ triangle pattern.  (All polygons are regular.)
+\begin{center}
+\includegraphics[scale=.2]{SphTruncatedDodecahedron.png}~~~~~~~~~~~~
+\includegraphics[scale=.2]{SphGreatRhombicosidodecahedron.png}~~~~\\
+Truncated Dodecahedron~~~~~~Great Rhombicosidodecahedron
+\end{center}
+\item Starting with the $[2,2,n]$ triangle pattern, explain how to use the Wythoff construction to obtain an $n$-gonal prism.  (This should work whether $n$ is even or odd.)  [Start by taking an angle bisector of a right angle.]
+\end{enumerate}
+
+\subsection*{5.3. Spherical Polyhedra}
+\addcontentsline{toc}{section}{5.3. Spherical Polyhedra}
+Spherical tilings have the unique property that they have only finitely many faces: for example the dodecahedron shown in the previous section has only 12 faces total.  Euclidean and hyperbolic tilings have infinitely many faces.  The reason for this discrepancy is that the sphere is \emph{compact}, and it has finite surface area, whereas the other types of geometry do not.  Thus, uniform spherical tilings have become their own field of study.  They also relate to polyhedra, which were first seen in places like Egypt, and then started being described in writing in Greek civilizations.
+
+In this section, we will study the notion of a \emph{spherical polyhedron}, which is a special kind of spherical tiling.  Then we will focus on Euclidean polyhedra, which are topologically like spherical polyhedra, but are embedded in $\mathbb R^3$ so that the faces are contained in Euclidean planes.  We recall that a spherical polygon is said to be \textbf{flattenable} if its vertices are coplanar in the ambient $\mathbb R^3$ [Exercise 4 of the previous section.]\\
+
+\noindent\textbf{Definition.} \emph{A \textbf{spherical polyhedron} is a spherical tiling for which every face is flattenable, has at least $3$ sides, and no two faces have their vertices all in a common plane in $\mathbb R^3$.}\\
+
+\noindent\textbf{Examples.}
+
+(1) We recall the dodecahedron and cube (as spherical tilings) from the previous section.  More generally, all five Platonic solids are spherical polyhedra, since they are made up of regular polygons.
+\begin{center}
+\includegraphics[scale=.13]{SphTetrahedron.png}
+\includegraphics[scale=.13]{SphOctahedron.png}
+\includegraphics[scale=.13]{SphIcosahedron.png}
+\includegraphics[scale=.13]{SphCube.png}
+\includegraphics[scale=.13]{SphDodecahedron.png}\\
+Tetrahedron~~~~~Octahedron~~~~~Icosahedron~~~~~~Cube~~~~~~Dodecahedron
+\end{center}
+The truncated icosahedron and truncated octahedron are also spherical polyhedra:
+\begin{center}
+\includegraphics[scale=.2]{Buckyball.png}~~~~
+\includegraphics[scale=.2]{SphTruncatedOctahedron.png}
+\end{center}
+
+(2) Here is an example of a spherical polyhedron which does not use regular polygons.  Let $a>b>c>0$ be real numbers such that $a^2+b^2+c^2=1$.  Then there are eight vectors of the form
+$$(\pm a,\pm b,\pm c)$$
+and they are all unit vectors.  Connect two of them by a spherical segment if and only if they differ in exactly one component.  Doing so will get you the \emph{rectangular prism} shown below.  Each face is a rectangle, and is flattenable, as the reader can see.  But the faces are not squares, even though the polyhedron is graph-theoretically the same as the cube.
+\begin{center}
+\includegraphics[scale=.2]{SphRectangularPrism.png}
+\end{center}
+
+(3) The rhombic dodecahedron, obtained by connecting the vertices of the cube and those of the octahedron together as shown below, is \emph{not} a spherical polyhedron.  Its faces are not flattenable, as they cannot be inscribed in circles.
+\begin{center}
+\includegraphics[scale=.2]{SphRhombicDodecahedron.png}
+\end{center}
+
+(4) The following tiling, obtained by taking a cube and drawing one diagonal of each face, is not a spherical polyhedron.  Though all faces are flattenable (because they are triangles), the triangles that make up each square have four coplanar vertices altogether.  This causes the Euclidean version to have degenerate edges (whose dihedral angles are $180^\circ$).
+\begin{center}
+\includegraphics[scale=.2]{SphCrazySample.png}
+\end{center}
+
+\noindent\textbf{Proposition 5.11.} (i) \emph{A tiling made up of regular polygons is a spherical polyhedron.}
+
+(ii) \emph{Given a spherical polyhedron, the vertices can be connected to form a Euclidean polyhedron, whose faces correspond bijectively to the tiling's faces.}\\
+
+\noindent It is worth remarking that (ii) is false for tilings that are not spherical polyhedra.  If a face of the tiling is not flattenable, it will correspond to multiple faces of the Euclidean polyhedron, with angles strictly $<180^\circ$.
+\begin{proof}
+(i) By Exercise 4 of the previous section, every face is flattenable, and obviously each face has at least $3$ sides [lunes are not considered regular polygons].  If two faces had their vertices all in a common plane in $\mathbb R^3$, there would be a circle passing through all the vertices; hence the faces have the same circumscribed circle, hence the same center, contradicting that their interiors are disjoint.
+
+(ii) For each pair of vertices connected by an edge, connect them by a Euclidean line segment in $\mathbb R^3$.  Each face of the tiling is flattenable, hence the Euclidean line segments corresponding to its edges lie in a Euclidean plane, hence bound a flat polygon, which can be taken to be the corresponding face.  This face is nondegenerate, since it has at least three sides and no three points on $S^2(\mathbb R)$ are collinear.  Finally, since no two faces of the spherical tiling have their vertices all in a common plane, no two faces of the Euclidean polyhedron lie in a common plane, which prevents any faces from merging into a single face.
+\end{proof}
+
+\noindent The polyhedron in part (ii) is called the \textbf{inscribed Euclidean polyhedron}.  It will be introduced in a different light in the next section.  That section will also show how to circumscribe a Euclidean polyhedron, as well as to classify the Archimedean and Catalan solids.
+
+\subsection*{Exercises 5.3. (Spherical Polyhedra)} % In the 2018 fall, I realized how to convert between Archimedean solids and Catalan solids.  Specifically, there is a genuine
+% mathematical conversion between a spherical polyhedron, its flat-face counterpart (by connecting the vertices) and its flat-face dual (by taking tangent planes to the vertices).
+% This is to be covered in Section 5.4.  Right here, introduce & prove properties for spherical polyhedra.
+\begin{enumerate}
+\item Suppose $P$ is a convex Euclidean polyhedron.  The \textbf{vertex angle defect} of a vertex of $P$ is equal to $360^\circ=2\pi$ minus the sum of the angles.  Note that this can be obtained by cutting around the vertex, cutting one of the edges, flattening the result on a table, and seeing what angle the cut edge becomes.  [Intuitively, the vertex angle defect measures how far the vertex is from being flat.]
+
+The aim of this exercise is to show that the vertex angle defects of $P$ add to $720^\circ=4\pi$.
+
+(a) Form a spherical tiling as follows: For each face of $P$, draw the outward unit normal vector.  This is a point on the unit sphere; construct it as a vertex of the tiling.  Then, connect two vertices by an edge if and only if the corresponding faces meet at an edge. [This need not be a spherical polyhedron.]
+
+Show that faces of this tiling correspond bijectively to vertices of $P$, edges correspond to edges, and vertices correspond to faces.  [In this case we say the spherical tiling is \textbf{dual} to $P$.  The concept of duality is a bit combinatorial, however, so it will not be elaborated.]
+
+(b) Given a face-vertex pair where the vertex is on the face, either on $P$ or the spherical tiling, one can measure the angle inside the vertex at the face.  A face-vertex pair on the tiling corresponds to one on the polyhedron by part (a).  Show that for corresponding pairs, the angles are supplementary.  [It helps to assume, by rotating everything in $\mathbb R^3$, that the vertex on the tiling which possesses the angle is at the north pole.]
+
+(c) Recall Exercise 8 of the previous section: the area of an $n$-gon is the sum of its angles minus $\pi(n-2)$.  Show that the sum of the areas of the faces of the tiling is $4\pi$.  [You do not need to know why the formulas actually give the area: it suffices to understand the invariance under the cutting and pasting of polygons.  Then you can simply change the arbitrary tiling to a more convenient one.] % Though my ambition is to show that the formulas actually give the area in Chapter 6.  I found a PDF with the Gauss-Bonnet theorem, doesn't seem like the proof will be as hard as it may seem.
+
+(d) Show that the area of a single face of the tiling equals the vertex angle defect of the corresponding vertex of $P$.  Conclude.
+
+\item When studying uniform Euclidean polyhedra (which will be defined in the next section), there are two important infinite families of them.  One are \textbf{prisms}, obtained by taking two $n$-gons, and joining them by a belt of $n$ squares, each meeting its top edge on one $n$-gon and its bottom edge on the other, while their left and right edges meet each other.  The other are \textbf{antiprisms}, obtained by taking two $n$-gons, and joining them by a belt of $2n$ equilateral triangles; $n$ triangles meet only the top $n$-gon by the edges, the other triangles meet only the bottom $n$-gon by the edges, and types of triangles alternate around the belt. % Added a parenthesized thing.  (This exercise doesn't actually deal with the general uniform polyhedron concept.)
+
+The following are illustrations for the case $n=6$.
+\begin{center}
+\includegraphics[scale=.2]{HexPrism.png}~~~~
+\includegraphics[scale=.2]{HexAntiprism.png}\\
+~~~Prism~~~~~~~~~~~~~~~~~~~~~Antiprism
+\end{center}
+(a) If $n\geqslant 3$, show that, up to rigid motions and rescaling, there is a unique $n$-gonal prism (resp., antiprism) made out of regular polygons.
+
+(b) The cube is a square prism; the octahedron is a triangular antiprism.
+
+(c) For sufficiently large $n$, the symmetry group of the $n$-gonal prism is the group (vi) in Theorem 2.54, and the symmetry group of the $n$-gonal antiprism is the group (vii) in Theorem 2.54.  [Note that part (b) implies that this fails for a few small values of $n$.]  This is why they are called ``prismatic'' and ``antiprismatic'' symmetry, as mentioned after the proof of Theorem 2.54.
+
+(d) What kinds of prisms and antiprisms \---- as spherical tilings \---- are spherical polyhedra?  [The question refers to arbitrary tilings which are graph-theoretically isomorphic to the prisms and antiprisms.]
+\end{enumerate}
+
+\subsection*{5.4. Inscribed and Circumscribed Euclidean Polyhedra}
+\addcontentsline{toc}{section}{5.4. Inscribed and Circumscribed Euclidean Polyhedra}
+In the previous section, we have shown (Proposition 5.11(b)) that a spherical polyhedron has an inscribed Euclidean polyhedron obtained by connecting the vertices.  Here, we shall show how to circumscribe a Euclidean polyhedron, and we shall cover the concept of inscription-circumscription duality.
+
+Suppose we are given a spherical polyhedron on $S^2(\mathbb R)$.  To each vertex, construct the tangent plane at $S^2(\mathbb R)$ to the vertex.  Whenever two vertices meet by an edge, the corresponding tangent planes intersect in a line, which we declare to be an edge of the circumscribed polyhedron.  Finally, for each face on the sphere, the tangent planes to the vertices are concurrent by Exercise 4 of Section 5.2.  Their common intersection point is declared to be a vertex of the circumscribed polyhedron.  Finally, we restrict each face to consist only of the portion of the plane inside its edges and vertices.
+
+The polyhedron described in the previous paragraph is called the \textbf{circumscribed Euclidean polyhedron}.  By the same token that the inscribed polyhedron's edges are convex, the circumscribed ones have edges of positive length.  Note how, unlike the inscribed polyhedron, the circumscribed polyhedron is \emph{not} combinatorially isomorphic to the spherical tiling: it is isomorphic to its dual, as its faces correspond to the tiling's vertices and its vertices correspond to the tiling's faces.
+
+For example, given the dodecahedron (as a spherical polyhedron) from Section 5.2, its circumscribed Euclidean polyhedron is a regular icosahedron.
+
+The reader is encouraged to verify that for each edge of the spherical tiling, there are three values, each of which determines the other two: (i) the length of the corresponding edge of the inscribed Euclidean polyhedron; (ii) the spherical length of the edge in the tiling; (iii) the dihedral angle of the corresponding edge of the circumscribed polyhedron.  See Exercise 1.\\
+
+\noindent At this point it is natural to define the concept of a uniform polyhedron.  A \textbf{uniform polyhedron} is a convex Euclidean polyhedron satisfying the following conditions:
+\begin{itemize}
+\item Every face is a regular polygon.  [Note that since edges are shared, each of these polygons must have the same side length.]
+
+\item The (global) isometry group of the polyhedron acts transitively on the vertices.  In other words, if $v_1$ and $v_2$ are any two vertices, there is a global isometry of the polyhedron sending $v_1\mapsto v_2$.
+\end{itemize}
+For example, the Platonic solids are uniform polyhedra; in fact, they are precisely the uniform polyhedra with only one type of regular polygon for the faces.  Prisms and antiprisms (Exercise 2 of the previous section) are also uniform polyhedra.  In this section we shall show that there are exactly $13$ other uniform polyhedra in addition to these;\footnote{Technically, two of them have no orientation-reversing symmetry.  If the reflections of these polyhedra are counted separately, there are $15$.} they are called the \textbf{Archimedean solids} and were first enumerated by Archimedes. % Ah, I see now. https://en.wikipedia.org/wiki/Archimedean_solid (first sentence)
+
+If $G$ is the isometry group of a uniform polyhedron, then by Proposition 2.49, there exists a point $p\in\mathbb R^3$ fixed by $G$ entirely.  Moreover, since $G$ acts transitively on the vertices, every vertex has the same distance from $p$: indeed, if $v_1$ and $v_2$ are vertices, then there exists $T\in G$ such that $T(v_1)=v_2$, but also $T(p)=p$, and so $\rho(p,v_1)=\rho(T(p),T(v_1))=\rho(p,v_2)$.  If $r$ is this common distance, then the sphere centered at $p$ of radius $r$ contains all the vertices of the polyhedron.  Thus the polyhedron is inscribed in the sphere, and can even be seen as the inscribed polyhedron given by a spherical polyhedron (why?).\\
+
+\noindent\emph{Remark}. It is tempting to think it suffices that every face be regular, and all vertices be equal in angles and dihedral angles around the loop.  That would imply that between any two vertices, there is a \emph{local} isometry sending a neighborhood of one vertex to a neighborhood of the other.  Under these weaker conditions, however, Branko Gr\"unbaum (2009) discovered an extra polyhedron: it is called the \emph{pseudo-rhombicuboctahedron}, obtained by taking a rhombicuboctahedron and rotating its bottom cap $45^\circ$, as shown below.
+\begin{center}
+\includegraphics[scale=.2]{Pseudorhombicuboctahedron.png}
+\end{center}
+Gr\"unbaum pointed out the flaw that many authors used, where they used the definition of an Archimedean solid where the vertices only needed to be locally isometric, but they omitted the pseudo-rhombicuboctahedron.\\
+
+\noindent\textbf{ARCHIMEDEAN SOLIDS}\\
+
+\noindent We are now in a position where we can classify the Archimedean solids; i.e., the uniform polyhedra which are not Platonic solids, prisms or antiprisms.  To do this, we let $P$ be an Archimedean solid, inscribed in the unit sphere, and we let $G$ be its isometry group.  Then $G$ is a finite subgroup of $O(3)$, hence is one of the groups of Theorem 2.54, and we may use casework.  Since $G$ acts transitively on the vertices of $P$, the set of vertices must be exactly one of the orbits of the action of $G$.  This fact makes the classification easier than it may seem at first glance.
+
+First, we claim that $G$ cannot be among the families of axial groups (i)-(vii) of Theorem 2.54.  Indeed, if $G$ were any of them, then we may assume $G$ fixes the standard equator $z=0$.  Then if any vertex is on the equator, all of them are, which is obviously not possible.  If a vertex has a $z$-coordinate of $r>0$, then by the transitivity, all vertices would have $z$-coordinates of $\pm r$.  Moreover, either there are at most two vertices in the plane $z=r$ (from which an easy contradiction is derived), or the vertices in that plane form an $n$-gon for some $n$ \---- this must be regular by uniformity of $P$.  Consequently, the plane $z=-r$ would also have a regular $n$-gon, and $P$, being the convex hull of the set of vertices, is readily seen to be either an $n$-gonal prism or an $n$-gonal antiprism  (depending on whether the polygons are aligned in the $z$-direction).  This is against the rules, hence $G$ is not an axial group.
+
+We thus restrict the casework to the seven groups (viii)-(xiv).
+
+If $G=\operatorname{Isom}(\mathbf{Tet})$ (which is (ix)), then we may get a spherical tiling by connecting each pair of vertices of $\mathbf{Tet}$ (via spherical line segments), and then in each triangle, drawing the three altitudes to the opposite edges (these are also the medians and angle bisectors, since the triangles are equilateral).  The result is as shown (and this turns out to be the $[2,3,3]$ triangle pattern):
+\begin{center}
+\includegraphics[scale=.2]{TetrTiling.png} % T = Stri_tiling(3,3,2); sphereDesign([t.vlist() for t in T],STD_ICOS_PERSP_POINT)
+\end{center}
+There are $24$ triangles in this tiling and $|\operatorname{Isom}(\mathbf{Tet})|=24$; moreover, the ele\-ments of $G$ send each triangle to all the distinct triangles.  Note also that $G$ does not have $90^\circ$ or $60^\circ$ rotations; it \emph{reflects} each triangle to each other one adjacent by an edge.  Once we know where a vertex of $P$ is located in one of these triangles, the rest of the vertices must be essentially located in that same position in the other triangles (reflecting over edges).  Then we will know what $P$ is, being the convex hull of the set of vertices. % TeX put the hyphen and line break in automatically, but okay.
+
+Thus, we restrict our attention to one triangle, noting that the triangles have angles $90^\circ,60^\circ,60^\circ$.  Where can a vertex of the polyhedron be located?
+\begin{center}
+\includegraphics[scale=.5]{Tri606090.png}
+\end{center}
+If the vertex of $P$ is at $B$ or $C$, then it is fixed by six elements of $G$, and the upshot is that $P$ has only four vertices and is a tetrahedron.  This contradicts our assumption that $P$ is not a Platonic solid.  If the vertex is at $A$, then $P$ is an octahedron, again a Platonic solid.  So the vertex can't be at any of the vertices of this triangle.
+
+If the vertex is on the edge $\overline{BC}$, then $P$ has a rectangular face at each $4$-fold vertex, hence a square face by uniformity, so the vertex must be at the midpoint of $\overline{BC}$.  But in this case the reflection of the triangle over the angle bisector from $A$ is an extra isometry of $P$ which is outside $G$; contradiction.  If the vertex is on edge $\overline{AC}$ (or $\overline{AB}$), then each face of $P$ is either a triangle or a hexagon, (as can be seen visually), and the diameter of the sphere which is perpendicular to the face goes through a $6$-fold vertex of the tiling.  In this case the uniformity of $P$ determines where the vertex is located, and we have the \emph{truncated tetrahedron}, consisting of four triangles and four hexagons, with one triangle and two hexagons to each vertex.
+\begin{center}
+\includegraphics[scale=.5]{VertexSample.png}~~~~
+\includegraphics[scale=.2]{ArchimedeanSolids/TruncatedTetrahedron.png}
+\end{center}
+Finally, if the vertex is in the interior of $\triangle ABC$, then the faces of $P$ are hexagons and squares, and furthermore, the vertex must be the incenter of $\triangle ABC$.  But this again implies that $P$ has an extra isometry outside $G$, obtained by reflecting the triangle over $A$'s angle bisector, so this case is impossible.
+
+Thus, if $G=\operatorname{Isom}(\mathbf{Tet})$, then $P$ must be the truncated tetrahedron.
+
+The above reasoning suggests a general principle when classifying all possible locations of one vertex.  Whenever two triangles in the spherical tiling meet along an edge, their corresponding vertices are connected by an edge in $P$ (unless they coincide, which is true if and only if the vertex is on the tiling's edge).  When the spherical edge between the vertices is drawn, it must be perpendicular to the triangle tiling's edge (by symmetry considerations).  Since $P$ is uniform, it must also have the same length no matter which side of the tiling's triangle it goes towards.  Thus we have established
+\begin{center}
+[*] \textbf{Suppose we are given a triangle pattern with $|G|$ triangles, such that the elements of $G$ send each triangle to all the distinct triangles. % "G acts transitively on the triangles" is a weaker assertion.  I want to state that G acts transitively on the triangles *and* the stabilizer of each triangle is trivial.
+Suppose also that triangles that are adjacent by an edge reflect to one another via $G$.  Then wherever $P$'s vertex is located in one triangle, it must have the same perpendicular distance to every side of the triangle it does not touch (because this distance is half the edge length of $P$'s spherical version).}
+\end{center}
+This principle easily boils down the possible vertex positions; in fact, it means the vertex position is determined by the specification of which edges it is on.
+
+With this in mind, we now consider the case $G=\operatorname{Isom}^+(\mathbf{Tet})$, which is (viii) in Theorem 2.54.  We cannot exactly apply our principle, because $G$ has no reflections ($G\subset SO(3)$), but we can still invoke the idea.  To do this, we consider this alternate tiling, obtained by taking the tetrahedron, and drawing on each face three line segments from the vertices to the center of the triangle.
+\begin{center}
+\includegraphics[scale=.2]{TetrTiling2.png}
+\end{center}
+Given the location of one vertex of $P$ in one of the triangles, the rest are obtained by rotating the point $120^\circ$ around each 3-fold and 6-fold vertex, and $180^\circ$ around the midpoint of each long edge (of the original tetrahedron), and then iterating.  We can use this to answer the question of whether any Archimedean solids are possible.
+
+The answer is, in fact, \emph{no}: if the vertex of $P$ is on the altitude to the base, \emph{or} on any edge, the reader can see why orientation-reversing elements of $\operatorname{Isom}(\mathbf{Tet})$ are isometries, contradicting that $G=\operatorname{Isom}^+(\mathbf{Tet})$.  Thus the vertex must be in the interior of the tiling's triangle and cannot be on the altitude to the base.  The reader is then encouraged to use the above illustration as a guide, and observe that $P$ is made up of triangles, with five to each vertex: hence (in order to be uniform), $P$ would be the regular icosahedron, which obviously has way more isometries than $G$.  Thus, $G$ cannot be $\operatorname{Isom}^+(\mathbf{Tet})$.
+
+We leave it to the reader to follow a similar argument (with an appropriate spherical tiling) to show that $G$ cannot be the pyritohedral symmetry group (xiv).  Thus we have covered the cases (viii), (ix), (xiv) of Theorem 2.54.
+
+We now consider the case $G=\operatorname{Isom}(\mathbf{Oct})$ [which is (xi)].  We claim that there are actually five Archimedean solids which fall into this case, and we may easily apply the principle [*] to the $[2,3,4]$ triangle pattern, because the hypotheses are clearly held:
+\begin{center}
+\includegraphics[scale=.2]{Sph234Pattern.png}
+\end{center}
+Once we know the location of one vertex, $P$ can be obtained by reflecting it over all the triangles' edges then taking the convex hull of the result.
+
+The angles of each triangle are $90^\circ,60^\circ,45^\circ$; we draw one of these triangles to investigate.
+\begin{center}
+\includegraphics[scale=.5]{Tri456090.png}
+\end{center}
+If the vertex of $P$ is at $C$, it is fixed by eight elements of $G$ (forming a subgroup $\cong D_4$); moreover, there are six vertices and $P$ is an octahedron; against our assumptions.  If the vertex of $P$ is at $B$, we get a similar contradiction; this time $P$ is a cube.
+
+However, the vertex of $P$ \emph{can} be at $A$ without a problem.  In this case, the vertices of $P$ are precisely at the $4$-fold vertices of the triangle pattern, and $P$ consists of six squares and eight equilateral triangles, with the pattern square-triangle-square-triangle around each vertex.  This solid is called the \emph{cuboctahedron}, pictured below on the left.
+
+What if $P$'s vertex is on $\overline{AC}$ without being at either endpoint?  Then by our principle, it must have the same perpendicular distance to $\overline{AB}$ and $\overline{BC}$ \---- (note that since $\angle A$ is a right angle, the perpendicular distance to $\overline{AB}$ is just the distance to $A$).  This determines where the vertex is located,\footnote{Note by the way, that the vertex of $P$ is located where $\angle B$'s angle bisector meets $\overline{AC}$.} and by examining the triangle pattern, the vertices of $P$ form a square around each eight-fold vertex and a hexagon around each six-fold vertex.  In fact, each vertex of $P$ has around it two hexagons and a square, yielding the \emph{truncated octahedron}, the second solid from the left in the picture below.
+
+By similar reasoning, if $P$'s vertex is on $\overline{AB}$ then the polyhedron is made up of two octagons and a triangle at each vertex; we have the \emph{truncated cube}, the third solid from the left in the picture below.
+
+If $P$'s vertex is on $\overline{BC}$, then $P$ must have the same perpendicular to $\overline{AC}$ and $\overline{AB}$, and these perpendiculars make up the edges of $P$.  In this case, we have the \emph{rhombicuboctahedron}, which has three squares and a triangle to each vertex, and is the fourth solid from the left (or second from the right).  [Note that it has 18 squares total, but $G$ does not act transitively on the squares: one orbit of the action consists of the six squares meeting triangles at all four corners, and another orbit consists of the other twelve squares.]
+
+The final case is where $P$ is in the interior of $\triangle ABC$.  In this case, its perpendiculars to all three sides must have equal length by our principle [*], so $P$ must actually be the incenter of the triangle.  Two vertices of $P$ connect by an edge if and only if the corresponding faces of the triangle pattern meet by an edge, and from this it is readily visualized that each vertex of $P$ has three distinct polygons occurring once: a square, a hexagon and an octagon.  This gives us the \emph{great rhombicuboctahedron}, or \emph{truncated cuboctahedron}, the fifth (or rightmost) solid in the picture.
+\begin{center}
+\includegraphics[scale=.15]{ArchimedeanSolids/Cuboctahedron.png}~
+\includegraphics[scale=.15]{ArchimedeanSolids/TruncatedOctahedron.png}~
+\includegraphics[scale=.15]{ArchimedeanSolids/TruncatedCube.png}~
+\includegraphics[scale=.15]{ArchimedeanSolids/Rhombicuboctahedron.png}~
+\includegraphics[scale=.15]{ArchimedeanSolids/GreatRhombicuboctahedron.png}
+\end{center}
+These are the five Archimedean solids with isometry group $\operatorname{Isom}(\mathbf{Oct})$.  The following diagram summarizes which location of $P$'s vertex in the triangle entails which solid:
+\begin{center}
+\includegraphics[scale=.5]{Tri456090_expl.png}
+\end{center}
+\emph{Remark}. Some authors call the rhombicuboctahedron the \emph{small rhombicuboctahedron} to distinguish it from the great one.\\
+
+\noindent Now we tackle the case $G=\operatorname{Isom}^+(\mathbf{Oct})$.  We claim that there is one Archimedean solid (up to isometries including orientation-reversing ones) which falls into this case.
+
+For this, we consider the $[2,3,3]$ triangle pattern, this time drawing a spherical cube and drawing the two diagonals of each face.  As before, each triangle is sent by the elements of $G$ to all the distinct triangles, so we may consider a vertex as it appears in just one of the triangles, and transfer it to the others using only rotations ($G$ is chiral).
+\begin{center}
+\includegraphics[scale=.2]{TetrakisTiling.png}
+\end{center}
+As in the case of $\operatorname{Isom}^+(\mathbf{Tet})$, the vertex of $P$ cannot be on either the triangle's boundary or the altitude to the hypotenuse, because that would imply that $G$ has orientation-reversing isometries.  When the vertex is placed randomly, and then rotated according to $G$'s elements, the front four triangles of the spherical tiling (the square with the X in it facing us) consist of four of $P$'s vertices forming a tilted square.
+
+Using the above diagram as a guide, one can see that for each six-fold vertex (each vertex of the original cube), $P$ has a triangle.  Also, on each edge of the original cube (the hypotenuses of the triangles in the pattern), $P$ has two triangles, with $180^\circ$-rotational symmetry around the edge's midpoint.  When an adjacent square of $P$ is drawn, one of the triangles meets it by an edge and the other only meets it by a vertex.  With that, each vertex of $P$ consists of a square and four triangles, determining the solid to be the \emph{snub cube}:
+\begin{center}
+\includegraphics[scale=.2]{SnubCubeLeft.png}~~~~\includegraphics[scale=.2]{ArchimedeanSolids/SnubCube.png}\\
+Left snub cube~~~~~~~~~~Right snub cube
+\end{center}
+One checks that $P$ has no orientation-reversing symmetry, yet it has all orientation-\emph{preserving} symmetries of the octahedron: its isometry group is exactly $\operatorname{Isom}^+(\mathbf{Oct})$.  Due to the lack of orientation-reversing symmetry, when we reflect $P$ (or apply any orientation-reversing isometry of $\mathbb R^3$), we get another form of the snub cube which cannot possibly be rotated rigidly to get the original one.
+
+These forms are called the \emph{two chiral forms} of the snub cube (see them side-by-side above).  In practice, they are not counted separately in the family of Archimedean solids; thus, when we add this to the five solids with full octahedral symmetry, we have, in our hands, six Archimedean solids with octahedral symmetry.
+
+At this point, only the cases $G=\operatorname{Isom}(\mathbf{Icos}),\operatorname{Isom}^+(\mathbf{Icos})$ remain [(xiii) and (xii) of Theorem 2.54 respectively].  But this is relatively easy for the reader now, because it merely copies the classification for octahedral symmetry.  For $G=\operatorname{Isom}(\mathbf{Icos})$, by taking the $[2,3,5]$ triangle pattern (where the angles of each triangle are $90^\circ,60^\circ,36^\circ$), and using casework on where $P$'s vertex is located inside the triangle, one gets five new Archimedean solids, exactly as in the octahedral case.
+
+And in the case $G=\operatorname{Isom}^+(\mathbf{Icos})$, one can take the spherical dodecahedron and get a triangular tiling by connecting the vertices of each pentagon to the center of the pentagon.  One last Archimedean solid thus arises, resulting in six with icosahedral symmetry.  Adding these to the six with octahedral symmetry, and the one (truncated tetrahedron) with tetrahedral symmetry, we end up with a total of 13.
+
+We will not give all the details, but will give a chart all of the Archimedean solids.  [The vertex configuration $(n_1.n_2.\dots.n_k)$ indicates that, around a vertex, the faces are (in order) an $n_1$-gon, an $n_2$-gon and so on up to an $n_k$-gon.]
+\begin{center}
+\begin{tabular}{ccccccc}
+\parbox{2.5cm}{Name (vertex\\configuration)}&Picture&\#Faces&\# Edges&\# Vertices&\parbox{2cm}{Symmetry\\Group}\\\hline\hline
+
+\parbox{2.5cm}{Truncated\\Tetrahedron\\(3.6.6)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedTetrahedron.png}&
+8 \parbox{2cm}{(4 triangles,\\4 hexagons)}&
+18&
+12&
+$\operatorname{Isom}(\mathbf{Tet})$\\\hline
+
+\parbox{2.5cm}{Cuboctahedron\\(3.4.3.4)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/Cuboctahedron.png}&
+14 \parbox{2cm}{(8 triangles,\\6 squares)}&
+24&
+12&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Truncated\\Cube\\(3.8.8)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedCube.png}&
+14 \parbox{2cm}{(8 triangles,\\6 octagons)}&
+36&
+24&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Truncated\\Octahedron\\(4.6.6)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedOctahedron.png}&
+14 \parbox{2cm}{(6 squares,\\8 hexagons)}&
+36&
+24&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Rhombicuboct-\\ahedron\\(3.4.4.4)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/Rhombicuboctahedron.png}&
+26 \parbox{2cm}{(8 triangles,\\18 squares)}&
+48&
+24&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Great\\Rhombicuboct-\\ahedron\\(4.6.8)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/GreatRhombicuboctahedron.png}&
+26 \parbox{2cm}{(12 squares,\\8 hexagons,\\6 octagons)}&
+72&
+48&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Snub Cube\\(3.3.3.3.4)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/SnubCube.png}&
+38 \parbox{2cm}{(32 triangles,\\6 squares)}&
+60&
+24&
+$\operatorname{Isom}^+(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Icosidodecahedron\\(3.5.3.5)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/Icosidodecahedron.png}&
+32 \parbox{2.2cm}{(20 triangles,\\12 pentagons)}&
+60&
+30&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+
+\parbox{2.5cm}{Truncated\\Dodecahedron\\(3.10.10)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedDodecahedron.png}&
+32 \parbox{2cm}{(20 triangles,\\12 decagons)}&
+90&
+60&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+
+\parbox{2.5cm}{Truncated\\Icosahedron\\(5.6.6)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedIcosahedron.png}&
+32 \parbox{2.3cm}{(12 pentagons,\\20 hexagons)}&
+90&
+60&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+\end{tabular}
+
+\begin{tabular}{ccccccc}
+\parbox{2.5cm}{Name (vertex\\configuration)}&Picture&\#Faces&\# Edges&\# Vertices&\parbox{2cm}{Symmetry\\Group}\\\hline\hline
+
+\parbox{2.5cm}{Rhombicosi-\\dodecahedron\\(3.4.5.4)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/Rhombicosidodecahedron.png}&
+62 \parbox{2.2cm}{(20 triangles,\\30 squares,\\12 pentagons)}&
+120&
+60&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+
+\parbox{2.5cm}{Great\\Rhombicosi-\\dodecahedron\\(4.6.10)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/GreatRhombicosidodecahedron.png}&
+62 \parbox{2cm}{(30 squares,\\20 hexagons,\\12 decagons)}&
+180&
+120&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+
+\parbox{2.5cm}{Snub\\Dodecahedron\\(3.3.3.3.5)}&
+\includegraphics[scale=.1]{ArchimedeanSolids/SnubDodecahedron.png}&
+92 \parbox{2.2cm}{(80 triangles,\\12 pentagons)}&
+150&
+60&
+$\operatorname{Isom}^+(\mathbf{Icos})$\\\hline
+\end{tabular}
+\end{center}
+
+To remember these solids and their names, it helps to know what some of the terms mean.
+
+First, \textbf{truncation} of a polyhedron is obtained by ``slicing off'' each vertex, so that a new face arises with as many sides as there were edges to the vertex.  The following illustration shows this for a cube:
+\begin{center}
+\includegraphics[scale=.3]{Truncation.png}
+\end{center}
+Alternatively, draw points on the edges near the vertex, connect each pair of points with an edge if and only if the edges they're on share a face, and then erase inside the bounded region to make a new face.  [This makes more sense for tilings on a smooth surface; recall the truncated heptagonal tiling from Exercise 7 of Section 4.5.]
+
+Each Platonic solid can be truncated, resulting in one of the Archimedean solids.  Note that the slices have to be positioned in a particular way for the result to have regular-polygon faces. % By "This is relatively easy to prove without considering each Platonic solid," I meant that you can prove that truncating any of them yields a uniform polyhedron, without casework on each of the actual 5 solids.
+To get an Archimedean, the lengths must be chosen so that the face formed each original vertex is perpendicular to the segment from the center to that vertex, and the side lengths of these faces are equal to the resulting lengths of the shortened edges.
+\begin{center}
+\begin{tabular}{ccccc}
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedTetrahedron.png}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedOctahedron.png}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedIcosahedron.png}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedCube.png}&
+\includegraphics[scale=.1]{ArchimedeanSolids/TruncatedDodecahedron.png}\\
+Truncated&
+Truncated&
+Truncated&
+Truncated&
+Truncated\\
+Tetrahedron&
+Octahedron&
+Icosahedron&
+Cube&
+Dodecahedron
+\end{tabular}
+\end{center}
+This careful truncation makes sure none of the slices touch each other, so that some of each edge of the original polyhedron is still left.  We could be greedy and get rid of the entire edges through the truncation, though; this happens when we slice each vertex through the midpoints of the edges meeting it.  When we do this, we get the \textbf{rectification} (or \textbf{degenerate truncation}), whose vertices correspond bijectively with the edges of the original polyhedron (even though in the careful truncation, there is a two-to-one correspondence from the vertices to the original polyhedron's edges).
+
+The interesting graph-theoretic thing about the rectification is this: a polyhedron and its dual have the same rectification.  The reader who is interested in the graph-theoretic viewpoint of polyhedra is encouraged to wing a proof.  Thus, the cube and octahedron have the same rectification; as do the icosahedron and dodecahedron.
+
+The rectification of a tetrahedron is merely an octahedron, which is another Platonic solid.  But the rectifications of the other Platonic solids are Archimedean solids, the cuboctahedron for the cube and octahedron; and the icosidodecahedron for the icosahedron and dodecahedron:
+\begin{center}
+\includegraphics[scale=.2]{ArchimedeanSolids/Cuboctahedron.png}~~~~\includegraphics[scale=.2]{ArchimedeanSolids/Icosidodecahedron.png}
+\end{center}
+Now, on the above two polyhedra, disconnect the faces and rotate each face at an angle of $\pi/n$ where $n$ is the number of sides; this sends the vertices to where the edges' midpoints used to be.  Then, translate the faces in $\mathbb R^3$ until each pair of vertices corresponding to formerly meeting edges coincides.  You thus have two frames; one consists of 8 triangles and 6 squares, and the other consists of 20 triangles and 12 pentagons, but they only meet at vertices.  At each vertex of the original polyhedron, a empty spot with four edges emerges.
+
+Putting squares in these empty spots yields the rhombicuboctahedron and rhombicosidodecahedron:
+\begin{center}
+\includegraphics[scale=.2]{ArchimedeanSolids/Rhombicuboctahedron.png}~~~~\includegraphics[scale=.2]{ArchimedeanSolids/Rhombicosidodecahedron.png}
+\end{center}
+Or, if you twist the faces in such a way that each spot can fit a pair of hinged triangles, you get the snubs (the ones with no orientation-reversing symmetry):
+\begin{center}
+\includegraphics[scale=.2]{ArchimedeanSolids/SnubCube.png}~~~~\includegraphics[scale=.2]{ArchimedeanSolids/SnubDodecahedron.png}
+\end{center}
+Finally, take the rhombicuboctahedron and rhombicosidodecahedron, and consider the squares that ``filled in the spots.''  For the rhombicosidodecahedron, that's all 30 squares; for the rhombicuboctahedron, that's only the twelve squares which meet the triangles along edges.  Suppose we wish to expand these squares out so they don't meet each other by the vertices.  Then each vertex turns into two vertices and an edge that connects the spot-filling squares.  The edges add more sides to the rest of the faces, doubling the quantities.  We thus get the great rhombicuboctahedron and great rhombicosidodecahedron:
+\begin{center}
+\includegraphics[scale=.2]{ArchimedeanSolids/GreatRhombicuboctahedron.png}~~~~\includegraphics[scale=.2]{ArchimedeanSolids/GreatRhombicosidodecahedron.png}
+\end{center}
+Observe that, graph-theoretically, these are the truncations of the cuboctahedron and icosidodecahedron respectively!  The cuboctahedron and icosidodecahedron are two Archimedean solids satisfying a unique property, making this work; see Exercise 2.  Thus, the two polyhedra above are sometimes called the \emph{truncated cuboctahedron} and \emph{truncated icosidodecahedron}, respectively.  However, if you directly slice a vertex of the cuboctahedron (resp., icosidodecahedron) in $\mathbb R^3$, you do not get a square; instead, you get a rectangle whose side lengths are in the ratio $\sqrt 2$ (resp., $\phi$).\\
+
+\noindent\textbf{CATALAN SOLIDS}\\
+
+\noindent We now find ourselves interested in the dual of a uniform polyhedron.  We know what it is graph-theoretically, but what is the best way to embed it into $\mathbb R^3$?
+
+The first easy observation is that the dual of an Archimedean solid can't be an Archimedean solid.  Indeed, if $P$ is a uniform polyhedron whose dual is another uniform polyhedron $Q$, then $Q$'s isometry group acts transitively on the vertices.  By duality, $P$'s isometry group would act transitively on the faces, which would make it a Platonic solid.
+
+The dual of an Archimedean solid has identical faces (due to the Archimedean solid having identical vertices), but it has different numbers of edges surrounding different vertices, so no matter how it is drawn, its isometry group cannot act transitively on the vertices.  However, one can ask for regular vertex figures,\footnote{A vertex figure is regular if all the angles of the faces meeting it are equal, and all the dihedral angles meeting it (inside the polyhedron) are equal.  Note that this is equivalent to the vertex's local rotations acting transitively on the edges.} just as an Archimedean solid has regular polygons for faces.
+
+This is essentially all we could wish for, and yet it is easy to construct the dual with these properties.  To do this, recall that a uniform polyhedron $P$ can be inscribed in a sphere.  Simply let $Q$ be the circumscribed polyhedron given by $P$ (as a spherical polyhedron).  Then since $Q$ has the same isometry group as $P$, the group acts transitively on $Q$'s faces.  Moreover, by Exercise 1, since $P$ has identical edge lengths, $Q$ has identical dihedral angles.  The reader is then encouraged to check that $Q$ has regular vertex figures.
+
+Thus, the dual of a uniform polyhedron has the following properties:
+\begin{itemize}
+\item Isometry group acts transitively on the faces;
+
+\item Every vertex has a regular vertex figure.
+\end{itemize}
+Conversely, such a polyhedron is circumscribed around a sphere, and the corresponding inscribed Euclidean polyhedron is uniform.  This shows how to easily convert between uniform polyhedra and their duals as polyhedra with the above two properties.
+
+Platonic solids dualize to each other; they are both uniform and have the above two properties, as the reader can easily see.  Prisms and antiprisms dualize to other infinite families of polyhedra; see Exercise 5.  Finally, in this fashion, the Archimedean solids dualize to the \emph{Catalan solids}, first described by Eug\`ene Catalan in 1865.  Here is a chart with the Catalan solids; they are listed in the same order as their duals in the previous chart.
+\begin{center}
+\begin{tabular}{cccccccc}
+Name&Picture&\# Faces&Face Type&\# Edges&\# Vertices&\parbox{2cm}{Symmetry\\Group}\\\hline\hline
+
+\parbox{2.5cm}{Triakis\\Tetrahedron}&
+\includegraphics[scale=.1]{CatalanSolids/TriakisTetrahedron.png}&
+12&
+\parbox{2cm}{isosceles\\triangle}&
+18&
+8&
+$\operatorname{Isom}(\mathbf{Tet})$\\\hline
+
+\parbox{2.5cm}{Rhombic\\Dodecahedron}&
+\includegraphics[scale=.1]{CatalanSolids/RhombicDodecahedron.png}&
+12&
+rhombus&
+24&
+14&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Triakis\\Octahedron}&
+\includegraphics[scale=.1]{CatalanSolids/TriakisOctahedron.png}&
+24&
+\parbox{2cm}{isosceles\\triangle}&
+36&
+14&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Tetrakis\\Cube}&
+\includegraphics[scale=.1]{CatalanSolids/TetrakisCube.png}&
+24&
+\parbox{2cm}{isosceles\\triangle}&
+36&
+14&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Deltoidal\\Icositetrahedron}&
+\includegraphics[scale=.1]{CatalanSolids/DeltoidalIcositetrahedron.png}&
+24&
+kite&
+48&
+26&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Disdyakis\\Dodecahedron}&
+\includegraphics[scale=.1]{CatalanSolids/DisdyakisDodecahedron.png}&
+48&
+\parbox{2cm}{scalene\\triangle}&
+72&
+26&
+$\operatorname{Isom}(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Pentagonal\\Icositetrahedron}&
+\includegraphics[scale=.1]{CatalanSolids/PentagonalIcositetrahedron.png}&
+24&
+pentagon&
+60&
+38&
+$\operatorname{Isom}^+(\mathbf{Oct})$\\\hline
+
+\parbox{2.5cm}{Rhombic\\Triacontahedron}&
+\includegraphics[scale=.1]{CatalanSolids/RhombicTriacontahedron.png}&
+30&
+rhombus&
+60&
+32&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+
+\parbox{2.5cm}{Triakis\\Icosahedron}&
+\includegraphics[scale=.1]{CatalanSolids/TriakisIcosahedron.png}&
+60&
+\parbox{2cm}{isosceles\\triangle}&
+90&
+32&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+
+\parbox{2.5cm}{Pentakis\\Dodecahedron}&
+\includegraphics[scale=.1]{CatalanSolids/PentakisDodecahedron.png}&
+60&
+\parbox{2cm}{isosceles\\triangle}&
+90&
+32&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+\end{tabular}
+
+\begin{tabular}{cccccccc}
+Name&Picture&\# Faces&Face Type&\# Edges&\# Vertices&\parbox{2cm}{Symmetry\\Group}\\\hline\hline
+
+\parbox{2.5cm}{Deltoidal\\Hexecontahedron}&
+\includegraphics[scale=.1]{CatalanSolids/DeltoidalHexecontahedron.png}&
+60&
+kite&
+120&
+62&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+
+\parbox{2.5cm}{Disdyakis\\Triacontahedron}&
+\includegraphics[scale=.1]{CatalanSolids/DisdyakisTriacontahedron.png}&
+120&
+\parbox{2cm}{scalene\\triangle}&
+180&
+62&
+$\operatorname{Isom}(\mathbf{Icos})$\\\hline
+
+\parbox{2.5cm}{Pentagonal\\Hexecontahedron}&
+\includegraphics[scale=.1]{CatalanSolids/PentagonalHexecontahedron.png}&
+60&
+pentagon&
+150&
+92&
+$\operatorname{Isom}^+(\mathbf{Icos})$\\\hline
+\end{tabular}
+\end{center}
+
+A quadrilateral $ABCD$ where $AB=BC$ and $CD=DA$, which implies reflective symmetry over $\overset{\longleftrightarrow}{BD}$, is called a kite.  Also, the prefix ``icositetra-'' merely means 24; it does not mean the icosahedron and tetrahedron play the main roles (like in ``icosidodecahedron'').
+
+\subsection*{Exercises 5.4. (Inscribed and Circumscribed Euclidean Polyhedra)} % Given a spherical polyhedron, show how to get the inscribed Euclidean polyhedron
+% (by connecting the vertices), and the circumscribed Euclidean polyhedron (by taking tangent planes to the vertices).
+% Use this to define Archimedean solids and Catalan solids and classify them all.
+% POTENTIAL EXERCISES: Some of the mathematical calculations for the Catalan/Archimedean solids I did in F2018.
+% POTENTIAL EXERCISE: Johnson solids [of course, we're not going to classify them, but it's interesting to know there are exactly 92]
+\begin{enumerate}
+\item Let $P$ be a spherical polyhedron, and $E$ one of its edges.  Let $d$ be the spherical length of $E$; let $\ell$ be the length of the corresponding edge of the inscribed polyhedron; and let $\theta$ be the dihedral angle of the corresponding edge of the circumscribed polyhedron.  Show that $\ell=\sqrt{2-2\cos d}$ and $d+\theta=\pi$.  Conclude that each of the values $d,\ell,\theta$ determines the other two, so that if any two edges have one of these values equal, they have all of them equal.
+
+\item Among all Archimedean solids, only the cuboctahedron and icosidodecahedron have isometry groups acting transitively on the edges.  [Because of this, those two solids are considered \textbf{quasi-regular}, while the other eleven are \textbf{semi-regular}.]  Explain why this enables them to be (graph-theoretically) truncated, still resulting in Archimedean solids.
+
+\item The great rhombicuboctahedron and great rhombicosidodecahedron are the only Archimedean solids where the \emph{orientation-preserving} isometry group fails to act transitively on the vertices.  [Transitivity of the orientation-preserving isometry group on the vertices is a stronger condition which is not required for uniformity.]
+
+\item\emph{(Euler's formula.)} \---- Given a convex polyhedron with $F$ faces, $E$ edges and $V$ vertices, prove that $F-E+V=2$. [Convert it to a spherical polyhedron, and then use induction on $E$, noting the invariance of the formula when certain edges are deleted.  Care must be taken to avoid ``bogus'' faces with holes in them.]  This fact has first been stated by Leonhard Euler.
+
+\item\emph{(The duals of prisms and antiprisms.)} \---- In this exercise we determine the dual of prisms and antiprisms, as polyhedra with congruent faces and regular vertex figures.
+
+(a) Show that the dual of an $n$-gonal prism is an $n$-gonal \textbf{bipyramid}; i.e., it is obtained by taking two pyramids and joining their bases together.
+
+(b) Show that the dual of an $n$-gonal antiprism has kite-shaped faces, with $n$ on top and $n$ on the bottom, similarly to the bipyramid.  It is called a \textbf{deltohedron} (or \textbf{trapezohedron}).
+
+Here is the special case of each with $n=7$.
+\begin{center}
+\includegraphics[scale=.2]{Bipyramid.png}~~~~~
+\includegraphics[scale=.2]{Deltohedron.png}\\
+~~~Bipyramid~~~~~~Deltohedron
+\end{center}
+(c) If $n=4$, the bipyramid is an octahedron; and if $n=3$, the deltohedron is a cube.
+
+\item The aim of this exercise is to show how certain Archimedean/Catalan solids can be constructed in practice.
+
+(a) 24 points in $\mathbb R^3$ are permutations of $(\pm 2,\pm 1,0)$ [even and odd permutations are permitted].  Show that their convex hull is a truncated octahedron.
+
+Now we show how to construct its dual, the tetrakis cube.
+
+(b) Explain why we may assume that the tetrakis cube has vertices $(\pm 1,\pm 1,\pm 1)$ and $(\pm r,0,0),(0,\pm r,0),(0,0,\pm r)$ for some $r>0$.
+
+(c) The dihedral angle between two faces is supplementary to the central angle given by the perpendiculars from the origin to the faces.  Use this to show that the dihedral angles of this tetrakis cube are equal to $\cos^{-1}\left[-\frac{2(r-1)}{r^2-2r+2}\right]$ and $\cos^{-1}\left[-\frac 1{r^2-2r+2}\right]$.
+
+(d) Conclude that (since a Catalan solid has constant dihedral angles), $r=\frac 32$.
+
+(e) Explain how the tetrakis cube could have been alternatively constructed from part (a).  [Consider inscribing the truncated octahedron in a sphere.]
+
+Now we give an example involving a Catalan solid with icosahedral symmetry.  Recall (Section 2.7) that the twelve points of the form
+$$(\pm\phi,\pm 1,0),~~~~(0,\pm\phi,\pm 1),~~~~(\pm 1,0,\pm\phi)$$
+form a regular icosahedron, and the twenty points of the form
+$$(\pm 1,\pm 1,\pm 1),~~~~(\pm\phi^{-1},\pm\phi,0),~~~~(\pm\phi,0,\pm\phi^{-1}),~~~~(0,\pm\phi^{-1},\pm\phi)$$
+form a regular dodecahedron.  We dilate these polyhedra with variable scalars $a,b$ so that the icosahedron's vertices are even permutations of $(\pm a\phi,\pm a,0)$, and the dodecahedron's vertices are $(\pm b,\pm b,\pm b)$ and even permutations of $(\pm b\phi^{-1},\pm b\phi,0)$.
+
+(f) Show that the 32 points above form a rhombic triacontahedron if and only if the points
+$$(a\phi,a,0),~~~~(b\phi,0,b\phi^{-1}),~~~~(a\phi,-a,0),~~~~(b\phi,0,-b\phi^{-1})$$
+are coplanar.  [Two of them form an edge of the icosahedron, and two of them form the dodecahedron's corresponding edge.]
+
+(g) Show that the points form a rhombic triacontahedron if and only if $a=b$.  Furthermore, conclude that the faces of a rhombic triacontahedron are \textbf{golden rhombi}; in other words, the ratio of their diagonals is $\phi$.
+
+(h) Now explain how to get the icosidodecahedron.
+
+This strategy can be used to obtain the coordinates of any Catalan and Archimedean solid, but many of the constructions involve nontrivial polynomial solving.  Those with mathematical software are encouraged to try to construct these solids. % Which I, the author of Various Geometry, did in the fall of 2018!  (Also, I don't think they're all quadratic irrationalities, as several times I used Newton's method to approximate roots of a high-degree polynomial)
+
+\item\emph{(Johnson solids.)} \---- A \textbf{Johnson solid} is a strictly convex polyhedron (i.e., all dihedral angles are strictly less than $180^\circ=\pi$), with regular polygons as faces, which is not uniform.  In other words, its global isometry group is \emph{not} to act transitively on the vertices.  An example is the square pyramid, obtained by putting four equilateral triangles around a vertex and then closing the base with a square.  Another example is the pseudo-rhombicuboctahedron mentioned before the classification of Archimedean solids.
+
+Come up with many ways to create Johnson solids.  [Consider attaching pyramids to uniform polyhedra, removing parts of uniform polyhedra, and attaching prisms/antiprisms.  These are respectively called \textbf{augmenting}, \textbf{diminishing} and \textbf{elongating}/\textbf{gyroelongating}.]
+
+In 1966, Norman Johnson listed 92 of these solids and gave names and an ordering for them.  He did not yet know whether there were any others, but in 1969, Victor Zalgaller confirmed that he had all of them.
+\end{enumerate}
+
+\subsection*{5.5. Spherical $n$-space}
+\addcontentsline{toc}{section}{5.5. Spherical $n$-space}
+As usual, we wish to generalize the geometry to higher dimensions.  We let $S^n(\mathbb R)$ be the $n$-sphere $\{\vec v\in\mathbb R^{n+1}:\|\vec v\|=1\}$, and after defining certain notions, we will call this \textbf{spherical $n$-space}.
+
+It may seem that two dimensions is the highest number of dimensions of spherical geometry which can be visualized, since in three dimensions, one uses the hypersphere in $\mathbb R^4$.  However, we recall the \emph{stereographic projection model} from Section 5.1.  It enables the $n$-sphere to be realized as $\mathbb R^n$ (with one point left out), which is perfectly visualizable when $n=3$.\\
+
+\noindent The basic geometry of $S^n(\mathbb R)$ is fairly easy, for the most part.  For $0\leqslant k<n$, a \textbf{$k$-sphere} is defined to be a $k$-sphere on $S^n(\mathbb R)$: this is the intersection with $S^n(\mathbb R)$ of a $(k+1)$-plane in $\mathbb R^{n+1}$, and we require the intersection to have more than one point (so that in particularly it has infinitely many points).  A $k$-plane is defined to be a $k$-sphere centered at the origin, or what is the same thing, a $k$-sphere with largest possible radius.
+
+Isometries of $S^n(\mathbb R)$ are, once again, elements of $O(n+1)$.  The elements of $SO(n+1)$ are orientation-preserving, and the rest are orientation-reversing.
+
+The distance between two points in $S^n(\mathbb R)$ is, as before, the measure of the central angle given by the radii to the points.  It may also be realized as the arc length of the line segment connecting the points.
+
+Before carrying on, it would help to understand the stereographic projection model (the best way for spherical 3-space to be visualized), but that is fairly self-explanatory.  In Section 4.6, we defined stereographic projection $S^n(\mathbb R)\to\mathbb R^n\sqcup\{\infty\}$, and we may merely use this map to convert a construction in the $n$-sphere to one of the flat $n$-space.  The reader is left to verify:
+\begin{itemize}
+\item $k$-spheres are generalized $k$-spheres in $\overline{\mathbb R^n}$.  In other words, (unless they contain $\infty$), they are Euclidean $k$-spheres, but their centers generally differ from the Euclidean centers.
+
+\item A $k$-plane is the intersection of a $(k+1)$-plane through the origin, with a hypersphere of radius $r$ and center $\vec a\in\mathbb R^n$ such that $r^2-\|\vec a\|^2=1$. [Exercise 8 of Section 4.6.]
+\end{itemize}
+This study is relatively easy, unlike the other kinds of geometry.\\
+
+\noindent\textbf{BASIC FACTS ABOUT SPHERICAL $3$-SPACE}\\
+
+\noindent We conclude this section with a few basic properties about spherical 3-space.  First, since the isometry group is $O(4)$, it is clear that isometries act transitively on the points.  We also have the transitivity of isometries on planes, lines, spheres of a given radius, and circles of a given radius.  But we haven't proven that two points determine a line, etc.  That is what we shall tackle right now.\\
+
+\noindent\textbf{Proposition 5.12.} \emph{In $S^3(\mathbb R)$,}
+
+(i) \emph{Two points determine a line unless the points are antipodes, in which case every line through one point also goes through the other.}
+
+(ii) \emph{Any two distinct planes intersect in a line.}
+
+(iii) \emph{Three points that are not collinear determine a plane.}
+
+(iv) \emph{If $\Pi$ is a plane and $\ell$ a line not contained in it, then $\Pi$ and $\ell$ intersect in two antipodal points.}\\
+
+\noindent Remarks are in order.  First, (i) holds in any dimensional space $S^n(\mathbb R)$, and the proof can readily be carried over.  Secondly, in part (iii), the hypothesis implies that no two of the points are antipodes, because if they were, then the three points would be collinear no matter what the third point is.
+
+Finally, two lines in $S^3(\mathbb R)$ need not intersect; for instance, the intersections of the planes $x=y=0$ and $w=z=0$ with $S^3(\mathbb R)$ are two nonintersecting lines.  [See how to view them in the stereographic projection model?]
+
+\begin{proof}
+(i) Let $p$ and $q$ be distinct points of $S^3(\mathbb R)$.  If $p,q$ are antipodes, then $p=-q$, so that every line going through either $p$ or $q$ also goes through the other (because lines are cross sections of two-dimensional linear subspaces of $\mathbb R^4$).  If $p,q$ are not antipodes, then they are linearly independent vectors of $\mathbb R^4$ (why?), hence span a plane $\Pi$.  With that, $\Pi\cap S^3(\mathbb R)$ is the unique line going through $p$ and $q$.
+
+Alternatively, one could assume we are in the stereographic projection model and $p=0$.  Then the antipode of $p$ is $\infty$.  Moreover, if $q\ne\infty$, then there is a unique Euclidean line $\ell$ through $p,q$, and (since it contains the origin) it must be a spherical line.  If $\ell'\ne\ell$ is another line through $p,q$, then $\ell'$ is not a Euclidean line, hence it is a cross section of a circle with center $\vec a$ and radius $r$ such that $r^2-\|\vec a\|^2=1$: but $0\in\ell'$ implies $\|\vec a\|=r$ and so $r^2-\|\vec a\|^2=0$, contradiction.
+
+(ii) The planes are cross sections of three-dimensional (linear) subspaces of $\mathbb R^4$, say $V$ and $W$.  Then $V+W=\mathbb R^4$ (why?).  Moreover, $6=\dim(V)+\dim(W)=\dim(V+W)+\dim(V\cap W)=4+\dim(V\cap W)$, so $\dim(V\cap W)=2$.  Moreover, $[V\cap W]\cap S^3(\mathbb R)$ is a spherical line, and is the intersection of the given planes.
+
+(iii) If $p,q,r\in S^3(\mathbb R)$ are noncollinear points, then (since there are three of them), they are contained in a three-dimensional subspace of $\mathbb R^4$, say $V$.  With that, $V\cap S^3(\mathbb R)$ is a plane containing the points.  This plane is unique because if $p,q,r$ were in another plane, then they would be in the intersection of the planes, which is a line by part (ii): contradiction, because $p,q,r$ are noncollinear.
+
+(iv) This mirrors the proof of (ii), but this time $\dim(V)=3$ and $\dim(W)=2$.  We leave the argument to the reader.
+\end{proof}
+
+\subsection*{Exercises 5.5. (Spherical $n$-space)} % Introduce higher dimensional spaces, and use the stereographic projection to the aid as before.
+\begin{enumerate}
+\item Show that if $0\leqslant k<n$, then in $S^n(\mathbb R)$, a $k$-plane $P$ is isometric to $S^k(\mathbb R)$; i.e., there is a bijection $P\cong S^k(\mathbb R)$ which preserves distances, as well as lines and angles.  [Assume $P$ is a Euclidean $k$-plane in the stereographic projection model.]
+
+\item In all three types of geometry (spherical, Euclidean and hyperbolic), a $k$-sphere has an isometry group canonically isomorphic to that of $S^k(\mathbb R)$ [i.e., $O(k+1)$].
+
+\item Let $\vec v\in\mathbb R^n$, regarded as in the stereographic projection model of spherical $n$-space.  Show that the hyperbolic distance from the origin to $\vec v$ is $2\tan^{-1}\|\vec v\|$.
+
+\item Recall the regular 4-polytopes from Exercise 3 of Section 2.7.  In this exercise, we shall show that they all exist.
+
+(a) In the stereographic projection model of spherical 3-space, take any Platonic solid centered at the origin.  Then erase its Euclidean edges and replace them with the spherical line segments connecting the vertices.  Likewise, allow the new faces to be taken from planes of the spherical space.
+
+Show that the resulting figure has exactly the same symmetry (in the spherical space) as the original Platonic solid.  Conclude that it has constant dihedral angles.
+
+(b) Let $\delta$ be the dihedral angle of the Platonic solid in Euclidean 3-space (Exercise 3(b) of Section 2.7).  Show that the dihedral angle $\alpha$ of the figure of part (a) satisfies $\delta<\alpha<\pi$, and that any real number in that range is possible.
+
+(c) If $\alpha=2\pi/n$ for some integer $n$, then repeatedly reflecting the figure over its own faces eventually fills the spherical space with no gaps or overlaps.
+
+(d) By transfering the space filling in part (c) directly to $S^3(\mathbb R)$, and then connecting the vertices by Euclidean line segments in $\mathbb R^4$, show that we get the desired regular polytope.
+
+\item Suppose $T$ is an isometry of $S^n(\mathbb R)$, and this space is viewed via stereographic projection.  If $T(\vec 0)=\vec 0$, show that $T$ is a Euclidean orthogonal transformation in $O(n)$.  [Use Proposition 1.9.]  Moreover, every isometry of $S^n(\mathbb R)$ is a finite composition of reflections.
+\end{enumerate}
+
+\subsection*{5.6. Relation to Projective Space: Elliptic Geometry}
+\addcontentsline{toc}{section}{5.6. Relation to Projective Space: Elliptic Geometry}
+We recall from the first section that lines in $S^2(\mathbb R)$ are great circles, and any two of them intersect them in two antipodal points.  But it is really satisfying for lines to intersect in two points?  Certainly not, in some moods; for one thing, it ruins the statement that two points determine a line.  (They don't determine a line if they are antipodes.)  It would really be to our benefit if two lines had one intersection point.
+
+There is a surprisingly easy approach we can use to achieve this.  Start with $S^2(\mathbb R)$, and let $\sim$ be the equivalence relation on $S^2(\mathbb R)$ where $p\sim q$ if and only if $p=\pm q$ in $\mathbb R^3$.  Quotient out this equivalence relation, and let $E^2(\mathbb R)$ be the result.  Then $E^2(\mathbb R)$ is called the \textbf{real elliptic plane}.  It is like the sphere, except two points which used to be antipodes are now the same point.  Meanwhile, there is an obvious two-to-one correspondence from $S^2(\mathbb R)\to E^2(\mathbb R)$.
+
+Basic spherical geometry still holds in this setting: a line is a great circle of the sphere; a line segment is an arc of such a great circle; and a circle is a circle of the sphere.  However, the notions of a line segment and a circle are slightly different, because antipodes are identified together, and hence if any point is in a set its ``antipode'' must be as well.  Thus, for instance, a circle in $E^2(\mathbb R)$ (if it is not a line) really appears as \emph{two} circles on the sphere, for which each point on one circle is identified with its opposite point on the other.  And as before, there are two line segments between points, but both have length $<\pi$: if either had length exceeding $\pi$, it would contain antipodes on the sphere, so that its image in $E^2(\mathbb R)$ would really be an entire line.
+\begin{center}
+\includegraphics[scale=.2]{EllipLineSeg.png}~~~~
+\includegraphics[scale=.2]{EllipCircle.png}
+\end{center}
+We recall from Section 5.1 that in spherical geometry, two points $p,q$ have a distance $\leqslant\pi$, because they are connected by two segments, whose lengths add to $2\pi$, and the distance is the shorter length.  In the elliptic plane, the two segments have lengths that add to $\pi$, because if you try to draw the segments on the sphere, they will share \emph{one} of the points $p,q$, but as for the other point, one segment has the point and the other has its antipode as an endpoint.  Hence, their distance (the shorter length) is $\leqslant\pi/2$.
+\begin{center}
+\includegraphics[scale=.2]{EllipDifferentSegs.png}\\
+\emph{Two points making two segments (the labeled point in the back and its antipode are the same).}
+\end{center}
+In spherical geometry, two lines intersect in two points which are antipodes.  Here, now that we are identifying a pair of antipodes to a single point, we have\\
+
+\noindent\textbf{Proposition 5.13.} \emph{In $E^2(\mathbb R)$, any two lines intersect in a unique point.}\\
+
+\noindent Also, if two points are distinct in $E^2(\mathbb R)$, then they cannot be antipodes, and therefore by Proposition 5.1(iii),\\
+
+\noindent\textbf{Proposition 5.14.} \emph{In $E^2(\mathbb R)$, any two points determine a line.}\\
+
+\noindent At this point, we begin to imagine that the properties look familiar.  We recall the projective plane $P^2(\mathbb R)$ from Chapter 3, as the quotient space of $\mathbb R^3-\{\vec 0\}$ by the equivalence relation $\vec v\sim\vec w\iff\vec v=\lambda\vec w~\exists\lambda\in\mathbb R$.  Propositions 5.13 and 5.14, in fact, state that the elliptic plane satisfies the same basic properties of points and lines that the projective plane does (Proposition 3.1).  This is because they are canonically identified, as we now see.\\
+
+\noindent\textbf{Proposition 5.15 and Definition.} (i) \emph{Define a map $\vartheta:S^2(\mathbb R)\to P^2(\mathbb R)$ by $\vartheta((x,y,z))=[x:y:z]$.  Then $\vartheta$ is a surjective function such that $\vartheta(p)=\vartheta(q)$ if and only if $p=\pm q$ for $p,q\in S^2(\mathbb R)$.  Moreover, $\vartheta$ induces a bijection $\overline{\vartheta}$ from $E^2(\mathbb R)\to P^2(\mathbb R)$.}
+
+(ii) \emph{$\vartheta$ sends each $(x,y,z),z\ne 0$ to the point $(x/z,y/z)$ of the Euclidean plane.  We refer to this (resp., $\overline{\vartheta}$) as the \textbf{gnomonic projection} of the sphere (resp., elliptic plane).}
+
+(iii) \emph{Under the correspondence $\overline{\vartheta}$, elliptic lines correspond to projective lines.}\\
+
+\noindent It is worth remarking that by (iii), gnomonic projection sends lines to Euclidean lines (except the one it sends to the line at infinity).  Of course, this is not true for stereographic projection, where most of the lines are Euclidean circles.
+\begin{proof}
+(i) $\vartheta$ is well-defined because the only time $[x:y:z]$ is undefined is when $x=y=z=0$, and $S^2(\mathbb R)$ does not contain the origin.  $\vartheta$ is surjective, because each point of $P^2(\mathbb R)$ can be written as $[x:y:z]$, which is
+$$\vartheta\left(\frac 1{\sqrt{x^2+y^2+z^2}}(x,y,z)\right).$$
+If $\vartheta(p)=\vartheta(q)$, then $[\vec p]=[\vec q]$ in $P^2(\mathbb R)$.  Hence, by definition, $\vec p=\lambda\vec q$ for some $\lambda\ne 0$ in $\mathbb R$.  Since $\vec p,\vec q\in S^2(\mathbb R)$, their magnitudes are $1$, hence
+$$1=\|\vec p\|=\|\lambda\vec q\|=|\lambda|\|\vec q\|=|\lambda|,$$
+so that $\lambda=\pm 1$ and $p=\pm q$.  The converse is clear: if $p=\pm q$ then $\vartheta(p)=\vartheta(q)$.
+
+Clearly $\overline{\vartheta}$ can be defined by sending $\overline p\in E^2(\mathbb R)$ to $[\vec p]$, and it is a bijection.
+
+(ii) is clear because if $z\ne 0$, then $[x:y:z]=[x/z:y/z:1]=(x/z,y/z)$.
+
+(iii) Spherical lines are intersections with $S^2(\mathbb R)$ of planes through the origin, i.e., two-dimensional subspaces of $\mathbb R^3$.  The image of such a spherical line in $P^2(\mathbb R)$ is this plane, and hence a projective line.  Conversely, a projective line is a two-dimensional subspace of $\mathbb R^3$, and its restriction to the sphere is a great circle, i.e., a spherical line.
+\end{proof}
+
+\noindent Thus, Propositions 5.13 and 5.14 can alternatively be proven using Propositions 5.15 and 3.1, as Proposition 5.15 shows that the elliptic plane has the same points and lines as the projective plane.  However, this time there is a metric on pairs of points (two points have a distance $\leqslant\pi/2$).
+
+It is clear that isometries of $S^2(\mathbb R)$ can be restricted to $E^2(\mathbb R)$, because if $T$ is an isometry then $T(-p)=-T(p)$; and hence the map $p\mapsto\overline{T(p)}$ from $S^2(\mathbb R)\to E^2(\mathbb R)$ sends $\pm p$ to the same thing and one can identify antipodes in the domain. % Basically, set-theoretic injectification.
+Moreover, we recall that a projective transformation of $P^2(\mathbb R)$ is given by restricting any nonsingular linear operator on $\mathbb R^3$.  Since $T$ is given by a nonsingular linear operator (an orthogonal one), it becomes a projective transformation of the gnomonic projection.  Thus
+\begin{center}
+\textbf{In the gnomonic projection of the elliptic plane, isometries are projective transformations.  However, not all projective transformations are isometries, as a projective transformation does not generally preserve distances (they act transitively on pairs of distinct points).}
+\end{center}
+Similarly, a circle in $E^2(\mathbb R)$ which is not a line, gives rise to a cone in $\mathbb R^3$, and hence a conic in $P^2(\mathbb R)$.  Each circle has exactly one center (because the spherical circle has two centers which are antipodes), and again, not all conics are circles in $E^2(\mathbb R)$.\\
+
+\noindent\textbf{HIGHER DIMENSIONS}\\
+
+\noindent As before, we expect to be able to generalize these results to higher dimensions.
+
+It is fairly easy; we do the same thing to $S^n(\mathbb R)$ which we did to $S^2(\mathbb R)$.  We let $\sim$ be the equivalence relation where $p\sim q$ if and only if $p=\pm q$, and quotient it out to get elliptical $n$-space, $E^n(\mathbb R)$.  As in Proposition 5.15, the map $S^n(\mathbb R)\to P^n(\mathbb R)$ given by $(x_1,x_2,\dots,x_{n+1})\mapsto[x_1:x_2:\dots:x_{n+1}]$ induces a bijection $E^n(\mathbb R)$, and the reader is left to verify:
+\begin{itemize}
+\item $k$-planes in $E^n(\mathbb R)$ correspond to projective $k$-planes;
+
+\item Isometries are projective transformations, but not conversely;
+
+\item $k$-spheres which are not $k$-planes are $k$-dimensional ellipsoids, paraboloids and hyperboloids of revolution in $P^n(\mathbb R)$.\\
+\end{itemize}
+\noindent At this point it is interesting to compare projective space with elliptic space, and tell how much homogeneity is lost when bringing in the elliptic metric.  We can answer this by finding the number of degrees of freedom each has in picking isometries.\footnote{More rigorously, the group of isometries of any of the spaces we've gone over (spherical, Euclidean, hyperbolic, projective, elliptic) is a \emph{Lie group}, as it locally has the same topological structure as a concrete space $\mathbb R^d$.  The number $d$, called the \emph{dimension} of the Lie group, is the number of degrees of freedom.  We will not delve into details here.}  To begin with, $P^n(\mathbb R)$'s isometry group has $n^2+2n$ degrees of freedom: indeed, there are $(n+1)^2=n^2+2n+1$ degrees of freedom in picking an element of $GL_{n+1}(\mathbb R)$ [one for each entry: the requirement that the matrix be nonsingular is not equational, hence does not hinder any degree of freedom].  But when we quotient out the subgroup of scalar multiples of the identity matrix to get $PGL_{n+1}(\mathbb R)$, one degree of freedom is lost, leaving us with $n^2+2n$.
+
+Now we consider the isometry group of $E^n(\mathbb R)$.  It is obtained by taking $S^n(\mathbb R)$'s isometry group, $O(n+1)$, and quotienting out the subgroup $\{I_{n+1},-I_{n+1}\}$.  Since we are quotienting out a discrete subgroup, no degrees of freedom are lost to it.  The number of degrees of freedom in choosing an element of $O(n+1)$ is equal to $\frac{n(n+1)}2$, as can be seen in many ways:
+\begin{itemize}
+\item There are $n$ degrees in picking the first column of the matrix, because it can be any \emph{unit} $(n+1)$-dimensional vector.  Then there are $n-1$ degrees in picking the second column, because it must be a unit vector, but it must also be orthogonal to the first column, and this condition takes away a degree of freedom.  Then there are $n-2$ degrees in picking the third column, because it must be orthogonal to the first two: the linear independence of the first two guarantees that there will always be \emph{exactly} two degrees of freedom biting the dust.  The argument iterates until the last column, where there are no degrees of freedom left, and only two possible vectors that can be placed.  Hence the total number of degrees of freedom is $n+(n-1)+\dots+1+0=\frac{n(n+1)}2$.
+
+\item Take $m=n+1$ for simplicity of notation.  The map $A\mapsto AA^T$ is a smooth map from $m\times m$ matrices to $m\times m$ symmetric matrices, and its differential is surjective at every matrix $A$ which maps to $I_m$ (i.e., every orthogonal matrix).  The domain has $m^2$ degrees of freedom for obvious reasons.  The symmetric matrices have $\frac{m(m+1)}2$ degrees of freedom, because you can choose any elements for the upper triangular part including the diagonal, and then the rest is determined.  Hence, since $I_m$ is a regular value, its inverse image \---- which is $O(m)$ \---- is a regular manifold of $m^2-\frac{m(m+1)}2=\frac{m(m-1)}2=\frac{n(n+1)}2$ dimensions.
+\end{itemize}
+Since projective space has $n^2+2n=n(n+2)$ degrees worth of isometries, and elliptic space has $\frac{n(n+1)}2$, we conclude that the preserving the metric takes away $[n^2+2n]-\frac{n(n+1)}2=\frac{n^2+3n}2=\frac 12n(n+3)$ degrees of freedom.  Hence, whether a projective transformation preserves the metric can be characterized by $\frac 12n(n+3)$ equations.  It is an extremely relevant study to see what kinds of equations they are, but that is a topic beyond the scope of this book.
+
+\subsection*{Exercises 5.6. (Relation to Projective Space: Elliptic Geometry)} % Identify antipodes together to get a new kind of geometry, where
+% two lines intersect exactly *once*.  Realize that this is projective space but with a metric equipped, and restrictions on isometries.
+\begin{enumerate}
+\item (a) Let $(x_1,y_1),(x_2,y_2)\in\mathbb R^2$, viewed as points in the gnomonic projection of the elliptic plane.  Show that their distance is
+$$\cos^{-1}\frac{|x_1x_2+y_1y_2+1|}{\sqrt{x_1^2+y_1^2+1}\sqrt{x_2^2+y_2^2+1}}$$
+[Convert to the sphere.]  In particular, the distance from $(x,y)$ to the origin is $\cos^{-1}\frac 1{\sqrt{x^2+y^2+1}}$.
+
+(b) Let $(u_1,\dots,u_n),(v_1,\dots,v_n)\in\mathbb R^n$, viewed as points in the gnomonic projection of elliptic $n$-space.  What is their distance?
+
+\item (a) If $p\in E^2(\mathbb R)$, the set of points whose distance from $p$ is equal to $\pi/2$ is a line.  Moreover, when (and only when) a line segment from $p$ goes past this line, it stops being the shortest segment between the points.  [This line is called the \textbf{cut locus} of $p$.]
+
+(b) More generally, if $p\in E^n(\mathbb R)$, the set of points whose distance from $p$ is equal to $\pi/2$ is a hyperplane in $E^n(\mathbb R)$.  [Again called the \textbf{cut locus}.] % It's "hyperplane" for the same reason it's "line" in part (a).
+
+(c) The cut locus of $\vec p\in S^n(\mathbb R)\subset\mathbb R^{n+1}$ is $S^n(\mathbb R)\cap V$, where $V$ is the orthogonal complement of the span of $\vec p$.
+
+\item In the gnomonic projection of $E^n(\mathbb R)$, a projective transformation $T$ is an isometry if and only if it preserves cut loci, i.e., if $C$ is the cut locus of $p$, then $T(C)$ is the cut locus of $T(p)$.
+
+\item In the gnomonic projection of $E^2(\mathbb R)$, when is the center of a circle the origin?  When is it a point at infinity?
+
+\item In $E^2(\mathbb R)$, each of the triangle patterns $[2,3,3],[2,3,4],[2,3,5]$ still exist.  However, they have $12$, $24$ and $60$ triangles respectively, half of what they would have in the spherical case.  [Remember, antipodes are identified.]
+
+Here is an illustration of the $[2,3,5]$ tiling in the gnomonic projection:
+\begin{center}
+\includegraphics[scale=.2]{EllipPattern235.png}
+\end{center}
+\item Every Platonic solid except the tetrahedron can be constructed in $E^2(\mathbb R)$, but it will have half as many faces as in the spherical case.
+
+\item Which Archimedean and Catalan solids can be carried over to $E^2(\mathbb R)$?
+
+\item Is gnomonic projection conformal?  [Do not be fooled just because it sends lines to projective lines!]
+\end{enumerate}
+
+\end{document}

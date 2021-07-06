@@ -1,0 +1,1349 @@
+\documentclass[leqno]{book}
+\usepackage[small,nohug,heads=vee]{diagrams}
+\diagramstyle[labelstyle=\scriptstyle]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage{mathabx}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage[utf8]{inputenc}
+
+\makeatletter
+\newcommand*\bcd{\mathpalette\bcd@{.5}}
+\newcommand*\bcd@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+\begin{document}
+
+\chapter{Preliminary Group Theory}
+
+The material to be covered in this book will depend heavily on symmetries and their invariants.  Certain complicated constructions may be more easily understood once we know how to transform them to easier constructions.  The symmetries of an object form the algebraic structure known as a group.  Thus, a brief course on group theory will be a beneficial place to start.
+
+This chapter will go through the basics of group theory, as well as introduce a few basic propositions that will aid in some of the later chapters.
+
+\subsection*{1.1. Definition and Examples of Groups}
+\addcontentsline{toc}{section}{1.1. Definition and Examples of Groups}
+To first get a glimpse of what a group is, we shall introduce the notion of a permutation.  Informally, a permutation of a set of elements is a mere rearrangement of the elements.  For example, the following are permutations of the letters A, C, N, E:
+\begin{center}
+E~N~C~A~~~~~~~~~~~~~~~~~C~E~A~N
+\end{center}
+Permutations show up frequently in combinatorics, where one questions how many ways the letters of a certain word can be rearranged.  However, it does not make sense to talk about a permutation if we don't know how the elements were arranged originally: without this information, we merely have an ordered list.  We thus require that any permutation specifically state the starting and ending position of each element.  For example, the permutation C~E~A~N of the letters A, C, N, E can be rewritten as
+$$\begin{pmatrix}\text A&\text C&\text N&\text E\\\text C&\text E&\text A&\text N\end{pmatrix},$$
+which shows that A maps to C, C maps to E, N maps to A and E maps to N.  With permutations defined this way, we can compose any two of them, by seeing where each element of the set goes through the permutation on the right, and then seeing where the result lands through the permutation on the left.  For example,
+\begin{center}\includegraphics[scale=.35]{ACNE.png}\end{center}
+%$$\begin{pmatrix}\text A&\text C&\text N&\text E\\\text C&\text E&\text A&\text N\end{pmatrix}\circ\begin{pmatrix}\text A&\text C&\text N&\text E\\\text E&\text N&\text C&\text A\end{pmatrix}=\begin{pmatrix}\text A&\text C&\text N&\text E\\\text N&\text A&\text E&\text C\end{pmatrix}$$
+because A maps to E through the permutation on the right, and then E maps to N through the permutation on the left, so the composite permutation maps A to N; similarly for the other three letters.  Notice that the result is still a permutation.  This is true upon composition of any two permutations, as we now see.
+
+If $X$ is any set, we formally define a \textbf{permutation} of $X$ to be a bijective function from $X$ to $X$.  Such a function rearranges the elements of $X$.  For instance, if $X$ is the four-element set $\{\text A,\text C,\text N,\text E\}$, then these functions above are examples of the permutations of the letters.  The set of all permutations of $X$ is denoted $S(X)$ and is called the \textbf{symmetric group with respect to $X$}.  We now make the following observations:
+
+\---- If $f$ and $g$ are elements of $S(X)$, so is the composite function $f\circ g$.  After all, the composition of bijective functions is bijective.
+
+\---- Whenever $f,g,h\in S(X)$, $(f\circ g)\circ h=f\circ(g\circ h)$ because function composition is associative: indeed, both of these functions are equal to the map $x\mapsto f(g(h(x)))$.
+
+\---- The identity map $1_X:X\to X$ is a permutation.  Moreover, for any $f\in S(X)$, $1_X\circ f=f$ and $f\circ 1_X=f$, because for each $x\in X$, $1_X(f(x))=f(x)$ and $f(1_X(x))=f(x)$.
+
+\---- If $f\in S(X)$, then since $f$ is bijective, it has an inverse $f^{-1}$, which is also bijective.  Thus, $f^{-1}\in S(X)$, and $f\circ f^{-1}=f^{-1}\circ f=1_X$.
+
+Finally, we observe that if $f,g\in S(X)$, then $f\circ g$ may \emph{not} equal $g\circ f$.  For example, if $X=\{1,2,3\}$ then:
+$$\begin{pmatrix}1&2&3\\3&1&2\end{pmatrix}\circ\begin{pmatrix}1&2&3\\2&1&3\end{pmatrix}=\begin{pmatrix}1&2&3\\1&3&2\end{pmatrix}$$
+$$\begin{pmatrix}1&2&3\\2&1&3\end{pmatrix}\circ\begin{pmatrix}1&2&3\\3&1&2\end{pmatrix}=\begin{pmatrix}1&2&3\\3&2&1\end{pmatrix}$$
+Thus composition is not generally commutative.  It is, however, associative, and every element of $S(X)$ has an inverse.  We make abstract these properties in the following definition.\\
+
+\noindent\textbf{Definition.} \emph{A \textbf{group} is a nonempty set $G$ equipped with a binary operation $*$ satisfying the following conditions:}
+
+(i) \emph{Whenever $a\in G$ and $b\in G$, $a*b\in G$.  We say $G$ is \textbf{closed under}~$*$.}
+
+(ii) \emph{The operation is associative: $(a*b)*c=a*(b*c)$ for all $a,b,c\in G$.}
+
+(iii) \emph{There is an element $1\in G$ (called the \textbf{identity element}) such that $1*a=a$ and $a*1=a$ for all $a\in G$.}
+
+(iv) \emph{For each $a\in G$, there is an element $d\in G$ (called the \textbf{inverse} of $a$) such that $a*d=1$ and $d*a=1$.}\\
+
+\noindent\textbf{Definition.} \emph{A group $G$ is said to be \textbf{abelian}\footnote{Named after the early 19th century mathematician, Niels Henrik Abel.} if for all $a,b\in G$, $a*b=b*a$.}\\
+
+\noindent\textbf{Note.} Condition (i) \---- which states that $G$ is closed under the operation \---- is considered unnecessary by certain authors.  If the binary operation is written as $*:G\times G\to G$ in the definition, then condition (i) is automatic.  However, we will sometimes use operations $*$ without assuming from the start that they have this form.  Thus we explicitly list (i) as a condition that $G$ must satisfy.\\
+
+\noindent\textbf{Examples.}
+
+(1) The set $S(X)$ of permutations of $X$ is a group under function composition, as we have previously established.  (Hence the name ``symmetric \emph{group}.'')  This group is only abelian if $|X|\leqslant 2$, however, as one can readily show.
+
+If $X$ is the set $\{1,2,\dots,n\}$ for some positive integer $n$, then $S(X)$ is denoted $S_n$.  One can intuitively see that, e.g., the groups $S(\{\text A,\text C,\text N,\text E\})$ and $S_4$ are alike.  Similarly, if $X$ is any finite set such that $|X|=n$ then $S(X)$ and $S_n$ are alike, so this characterizes finite symmetric groups.\\
+
+(2) The integers $\mathbb Z$ form a group under the addition operation $+$.  After all, the sum of two integers is an integer, so condition (i) holds.  Since addition of integers is associative, we have condition (ii).  $0\in\mathbb Z$ serves as an additive identity; $0+a=a+0=a$ for all $a\in\mathbb Z$.  Thus condition (iii) holds.  Finally, condition (iv) holds, because for each $a\in\mathbb Z$, one can take $d=-a$, and then $a+d=d+a=0$.  Moreover, addition of integers is commutative, so $\mathbb Z$ is also an abelian group.
+
+Note that the definition of a group has the identity element denoted as $1$.  However, depending on the operation equipped, the notation may vary.  When the operation is addition, we use $0$ for the identity element; we mostly use $1$ as the identity when the group is completely abstract.\\
+
+(3) Under multiplication, however, $\mathbb Z$ is \emph{not} a group.  Conditions (i), (ii) and (iii) are satisfied, but $\mathbb Z$ does not possess a \emph{multiplicative} inverse for every element; for example, there is no $x\in\mathbb Z$ such that $2\cdot x=1$.\\
+
+(4) Do the rational numbers $\mathbb Q$ form a group under multiplication?  Well, conditions (i), (ii) and (iii) are easy to check.  It may \emph{seem} like (iv) is true, because whenever $x\in\mathbb Q$, the multiplicative inverse $\frac 1x$ is also rational, and $x\cdot\frac 1x=1$.  However, $0$ is an element of $\mathbb Q$ with no multiplicative inverse, and is in fact the only one.  This violates condition (iv) in the definition of a group.
+
+But now, suppose $G$ is the set $\mathbb Q-\{0\}$, obtained by removing $0$ from the set $\mathbb Q$ of rational numbers.  Then (i), (ii) and (iii) manifestly hold for $G$ ((i) because the product of nonzero rational numbers is nonzero).  Moreover, we also have (iv) now, because every element of $G$ is a \emph{nonzero} rational number, hence has a multiplicative inverse which is also a nonzero rational number.  Thus $G$ \---- alternatively denoted by $\mathbb Q_{\ne 0}$ or $\mathbb Q^\times$ \---- is a group under multiplication.  $G$ is abelian.\\
+
+(5) Let $n$ be a positive integer, and let $\mathbb Z/n\mathbb Z$ be the set of congruence classes modulo $n$.  Thus for $a,b\in\mathbb Z$, $\overline a=\overline b$ in $\mathbb Z/n\mathbb Z$ if and only if $a\equiv b\pmod n$, that is, $n\mid(a-b)$.  Using the Division Algorithm, one observes that $\mathbb Z/n\mathbb Z=\{\overline 0,\overline 1,\dots,\overline{n-1}\}$.  Then $\mathbb Z/n\mathbb Z$ is readily seen to be an abelian group under addition.  For example, if $n=4$, the operation table looks like this:
+\begin{center}
+\begin{tabular}{c|cccc}
+$+$ & $\overline 0$ & $\overline 1$ & $\overline 2$ & $\overline 3$\\\hline
+$\overline 0$ & $\overline 0$ & $\overline 1$ & $\overline 2$ & $\overline 3$\\
+$\overline 1$ & $\overline 1$ & $\overline 2$ & $\overline 3$ & $\overline 0$\\
+$\overline 2$ & $\overline 2$ & $\overline 3$ & $\overline 0$ & $\overline 1$\\
+$\overline 3$ & $\overline 3$ & $\overline 0$ & $\overline 1$ & $\overline 2$
+\end{tabular}
+\end{center}
+Conditions (i), (ii) and (iii) hold (as addition is well-defined in modular arithmetic); condition (iv) also holds, but in a rather interesting way, because, for example, if $n=4$ as in the table above, then $\overline 1+\overline 3=\overline 0$.
+
+The group $\mathbb Z/n\mathbb Z$ is called the \textbf{cyclic group of order $n$}.  The word ``cyclic'' is involved because there is one element of the group (in this case $\overline 1$) which can be iteratively combined with itself to cover the entire group.  The additive group $\mathbb Z$ in Example (2) is sometimes called the \textbf{infinite cyclic group}.\\
+
+(6) Here is an example of a nonabelian group: let $GL_2(\mathbb R)$ be the set of nonsingular (i.e., invertible) $2\times 2$ matrices with real entries.  We show that this is a group under matrix multiplication.  (This is known as the \textbf{general linear group}.)  Firstly, (i) holds, because the formula $\det(AB)=\det A\det B$ implies that the product of nonsingular matrices is nonsingular.  It is well known in linear algebra that multiplication of matrices is associative; hence (ii).  The identity matrix $I_2=\begin{bmatrix}1&0\\0&1\end{bmatrix}$ satisfies $I_2A=AI_2=A$ for all matrices $A$, so that condition (iii) holds.  As for condition (iv), note that we are restricting ourselves to \emph{nonsingular} matrices.  Thus every matrix in $GL_2(\mathbb R)$ has an inverse, and this inverse is also in $GL_2(\mathbb R)$.  Hence, $GL_2(\mathbb R)$ is a group under multiplication.
+
+However, matrix multiplication is \emph{not} commutative.  For instance, if $A=\begin{bmatrix}1&1\\0&1\end{bmatrix}$ and $B=\begin{bmatrix}2&0\\0&1\end{bmatrix}$, then $A,B\in GL_2(\mathbb R)$, but $AB=\begin{bmatrix}2&1\\0&1\end{bmatrix}\ne\begin{bmatrix}2&2\\0&1\end{bmatrix}=BA$.  Hence this group is nonabelian.\\
+
+(7) Imagine a square on the table.  Now think of all possible ways to take the square, move it around, and put it back down to match the original shape.  Let us number the vertices so that we can distinguish these moves.
+\begin{center}\includegraphics[scale=.4]{Square1.png}\end{center}
+
+Of course, we do not care about where the square traveled midway; we only care about which vertices are at which positions at the end.  We could hand the square over to a circus clown, watch him do some juggling, then when it falls on the ground, take the square back and return it to the table.
+
+So what positions can the square end up in?  First, the square could have the same side face-down as it did before.  Then it is visually clear that the square must have either been rotated by one, two or three quarters of a turn, or put back in its starting position:
+\begin{center}\includegraphics[scale=.3]{SquaresOP.png}\end{center}
+
+Alternatively, if the side that used to be face-down is now face-up, the square has been reflected over one of the four symmetry lines:
+\begin{center}\includegraphics[scale=.3]{SquaresOR.png}\end{center}
+
+It is readily seen that these are the only possible ways to move the square so that it'll match the original shape.  There is a natural composition on these transformations; $a\circ b$ is obtained by doing transformation $b$ to the square first, then transformation $a$.\footnote{We perform group operations from right to left, as we think about them as an abstraction of function composition.}  This will land the square to match its original shape, hence will always be one of the eight transformations above.
+
+With a bit of work, you can figure out, for each of the $8^2=64$ ordered pairs of transformations, what their composition is.  This amounts to the following operation table (where the row label is the left operand):
+\begin{center}
+\begin{tabular}{c|cccccccc}
+$\circ$ & $r_0$ & $r_1$ & $r_2$ & $r_3$ & $v$ & $t$ & $h$ & $d$\\\hline
+$r_0$ & $r_0$ & $r_1$ & $r_2$ & $r_3$ & $v$ & $t$ & $h$ & $d$\\
+$r_1$ & $r_1$ & $r_2$ & $r_3$ & $r_0$ & $d$ & $v$ & $t$ & $h$\\
+$r_2$ & $r_2$ & $r_3$ & $r_0$ & $r_1$ & $h$ & $d$ & $v$ & $t$\\
+$r_3$ & $r_3$ & $r_0$ & $r_1$ & $r_2$ & $t$ & $h$ & $d$ & $v$\\
+$v$ & $v$ & $t$ & $h$ & $d$ & $r_0$ & $r_1$ & $r_2$ & $r_3$\\
+$t$ & $t$ & $h$ & $d$ & $v$ & $r_3$ & $r_0$ & $r_1$ & $r_2$\\
+$h$ & $h$ & $d$ & $v$ & $t$ & $r_2$ & $r_3$ & $r_0$ & $r_1$\\
+$d$ & $d$ & $v$ & $t$ & $h$ & $r_1$ & $r_2$ & $r_3$ & $r_0$
+\end{tabular}
+\end{center}
+We leave it to the reader to verify that the four conditions in the definition of a group are satisfied.  The eight elements $\{r_0,r_1,r_2,r_3,v,t,h,d\}$ thus form a group under the composition operation.  It is nonabelian, because, for example $r_1\circ v=d$ but $v\circ r_1=t$.  This group is denoted $D_4$ and is \textbf{the dihedral group of degree $4$}.\\
+
+(8) More generally, imagine a regular $n$-gon (i.e., a regular polygon with $n$ sides) on the table.  Now think of all possible ways to take it, move it around, and put it back down to match the original shape.  If the face-down side of the polygon stays face-down, the polygon will be rotated at one of $n$ possible angles (see figure at left).  If the face-down side of the polygon becomes face-up, the polygon will be flipped over one of the lines of symmetry (see figure at right).
+\begin{center}\includegraphics[scale=.3]{Heptagons.png}\end{center}
+
+Now let $r$ be counterclockwise rotation by $360/n$ degrees (it cycles each vertex along one edge), and let $d$ be any one of the flips.  Then $r^n=1$, $d^2=1$ and $dr=r^{-1}d$, as one can verify.  (By $r^n$, of course, we mean $r\cdot r\cdot\dots r$, where there are $n$ operands.)  Moreover, $D_n=\{1,r,r^2,\dots,r^{n-1},d,rd,\dots,r^{n-1}d\}$ is a group under the composition operation, which we call \textbf{the dihedral group of degree $n$}.\\
+
+\noindent We have given several examples of groups.  At this point we shall denote the operation of an abstract group via juxtaposition; in other words, we use $ab$ (or $a\cdot b$) rather than $a*b$.  Now we shall prove some basic properties of groups that follow from the definition of a group.  For example, is the identity element necessarily unique?  Is the inverse of any element necessarily unique?  As we now see, the answer is yes.\\
+
+\noindent\textbf{Proposition 1.1.} \emph{Let $G$ be a group.  Then:} %1.1
+
+(i) \emph{$G$ has a unique identity element.}
+
+(ii) \emph{For each $a\in G$, $a$ has a unique inverse.  (This inverse is denoted $a^{-1}$.)}
+
+(iii) \emph{For $a,b\in G$, $(ab)^{-1}=b^{-1}a^{-1}$.}
+
+(iv) \emph{For each $a\in G$, $(a^{-1})^{-1}=a$.}
+
+(v) \emph{For any $a,b\in G$, the equation $ax=b$ has a unique solution for $x$ in $G$, and the equation $ya=b$ has a unique solution for $y$ in $G$.}
+
+\begin{proof}
+(i) $G$ has an identity element $1$ by definition.  Now suppose $1'\in G$ is also an identity element.  To prove the uniqueness, we will show that $1'=1$.  Indeed, $1=1'\cdot 1=1'$; therefore $1'=1$.
+
+(ii) Suppose $d,d'\in G$ are both inverses of $a$.  To prove the uniqueness, we will show $d=d'$.  We have
+$$d=d1=d(ad')=(da)d'=1d'=d'$$
+Hence $d=d'$.
+
+(iii) By part (ii), $(ab)^{-1}$ is the \emph{unique} inverse of $ab$.  But $b^{-1}a^{-1}$ is also an inverse of $ab$, because
+$$(ab)(b^{-1}a^{-1})=a(bb^{-1})a^{-1}=a1a^{-1}=aa^{-1}=1$$
+and similarly $(b^{-1}a^{-1})(ab)=1$.  Therefore, $(ab)^{-1}=b^{-1}a^{-1}$.
+
+(iv) By part (ii), $(a^{-1})^{-1}$ is the unique inverse of $a^{-1}$.  Yet $a$ is clearly an inverse of $a^{-1}$, because $aa^{-1}=a^{-1}a=1$.  Therefore $(a^{-1})^{-1}=a$.
+
+(v) $x=a^{-1}b$ satisfies the first equation because $ax=aa^{-1}b=1b=b$.  To show uniqueness, let $x\in G$ be any element such that $ax=b$.  Then $a^{-1}b=a^{-1}ax=1x=x$, hence $x=a^{-1}b$.  The same argument goes for the equation $ya=b$; the solution is $y=ba^{-1}$.
+\end{proof}
+
+\noindent\textbf{EXPONENTIATION AND ORDER}\\
+
+\noindent Let $G$ be a group, $a\in G$ and $n\in\mathbb Z$.  Earlier, if $n>0$, we defined $a^n=aa\dots a$, where there are $n$ operands.  For example, $a^2=aa$, $a^3=aaa$, etc.  If $n<0$, say $n=-k$ with $k>0$, then we define $a^n=a^{-1}a^{-1}\dots a^{-1}$, where there are $k$ operands.  Finally we set $a^0=1$.  We thus have a notion of exponentiation in $G$.  The familiar laws of exponents $a^{n+m}=a^na^m$ and $a^{nm}=(a^n)^m$ hold; see Exercise 2.
+
+If $n$ is the smallest positive integer such that $a^n=1$, $n$ is called the \textbf{order of $a$}, and is denoted $|a|$; and $a$ is said to have \textbf{order $n$}.  If no such positive integer exists, $a$ is said to have \textbf{infinite order}.  Also, the size of the set $G$ is denoted $|G|$ and called the \textbf{order of $G$}.\\
+
+\noindent\textbf{Proposition 1.2.} \emph{Let $G$ be a group and $a\in G$.  Then:} %1.2
+
+(i) \emph{If $a$ has order $n$, then for $i,j\in\mathbb Z$, $a^i=a^j$ if and only if $i\equiv j\pmod n$.  In particular, $a^k=1$ if and only if $n\mid k$.}
+
+(ii) \emph{If $a$ has infinite order, then for $i,j\in\mathbb Z$, $a^i=a^j$ if and only if $i=j$.}
+
+\begin{proof}
+(i) Suppose $i\equiv j\pmod n$.  Then $n\mid(i-j)$, so that $i-j=nk$ for some $k\in\mathbb Z$.  With that, $i=nk+j$, so that $a^i=a^{nk+j}=a^{nk}a^j=(a^n)^ka^j=1^ka^j=1a^j=a^j$.
+
+Conversely, suppose $a^i=a^j$.  Then $a^{i-j}=a^ia^{-j}=a^i(a^j)^{-1}=1$.  By the Division Algorithm, one can write $i-j=nq+r$ where $0\leqslant r<n$.  Then $a^{i-j}=(a^n)^qa^r=a^r$.  Thus $a^r=1$.  Since $n$ is the \emph{smallest} positive integer such that $a^n=1$, we must have $r=0$.  Therefore $i-j=nq$ and $i\equiv j\pmod n$.
+
+(ii) If $i=j$ then clearly $a^i=a^j$.  Conversely, suppose that $a^i=a^j$.  Then $1=a^i(a^j)^{-1}=a^{i-j}$.  If $i-j>0$, then some positive-integer power of $a$ would be $1$, contradicting the fact that $a$ has infinite order.  We get a similar contradiction if $i-j<0$, for then $1=a^{j-i}$ and $j-i>0$.  Therefore, $i-j=0$ and $i=j$.
+\end{proof}
+
+\noindent We conclude this section by introducing the product of two groups $G$ and $H$.  Suppose $*$ is the operation of $G$ and $\star$ is the operation of $H$.\footnote{The different operation symbols helps one understand that the construction is possible if the groups use different kinds of operations; e.g., if one uses addition and the other uses multiplication.}  Define an operation $\diamond$ on the Cartesian product $G\times H=\{(g,h):g\in G,h\in H\}$ via
+$$(g_1,h_1)\diamond(g_2,h_2)=(g_1*g_2,h_1\star h_2)$$
+Then it is readily verified that $G\times H$ is a group.  Its identity element is $(1_G,1_H)$ where $1_G$ is the identity element of $G$ and $1_H$ is the identity of $H$.  The inverse of $(g,h)\in G\times H$ is equal to $(g^{-1},h^{-1})$.
+
+Moreover, $G\times H$ is abelian if and only if $G$ and $H$ are both abelian.  $G\times H$ is finite if and only if $G$ and $H$ are both finite, and in this case $|G\times H|=|G|~|H|$.
+
+\subsection*{Exercises 1.1. (Definition and Examples of Groups)}
+\begin{enumerate}
+\item If $ab=1$ in a group, prove that $ba=1$.
+
+\item Which of the following are groups under the given operation?
+
+(a) $\mathbb Q_{>0}=\{x\in\mathbb Q:x>0\}$ under multiplication.
+
+(b) $\mathbb R$ under addition.
+
+(c) $\mathbb R$ under multiplication.
+
+(d) $\mathbb R_{\ne 0}$ under multiplication.
+
+(f) The set of even numbers under addition.
+
+(g) The set of odd numbers under addition.
+
+(h) $\mathbb R$ under the operation $a*b=a+2b$.
+
+(i) The set of $2\times 2$ matrices with real entries, under addition.
+
+(j) The set of singular $2\times 2$ matrices with real entries, under addition.
+
+(k) The set of nonsingular $2\times 2$ upper triangular matrices with real entries, under multiplication.  An \textbf{upper triangular} matrix is a matrix all of whose entries on the bottom-left of the main diagonal are zero.
+
+(l) The set of polynomials with real coefficients, under addition.
+
+(m) The set of polynomials with real coefficients that have $17$ as a root, under addition.
+
+(n) The set of polynomials with real coefficients of degree $6$, under addition.
+
+(o) The set $\left\{\begin{bmatrix}a&b\\0&1\end{bmatrix}:a,b\in\mathbb R,a>0\right\}$ under multiplication.
+
+(p) The set $\left\{\begin{bmatrix}a&a\\0&1\end{bmatrix}:a\in\mathbb R,a\ne 0\right\}$ under multiplication.
+
+(q) $\mathbb R$ under the operation $a*b=a+b-ab$.
+
+(r) $\mathbb R-\{1\}$ under the operation $a*b= a+b-ab$.
+
+\item Let $G$ be a group and $a\in G$.  Show that: % You mentioned Hungerford's A. Alg. - an Intro., which is cited in the bibliography. ^^ If you insist on the acknowledgements section teasing him, I guess it will do that... in the fourth dimension.
+
+(a) $a^{n+m}=a^na^m$.  [One or both of the exponents could be negative or zero.]
+
+(b) $a^{nm}=(a^n)^m$.
+
+(c) If $a,b\in G$ and $ab=ba$, then $(ab)^n=a^nb^n$.
+
+(d) Show by example that part (c) may be false if $ab\ne ba$.
+
+\item If $p$ is prime, $a^p=1$ and $a\ne 1$, then what is the order of $a$?
+
+\item If $a\in G$ has order $nm$, show that $a^n$ has order $m$.
+
+\item Suppose $a,b\in G$, $a\ne 1$, $b^5=1$ and $ba=a^2b$.  What is the order of $a$?  [Show by induction that $b^ka=a^{2^k}b^k$ for positive integers $k$.]
+
+\item If $G$ is a finite group and $|G|$ is even, show that $G$ has an element of order $2$.  [The involution $x\mapsto x^{-1}$ on $G$ must have an even number of fixed points.  An \textbf{involution} on a set $X$ is a function $f:X\to X$ such that $f\circ f=1_X$.]
+
+\item (a) If $a$ and $b$ have finite order and $ab=ba$, then $(ab)^{|a||b|}=1$.
+
+(b) Show by example that part (a) may be false if $ab\ne ba$.
+
+\item Let $G$ be a group of order $4$ in which no element has order $4$.
+
+(a) Show that $G$ has no element of order $3$.  [If $|g|=3$, then the elements of $G$ are $g,g^2,g^3=1$ and a fourth element $d$.  Now which of these four elements is $gd$?]
+
+(b) Explain why every $g\ne 1$ in $G$ has order $2$.
+
+(c) Let the elements of $G$ be $1,a,b,c$ and write out the operation table for~$G$.
+
+\item Let $G=\{(a,b):a,b\in\mathbb R,a\ne 0\}$ and define an operation on $G$ via $(a_1,b_1)*(a_2,b_2)=(a_1a_2,a_1b_2+b_1)$.  Show that $G$ is a group.  Is $G$ abelian?
+
+\item Let $G$ be a group, and define a new operation $*$ on $G$ via $a*b=ba$.  Show that $G$ is also a group under this operation.
+
+\item Let $G$ be a group and $c\in G$.  Define a new operation on $G$ via $a*b=acb$.  Show that $G$ is a group under this operation.
+
+\item If $G$ is a nonabelian group, then $|G|\geqslant 6$.  [If $a,b\in G$ and $ab\ne ba$, show that the five elements of $H=\{1,a,b,ab,ba\}$ are all distinct.  Show that if $a^2=1$ then $aba\notin H$, and if $a^2\ne 1$ then $a^2\notin H$.]
+
+\item If $a,b,c\in G$ and either $ab=ac$ or $ba=ca$, then $b=c$.
+
+\item If $a,b,c\in G$, then the equation $axb=c$ has a unique solution for $x$ in $G$.
+
+\item Let $G$ be a set equipped with an associative binary operation such that:
+
+(i) There exists $1\in G$ such that $1a=a$ for all $a\in G$;
+
+(ii) For each $a\in G$ there exists $d\in G$ such that $da=1$.
+
+Then $G$ is a group under the operation.
+
+\item Let $G$ be a set equipped with an associative binary operation such that (i) there exists $1\in G$ such that $1a=a$ for all $a\in G$, and (ii) for each $a\in G$ there exists $d\in G$ such that $ad=1$.  Is $G$ necessarily a group?  [Consider the case where the operation is defined by $a*b=b$ for all $a,b\in G$.]
+
+\item Let $G$ be a nonempty set equipped with an associative binary operation such that for any $a,b\in G$, there exist $x,y\in G$ such that $ax=b$ and $ya=b$.  Then $G$ is a group.
+
+\item (a) Let $G$ be a nonempty, finite set equipped with an associative binary operation which cancels: if $ab=ac$ or $ba=ca$, then $b=c$.  Then $G$ is a group.
+
+(b) Show by example that part (a) may be false if $G$ is infinite.
+
+\item If $G$ and $H$ are groups, $g\in G$ has order $n$ and $h\in H$ has order $m$, then what is the order of $(g,h)\in G\times H$?
+\end{enumerate}
+
+\subsection*{1.2. Subgroups}
+\addcontentsline{toc}{section}{1.2. Subgroups}
+Sometimes when given a group $G$, it is convenient to discuss a subset of only \emph{certain} elements of $G$.  We want such a set of elements to form a group itself under $G$'s operation; this can be thought of as a ``coarser'' group than $G$ itself.
+
+For example, in the symmetric group $S(X)$, suppose some $x_0\in X$ is ``too precious'' to be moved anywhere else, and we let $G\subset S(X)$ consist of only the permutations $\sigma\in S(X)$ such that $\sigma(x_0)=x_0$.  Then $G$ is itself a group under function composition.  Indeed, if $\sigma,\tau\in G$ then $(\sigma\circ\tau)(x_0)=\sigma(\tau(x_0))=\sigma(x_0)=x_0$, hence $\sigma\circ\tau\in G$.  Function composition is associative, hence $G$'s operation is associative.  Since $1_X(x_0)=x_0$, $1_X\in G$ and $G$ has an identity element.  Finally if $\sigma\in G$ then $\sigma^{-1}\in G$ because $\sigma^{-1}(x_0)=\sigma^{-1}(\sigma(x_0))=(\sigma^{-1}\circ\sigma)(x_0)=x_0$.  Thus $G$ satisfies all four conditions that a group must satisfy.
+
+Similarly, if $n$ is a positive integer, then $n\mathbb Z=\{na:a\in\mathbb Z\}$ is a subset of the additive group $\mathbb Z$ of integers.  Since $na+nb=n(a+b)$ for $a,b\in\mathbb Z$, the set $n\mathbb Z$ is closed under addition; similarly for the additive identity and inverses, because $0=n\cdot 0$ and $-na=n(-a)$ for $a\in\mathbb Z$.  Also, the addition is manifestly associative (and commutative).  Thus $n\mathbb Z$ is an abelian group under addition.  These two examples lead to the following definition.\\
+
+\noindent\textbf{Definition.} \emph{A subset $H$ of a group $G$ is said to be a \textbf{subgroup} of $G$ if $H$ is itself a group under $G$'s operation.}\\
+
+\noindent Note, by the way, that the additive group $\mathbb R$ of real numbers does \emph{not} have the multiplicative group $\mathbb R_{\ne 0}$ of nonzero real numbers as a subgroup.  Though it is true that $\mathbb R_{\ne 0}\subset\mathbb R$ as sets, one group uses addition as the operation and the other uses multiplication, so the subset does not inherit the same operation.  $H$ must inherit the same operation as $G$ in order to be considered a subgroup.\\
+
+\noindent\textbf{Examples.}
+
+(1) Note that any group $G$ has two canonical subgroups, the group $G$ itself, and the trivial subgroup $\{1_G\}$.  After all, $1_G1_G=1_G$ and $1_G^{-1}=1_G$.\\
+
+(2) If $x_0\in X$, then the set $\{\sigma\in S(X):\sigma(x_0)=x_0\}$ is a subgroup of $S(X)$, as previously established.  Also, $n\mathbb Z$ is a subgroup of $\mathbb Z$.\\
+
+(3) Let $GL_2(\mathbb R)$ be the multiplicative group of nonsingular $2\times 2$ matrices with real entries.  Then $\{A\in GL_2(\mathbb R):\det A=1\}$ is a subgroup, which is denoted $SL_2(\mathbb R)$ and called the \textbf{special linear group}.  After all, the formula $\det(AB)=(\det A)(\det B)$ holds for square matrices; if $\det A=\det B=1$, then $\det(AB)=1$, so $SL_2(\mathbb R)$ is closed under multiplication.  Since $\det I_2=1$, $SL_2(\mathbb R)$ has an identity element.  Finally if $\det A=1$, then $\det(A^{-1})=\det(A^{-1})\det A=\det(A^{-1}A)=\det I_2=1$; therefore the inverse of any matrix in $SL_2(\mathbb R)$ is in $SL_2(\mathbb R)$.
+
+More generally, let $GL_n(\mathbb R)$ be the multiplicative group of nonsingular $n\times n$ matrices with real entries.  (The argument in Example (6) of Section 1.1 can be adapted to show that this is a group.)  Then $\{A\in GL_n(\mathbb R):\det A=1\}$ is a subgroup of $GL_n(\mathbb R)$, which is denoted $SL_n(\mathbb R)$.\\
+
+(4) The subset $\{1,r,r^2,\dots,r^{n-1}\}$ of the dihedral group $D_n$ (Example (8) of Section 1.1) is a subgroup, as the reader can readily verify.  It consists of transformations of the regular $n$-gon for which the face-down side of the polygon remains face-down.  $\{1,d\}$ is also a subgroup of $D_n$, because $d^2=1$, and one can readily verify the group axioms.\\
+
+\noindent It may be a surprise that many subsets are subgroups just because they satisfy a few properties.  Checking that a subset is a subgroup is usually not as cumbersome as one would expect from the start.  For example, associativity \emph{never} needs to be checked, because it will always hold, since it holds in the ambient group $G$.  The subgroup also never has an identity which is different from the identity of $G$.  In fact, we have the following proposition:\\
+
+\noindent\textbf{Proposition 1.3.} \emph{Let $G$ be a group and $H\subset G$ be a subset.  Then $H$ is a subgroup if and only if:} %1.3
+
+(i) \emph{$H$ is closed under the operation in $G$;}
+
+(ii) \emph{$1_G\in H$ (and is the identity element of $H$);}
+
+(iii) \emph{Whenever $a\in H$, $a^{-1}$ is also in $H$.}
+
+\begin{proof}
+Suppose $H$ is a subgroup.  Then $H$ is closed under the operation in $G$, by condition (i) in the definition of a group.  $H$ has some identity element $1_H$, and thus, for any $a\in H$, $1_Ha=a$.  Right multiplying both sides by $a^{-1}\in G$ gives $1_H=1_Haa^{-1}=aa^{-1}=1_G$.  Hence $1_H=1_G$ and $1_G\in H$.  Finally, if $a\in H$, then there exists $b\in H$ such that $ab=1_G$, since $H$ is a group.  Left multiplying both sides by $a^{-1}\in G$ yields $b=a^{-1}$ at once, therefore $a^{-1}\in H$.  Hence statements (i), (ii), (iii) hold.
+
+Conversely, suppose $H$ is a subset satisfying statements (i), (ii), (iii).  Then $H$ is closed under the operation in $G$, so condition (i) in the definition of a group is satisfied.  Since $(ab)c=a(bc)$ holds for \emph{all} $a,b,c\in G$, it holds particularly if the elements happen to be in $H$.  Therefore $H$ satisfies condition (ii).  Since $1_G\in H$ and $1_Ga=a1_G=a$ for all $a\in G$ (and hence for all $a\in H$), $H$ has an identity element.  Finally, every element of $H$ has an inverse because whenever $a\in H$, $a^{-1}\in H$ and $aa^{-1}=a^{-1}a=1_G$.  Hence $H$ is a subgroup of $G$.
+\end{proof}
+
+\noindent Thus checking that a subset is a subgroup is reduced to checking three conditions based purely on the ambient group's structure.  In fact, if we already know $H$ to be nonempty, we do not need to explicitly check that $1_G\in H$, because it follows automatically from (i) and (iii).  Take any $a\in H$.  By (iii), $a^{-1}\in H$, hence by~(i), $aa^{-1}=1_G\in H$.  Thus we have proven:\\
+
+\noindent\textbf{Proposition 1.4.} \emph{Let $G$ be a group and $H\subset G$ be a nonempty subset.  Then $H$ is a subgroup if and only if $H$ is closed under the operation of $G$ and whenever $a\in H$, $a^{-1}$ is also in $H$.}\\ %1.4
+
+\noindent The situation is stronger yet when $H$ is finite.  In this case, all that needs to be checked is closure under the operation, as we now prove.\\
+
+\noindent\textbf{Proposition 1.5.} \emph{Let $G$ be a group and $H\subset G$ be a nonempty, finite subset.  Then $H$ is a subgroup if and only if $H$ is closed under the operation of $G$.} %1.5
+
+\begin{proof}
+If $H$ is a subgroup, then $H$ is closed under the operation of $G$ by definition.  Conversely, suppose $H$ is closed under the operation of $G$.  Take any $a\in H$, we show that $a^{-1}\in H$; it will follow from Proposition 1.4 that $H$ is a subgroup of $G$.  Well, if $a$ has infinite order, then by Proposition 1.2(ii), the elements $a,a^2,a^3,\dots$ would all be distinct, and all of them would be in $H$ (by closure).  This contradicts the fact that $H$ is finite.  Therefore $a$ must have finite order, say $|a|=n$.  Consequently, $n-1\geqslant 0$, and $a^{n-1}=a^{-1}$ by Proposition 1.2(i).  If $n-1=0$ then $a=1_G$, and thus the hypothesis $a\in H$ immediately implies that $a^{-1}\in H$.  If $n-1>0$, then $a^{n-1}$ would be a positive power of $a$, hence be in $H$ by closure.  Therefore, $a^{-1}\in H$ as desired.
+\end{proof}
+
+\noindent\textbf{SUBGROUP GENERATED BY A SET}\\
+
+\noindent Sometimes it helps to speak of a subgroup generated by a set.  If $S\subset G$ is any subset, we can yield the minimal subgroup containing it by multiplying its elements and their inverses together in all possible ways.  For example, if $G=\mathbb Q_{\ne 0}$ and $S=\{2\}$, then this subgroup consists of all powers of $2$ with positive and negative exponents.  The idea is made precise in the next proposition.\\
+
+\noindent\textbf{Proposition 1.6 and Definition.} \emph{Let $S\subset G$ be a subset and let $H\subset G$ be the set of all products of finitely many elements of $S$ and their inverses.\footnote{If $S=\varnothing$, then $1$ is considered as a (vacuous) finite product.}  Then:} %1.6
+
+(i) \emph{$H$ is a subgroup of $G$ and $H\supset S$;}
+
+(ii) \emph{If $H'$ is any subgroup of $G$ containing $S$, then $H'\supset H$.}
+
+(iii) \emph{$H$ is unique for properties (i) and (ii).}
+
+\emph{$H$ is called the \textbf{subgroup of $G$ generated by $S$}.}
+
+\begin{proof}
+(i) Since the product of two finite products of elements of $S$ and their inverses is obviously another such finite product, $H$ is closed under the operation in $G$.  $1\in H$ because $1$ is a vacuous finite product (if $S\ne\varnothing$, then alternatively there exists $a\in S$, and then $1=aa^{-1}$).  Finally the fact that $H$ is closed under inverses follows from the facts that
+$$(a_1a_2\dots a_k)^{-1}=a_k^{-1}\dots a_2^{-1}a_1^{-1},~~~~~~~~(a^{-1})^{-1}=a$$
+(Proposition 1.1(iii), (iv)), and hence, the inverse of any finite product of elements of $S$ and their inverses is another such finite product.  Hence $H$ is a subgroup of $G$ by Proposition 1.3.
+
+(ii) Since $H'$ contains $S$ but is closed under inverses and the operation in $G$, it follows immediately that $H'$ contains any finite product of elements of $S$ and their inverses.
+
+(iii) Suppose $H_1$ also satisfies properties (i) and (ii).  Then $H_1$ is a subgroup of $G$ containing $S$, hence by Property (ii) for $H$, we have $H_1\supset H$.  But $H_1$ also satisfies property (ii) and $H$ is a subgroup of $G$ containing $S$, so that $H\supset H_1$.  Therefore $H_1=H$ and $H$ is unique.
+\end{proof}
+
+\noindent If the subgroup of $G$ generated by $S$ is $G$ itself, $S$ is said to \textbf{generate $G$}, or be a \textbf{generating set of $G$}.  Thus if $S$ generates $G$, then any subgroup of $G$ containing $S$ must be the whole group.  $G$ is said to be \textbf{cyclic} if it is generated by a single element (see Example (5) of Section 1.1).
+
+Every $a\in G$ is contained in a cyclic subgroup.  Let $\left<a\right>$ be the subgroup of $G$ generated by $a$ alone.  Then $\left<a\right>$ is a cyclic subgroup of $G$, and it contains $a$.\\
+
+\noindent\textbf{COSETS AND LAGRANGE'S THEOREM}\\
+
+\noindent Let $H\subset G$ be a subgroup and $a\in G$.  Define $aH=\{ah:h\in H\}$.  The sets $aH$ are called \textbf{left cosets} of the subgroup $H$.  They are \emph{not} generally subgroups of $G$; however, they are equinumerous with $H$, and they partition the group $G$, as shown in the following proposition.\\
+
+\noindent\textbf{Proposition 1.7.} \emph{Let $H\subset G$ be a subgroup.  Then:} %1.7
+
+(i) \emph{The left cosets of $H$ are all equinumerous with $H$; i.e., $|aH|=|H|$ for all $a\in G$.}
+
+(ii) \emph{$G$ is the union of the left cosets of $H$, and any two left cosets are either disjoint or identical.}
+
+\begin{proof}
+(i) Define $\varphi:H\to aH$ via $\varphi(h)=ah$.  Then $\varphi$ is well-defined because $h\in H$ implies that $ah\in aH$.  Moreover, every element of $aH$ is of the form $ah$ for some $h\in H$, and is therefore equal to $\varphi(h)$.  Therefore $\varphi$ is surjective.  $\varphi$ is injective due to the cancellation law (Exercise 14 of Section 1.1), thus if $\varphi(h_1)=\varphi(h_2)$, then $ah_1=ah_2$, and therefore $h_1=h_2$.  Hence $\varphi$ is a bijection and $|H|=|aH|$.
+
+(ii) Since $a=a\cdot 1\in aH$ for each $a\in G$, the union of the left cosets is clearly $G$.  Now suppose $aH$ and $bH$ are two left cosets.  If $aH\cap bH=\varnothing$, then they are disjoint, so suppose $aH\cap bH\ne\varnothing$.  Let $c\in aH\cap bH$.  Then since $c\in aH$, $c=ah_1$ for some $h_1\in H$.  Also, since $c\in bH$ we have $c=bh_2$ for some $h_2\in H$.  Furthermore, $ah_1=bh_2$ (both are equal to $c$).  Left-multiplying both sides by $b^{-1}$ and right-multiplying by $h_1^{-1}$ yields $b^{-1}a=h_2h_1^{-1}\in H$.  Since $b^{-1}a\in H$, we conclude that for any $h\in H$, $ah=b(b^{-1}ah)$, and $b^{-1}ah\in H$, so that $ah\in bH$, showing $aH\subset bH$.  But also, since $H$ is closed under inverses, $(b^{-1}a)^{-1}=a^{-1}b\in H$.  It likewise follows that for any $h\in H$, $bh=a(a^{-1}bh)\in aH$, so that $bH\subset aH$.  Therefore $aH=bH$ and the cosets are identical.
+\end{proof}
+
+\noindent The number of left cosets of $H$ is called the \textbf{index of $H$ in $G$} and is denoted $[G:H]$.  Since $G$ is the disjoint union of the left cosets, and they are all equinumerous with $H$, it follows from set theory that $|G|=|H|~[G:H]$.  In particular, if $G$ is finite, this is a statement involving positive integers, and therefore\\ % You mention many people haven't heard of infinite cardinal arithmetic.  Thus I will remove such stuff from the exercises, but the other such text will be left as electives.
+
+\noindent\textbf{Theorem 1.8.} (\textsc{Lagrange's Theorem}) \emph{If $G$ is a finite group and $H\subset G$ is a subgroup, then $|H|$ divides $|G|$.}\\
+
+\noindent Similarly, if $H\subset G$ is a subgroup and $a\in G$, define $Ha=\{ha:h\in H\}$.  The $Ha$ are called \textbf{right cosets} of $H$.  Again, they are equinumerous with $H$ and these sets partition the group $G$; Proposition 1.7 and its proof can be adapted for right cosets.  If $G$ is finite, it is clear that the number of right cosets of $H$ is equal to the number of left cosets, because both are equal to $|G|/|H|$.  However, for infinite groups $G$, this is not so obvious, because division of cardinal numbers is not defined.  This caveat is easily remedied, as Exercise 7 shows that $aH\leftrightarrow Ha^{-1}$ is a well-defined bijection between the left cosets of $H$ and the right cosets.  Thus, the set of left cosets of $H$ is equinumerous with the set of right cosets; the cardinality of each of these sets is called the \textbf{index} of $H$ in $G$.
+
+We conclude this section with a proposition which may seem ridiculously basic, but will be ubiquitous throughout this book.  It states that if $H\subset G$ is a subgroup of $G$, and you want to show that an element $a\in G$ is in $H$, you can multiply $a$ by elements you already know are in $H$ on either side, and then you need only show that the resulting element is in $H$.  In general, $G$ will seem to be a vastly complicated group, and it will be a lot more obvious that $H\subset G$ than that every element of $G$ is actually in $H$.  The proposition will make an element of $G$ easy to deal with.\\
+
+\noindent\textbf{Proposition 1.9.} \emph{Let $G$ be a group, $H\subset G$ a subgroup.  If $a\in G$ and $x,y\in H$, then $a\in H$ if and only if $xay\in H$.}
+\begin{proof}
+If $a\in H$ then $xay\in H$ by closure.  Conversely, suppose $xay\in H$, say $xay=h$.  Then left-multiplying by $x^{-1}$ and right-multiplying by $y^{-1}$ yields $a=x^{-1}hy^{-1}\in H$.  Therefore, $a\in H$ as desired.
+\end{proof}
+
+\subsection*{Exercises 1.2. (Subgroups)}
+\begin{enumerate}
+\item Let $G$ be a group and $H\subset G$ be a subset.  Show that $H$ is a subgroup if and only if $H\ne\varnothing$ and for all $a,b\in H$, $ab^{-1}\in H$.
+
+\item List all subgroups of the symmetric group $S_3$.  [There are six of them.]
+
+\item In which of the following cases is $H$ a subgroup of $G$?
+
+(a) $G=\mathbb Z,H=$ the even integers
+
+(b) $G=\mathbb Z,H=$ the odd integers
+
+(c) $G=\mathbb Z,H=$ the composite integers, along with $0$
+
+(d) $G=\mathbb Q,H=\mathbb Z[1/2]=\{a/2^n:a,n\in\mathbb Z,n\geqslant 0\}$
+
+(e) $G=\mathbb Q,H=$ fractions with denominators $\leqslant 17$
+
+(f) $G=\mathbb R,H=$ irrational numbers along with $0$ %(g) $G=\mathbb R,H=$ algebraic numbers [You may assume that the sum of any two algebraic numbers is algebraic.  This fact is due to field theory and is irrelevant to the book, except for Section 2.4.]
+
+(g) $G=D_n,H=\{1,d,rd,\dots,r^{n-1}d\}$
+
+(h) $G=\mathbb Z/5\mathbb Z,H=\{\overline 0,\overline 2,\overline 4\}$
+
+(i) $G=\mathbb Z/6\mathbb Z,H=\{\overline 0,\overline 2,\overline 4\}$
+
+(j) $G=GL_2(\mathbb R),H=\{A\in G:\det A>0\}$
+
+(k) $G=GL_2(\mathbb R),H=\{A\in G:\det A\in\mathbb Z\}$
+
+(l) $G=S_5,H=\{\sigma\in S_n:\sigma(1)=1\}$
+
+(m) $G=S_5,H=\{\sigma\in S_n:\sigma(3)=5\}$
+
+(n) $G=S(X),H=\{\sigma\in S(X):\sigma(x)=x\text{ for all but finitely many }x\in X\}$.
+
+\item (a) Show that the intersection of any family of subgroups of $G$ is a subgroup.
+
+(b) Show that if $S\subset G$ is a subset, then the subgroup of $G$ generated by $S$ is the intersection of all subgroups containing $S$.
+
+\item Give an example to show that the union of two subgroups of $G$ need not be a subgroup.
+
+\item If $H$ and $K$ are subgroups of a finite group $G$ and $K\subset H$, then $K$ is a subgroup of $H$, and $[G:K]=[G:H][H:K]$.
+
+\item If $H\subset G$ is a subgroup and $a,b\in G$, show that $aH=bH$ if and only if $Ha^{-1}=Hb^{-1}$.  [Show that $Ha^{-1}=\{x\in G:x^{-1}\in aH\}$.]
+
+\item A group $G$ is said to be \textbf{finitely generated} if it is generated by some finite subset $X\subset G$.  For example, the additive group $\mathbb Z$ is finitely generated, because it is generated by $\{1\}$.  However, the multiplicative group $\mathbb Q_{\ne 0}$ is not finitely generated: if it were generated by $\{a_1/b_1,a_2/b_2,\dots,a_n/b_n\}$ with $a_k,b_k\in\mathbb Z,\gcd(a_k,b_k)=1$, then let $p_1,\dots,p_t$ be the distinct prime factors of the $a_i$ and the $b_i$.  Then $p_1p_2\dots p_t+1$ would be a product of these fractions and their inverses, which number theory shows is impossible.
+
+(a) If $G$ and $H$ are groups, show that $G\times H$ is finitely generated if and only if both $G$ and $H$ are.
+
+(b) Let $G$ be the subgroup of $GL_2(\mathbb R)$ generated by $\begin{bmatrix}1&1\\0&1\end{bmatrix}$ and $\begin{bmatrix}2&0\\0&1\end{bmatrix}$.  Then let $H\subset G$ consist of the matrices in $G$ with a $1$ in the upper-left hand corner.  Show that $H$ is a subgroup of $G$ but is not finitely generated.  Thus a subgroup of a finitely generated group need not be finitely generated.
+
+\item Show that the following are equivalent for a subset $S\subset G$:
+
+(i) $S\ne\varnothing$, and whenever $a,b,c\in S$, $ab^{-1}c\in S$.
+
+(ii) $S$ is a left coset of some subgroup of $G$.
+
+(iii) $S$ is a right coset of some subgroup of $G$.
+
+\item If $H\subset G$ is a subgroup and $a\in G$, let $aHa^{-1}=\{aha^{-1}:h\in H\}$.
+
+(a) Show that $aHa^{-1}$ is a subgroup of $G$.
+
+(b) Two subgroups $H$ and $K$ of $G$ are said to be \textbf{conjugate} if $K=aHa^{-1}$ for some $a\in G$.  Prove that conjugacy of subgroups is an equivalence relation.
+
+\item (a) Define $Z(G)=\{a\in G:ag=ga\text{ for all }g\in G\}$.  Show that $Z(G)$ is a subgroup of $G$, and is abelian.  $Z(G)$ is called the \textbf{center} of $G$.
+
+(b) More generally, for each $a\in G$, define $C(a)=\{g\in G:ga=ag\}$.  Show that $C(a)$ is a subgroup of $G$, and that $Z(G)=\{a\in G:C(a)=G\}=\bigcap_{a\in G}C(a)$.  $C(a)$ is called the \textbf{centralizer} of $a$.
+
+\item Let $a\in G$ be an element of finite order.
+
+(a) Show that the order of $a$ is equal to the order of the cyclic subgroup $\left<a\right>$.  [Proposition 1.2(i).]
+
+(b) If $G$ is finite, conclude that $|a|$ divides $|G|$, and therefore $a^{|G|}=1$.
+
+(c) Use this to prove \emph{Fermat's Little Theorem}: if $p$ is prime and $p\nmid a$, then $a^{p-1}\equiv 1\pmod p$.  [Show that $(\mathbb Z/p\mathbb Z)^\times$, the set of nonzero congruence classes modulo $p$, is a group under multiplication.]
+
+\item (a) Let $G$ be an abelian group, and $T$ the set of elements of $G$ of finite order.  Show that $T$ is a subgroup of $G$.  This subgroup $T$ is called the \textbf{torsion subgroup}.
+
+(b) Show by example that part (a) may be false if $G$ is nonabelian.  [Consider $\begin{bmatrix}0&-1\\1&0\end{bmatrix}\begin{bmatrix}0&-1\\1&-1\end{bmatrix}$ in $GL_2(\mathbb R)$.]
+
+\item (a) Let $a,b\in G$ such that $ab=ba$ and $\gcd(|a|,|b|)=1$.  Then $|ab|=|a||b|$.  [Show that the subgroup generated by $a$ and $b$ is equal to the cyclic subgroup generated by $ab$.  Use Lagrange's Theorem and Exercise 8(a) of Section 1.1.]
+
+(b) If $G$ is a finite abelian group, and $a\in G$ has maximal order out of all elements of $G$, then for any $b\in G$, $|b|$ divides $|a|$. % Note: This is false in general if G is nonabelian!
+[Suppose on the contrary that $|b|$ does not divide $|a|$.  Then there exists a prime $p$ whose multiplicity in $|b|$'s prime factorization is larger than that in $|a|$'s.  Write $|b|=p^rm$ and $|a|=p^sn$ with $r>s$ and $p\nmid m,n$.  Then Exercise 5 of Section 1.1 shows that $|b^m|=p^r$ and $|a^{p^s}|=n$.  By part (a), what is $|a^{p^s}b^m|$?] % Rem: this is the only tricky part of the proof that if F is a field and G is a finite subgroup of (F-{0},\cdot), then G is cyclic.  See Section 2.4's exercises
+\end{enumerate}
+
+\subsection*{1.3. Homomorphisms and Isomorphisms}
+\addcontentsline{toc}{section}{1.3. Homomorphisms and Isomorphisms}
+Some groups can be rather interesting lookalikes, and may seem to have matching operation tables.  For example, let $D_3$ be the dihedral group of an equilateral triangle, and let $S_3$ be the symmetric group.  Observe that there is a one-to-one correspondence between the elements of these groups.
+\begin{center}
+\begin{tabular}{cccccc}
+$\begin{pmatrix}1&2&3\\1&2&3\end{pmatrix}$ &
+$\begin{pmatrix}1&2&3\\2&3&1\end{pmatrix}$ &
+$\begin{pmatrix}1&2&3\\3&1&2\end{pmatrix}$ &
+$\begin{pmatrix}1&2&3\\1&3&2\end{pmatrix}$ &
+$\begin{pmatrix}1&2&3\\2&1&3\end{pmatrix}$ &
+$\begin{pmatrix}1&2&3\\3&2&1\end{pmatrix}$ \\
+$\updownarrow$ & $\updownarrow$ & $\updownarrow$ & $\updownarrow$ & $\updownarrow$ & $\updownarrow$ \\
+\includegraphics[scale=.3]{Tri1.png} &
+\includegraphics[scale=.3]{TriR.png} &
+\includegraphics[scale=.3]{TriR2.png} &
+\includegraphics[scale=.3]{TriD.png} &
+\includegraphics[scale=.3]{TriRD.png} &
+\includegraphics[scale=.3]{TriR2D.png}
+\end{tabular}
+\end{center}
+Notice that this is not only a one-to-one correspondence between the groups, but also that applying the group compositions to corresponding elements gives you corresponding elements.  For example, $r$ corresponds to $\begin{pmatrix}1&2&3\\2&3&1\end{pmatrix}$, $d$ corresponds to $\begin{pmatrix}1&2&3\\1&3&2\end{pmatrix}$, and the composition $rd$ also corresponds to the composition of the permutations, $\begin{pmatrix}1&2&3\\2&3&1\end{pmatrix}\circ\begin{pmatrix}1&2&3\\1&3&2\end{pmatrix}=\begin{pmatrix}1&2&3\\2&1&3\end{pmatrix}$.
+
+These kinds of correspondences between groups are special, because they imply that the groups have the same operation tables (up to relabeling of the elements) and thus ``seem mechanically identical.''  We now carry over the concept to any two groups $G$ and $H$.  In order for a bijection $f:G\to H$ to have the property described above, we need to make sure that if $a\in G$ maps to $a'\in H$ and $b\in G$ maps to $b'\in H$, then $ab$ maps to $a'b'$.  In other words, the map $f$ must send $ab$ to $f(a)f(b)$, for any $a,b\in G$; i.e., $f(ab)=f(a)f(b)$.
+
+Thus a bijective map $f:G\to H$ satisfying $f(ab)=f(a)f(b)$ for all $a,b\in G$ is exactly the kind of map which claims that two group structures match.  This leads to the following definition.  We also need a name for functions $f:G\to H$ that satisfy $f(ab)=f(a)f(b)$ but are not necessarily bijective.\\
+
+\noindent\textbf{Definition.} \emph{If $G$ and $H$ are groups, a function $f:G\to H$ is said to be a \textbf{homomorphism} if $f(a*b)=f(a)*f(b)$ for all $a,b\in G$.  A homomorphism which is bijective is called an \textbf{isomorphism}.  If an isomorphism $G\to H$ exists, $G$ and $H$ are said to be \textbf{isomorphic}, denoted $G\cong H$.}\\
+
+\noindent\textbf{Note.} We have temporarily returned to the ``$*$'' notation to emphasize that $G$ and $H$ may have different group operations.  For example, if $G$ is multiplicative and $H$ is additive, the definition reads $f(ab)=f(a)+f(b)$.\\
+
+\noindent\textbf{Examples.}
+
+(1) The correspondence mentioned in the beginning of this chapter is an isomorphism $S_3\to D_3$.  However, when $n>3$, there is \emph{no} isomorphism from $S_n$ to $D_n$, because $|D_n|=2n<n!=|S_n|$; there isn't even a bijective map from $D_n$ to $S_n$.  However, there is an injective homomorphism from $D_n$ to $S_n$; see Exercise 4.\\
+
+(2) Linear algebra shows that $\det(AB)=(\det A)(\det B)$ for $n\times n$ matrices $A$ and $B$.  We thus have a homomorphism $\det:GL_n(\mathbb R)\to\mathbb R_{\ne 0}$, where $\mathbb R_{\ne 0}$ is the multiplicative group of nonzero real numbers.  Note that $\det$ is surjective because for any $a\in\mathbb R_{\ne 0}$, $\det\begin{bmatrix}a&0&\dots&0\\0&1&\dots&0\\\vdots&\vdots&\ddots&\vdots\\0&0&\dots&1\end{bmatrix}=a$.\\
+
+(3) If $G$ is any group and $a\in G$, the map $f:\mathbb Z\to G$ given by $f(n)=a^n$ is a homomorphism.  This follows from the exponential law $a^{n+m}=a^na^m$ (Exercise 3(a) of Section 1.1).  However, $f$ is not generally injective or surjective.\\
+
+(4) If $H$ is a subgroup of $G$, the inclusion map $\iota:H\to G$ given by $\iota(a)=a$ is an injective homomorphism.  The reasons are obvious.  $\iota$ is called the \textbf{inclusion map} from $H$ into $G$.\\
+
+(5) Let $G$ and $H$ be groups.  Then $p_1:G\times H\to G$ given by $p_1(a,b)=a$ is a homomorphism.  After all, $p_1((a,b)(a',b'))=p_1(aa',bb')=aa'=p_1(a,b)p_1(a',b')$.  $p_1$ is also surjective, because for each $a\in G$, $a=p_1(a,1)$.  Similarly $p_2:G\times H\to H$ given by $p_2(a,b)=b$ is a surjective homomorphism.  These are called \textbf{projections}.\\
+
+(6) For any groups $G$ and $H$, there is the \emph{trivial homomorphism} $f:G\to H$ given by $f(a)=1_H$ for all $a\in G$.\\
+
+\noindent There are several basic properties about homomorphisms, just like there were about groups.  For example, one would expect a homomorphism to make the identity element correspond to the identity element.  It automatically does that, as we now show.\\
+
+\noindent\textbf{Proposition 1.10.} \emph{Let $f:G\to H$ be a homomorphism of groups.  Then}
+
+(i) \emph{$f(1_G)=1_H$.}
+
+(ii) \emph{$f(a^{-1})=f(a)^{-1}$ for $a\in G$.}
+
+(iii) \emph{If $a$ has finite order, then so does $f(a)$, and $|f(a)|$ divides $|a|$.}\\
+
+\noindent The converse of (iii) is false: if $f(a)$ has finite order, $a$ does not necessarily have finite order.  For example, let $f:\mathbb Z\to\mathbb Z/5\mathbb Z$ be given by $f(a)=\overline a$.  Then $1\in\mathbb Z$ does not have finite order, but $f(1)=\overline 1$ has order $5$ in $\mathbb Z/5\mathbb Z$.
+\begin{proof}
+(i) Since $f$ is a homomorphism, $f(1_G)f(1_G)=f(1_G1_G)=f(1_G)=1_Hf(1_G)$.  Right multiplying both sides by $f(1_G)^{-1}$, we get $f(1_G)=1_H$.
+
+(ii) $f(a)^{-1}$ is the \emph{unique} inverse of $f(a)$ in $H$; however, $f(a^{-1})$ is also an inverse of $f(a)$ because $f(a)f(a^{-1})=f(aa^{-1})=f(1_G)=1_H$ (by part (i)) and similarly $f(a^{-1})f(a)=1_H$.  Therefore $f(a^{-1})=f(a)^{-1}$.
+
+(iii) Suppose $a$ has order $n>0$.  Then $a^n=1_G$.  Furthermore, by Exercise 9(a) below, $f(a)^n=f(a^n)=f(1_G)=1_H$.  Proposition 1.2 then implies that $f(a)$ has finite order and that $|f(a)|$ divides $n$.
+\end{proof}
+
+\noindent The concept of a group isomorphism may seem to be asymmetrical, since it is a map from $G$ to $H$ and not the other way around.  However, it is symmetrical.  If $f:G\to H$ is an isomorphism, then the bijective map $f$ has some inverse $f^{-1}$.  Moreover, $f^{-1}$ is also a bijection.  For any $a,b\in H$, $f^{-1}(ab)=f^{-1}(f(f^{-1}(a))f(f^{-1}(b)))=f^{-1}(f(f^{-1}(a)f^{-1}(b)))=f^{-1}(a)f^{-1}(b)$; thus $f^{-1}$ is an isomorphism $H\to G$.  Hence $G\cong H$ if and only if $H\cong G$.  In fact, isomorphism is an equivalence relation on the class of all groups (Exercise 1(b)).
+
+Incidentally, we now have some criteria which can tell us whether or not two groups are isomorphic.  To show that groups $G$ and $H$ are isomorphic, simply find an isomorphism $G\to H$.  However, how can we show that they are not isomorphic?  It certainly doesn't suffice to find a map $G\to H$ which is not an isomorphism; for all we know, there could be a different function from the one we're talking about which \emph{is} an isomorphism.  However, Proposition 1.10 gives some facts that isomorphisms must satisfy.
+
+For instance, if $f:G\to H$ is an isomorphism, then whenever $a\in G$ has finite order, $f(a)$ has finite order and $|a|=|f(a)|$.  After all, $|f(a)|$ divides $|a|$ by Proposition 1.10(iii), but also $|a|=|f^{-1}(f(a))|$ divides $|f(a)|$ because $f^{-1}$ is an isomorphism.  Thus an isomorphism $f$ must make elements of a given order correspond to elements of the same order.  If there is a positive integer $n$ such that $G$ and $H$ have different numbers of elements of order $n$, then we know that $G$ and $H$ cannot be isomorphic.
+
+If $G\cong H$ and $G$ is abelian, then so is $H$.  For $x,y\in H$, we have $x=f(a)$ and $y=f(b)$ for some $a,b\in G$ (because $f$ is surjective); moreover $xy=f(a)f(b)=f(ab)=f(ba)=f(b)f(a)=yx$.  Similarly, if $H$ is abelian, then so is $G$.  An abelian group can never be isomorphic to a nonabelian group.
+
+Any property of groups or group elements which is preserved by an isomorphism is called an \textbf{algebraic property}.  Thus the order of the group, the order of an element and a group being abelian are algebraic properties; however, whether a group contains the number $17$, or whether it contains a function as an element, is \emph{not} an algebraic property.  Exercise 3(c) shows that structure of the subgroups of $G$ is an algebraic property of $G$.  If two groups differ for a certain algebraic property, they can't be isomorphic.\\
+
+\noindent\textbf{IMAGE OF A GROUP HOMOMORPHISM}\\
+
+\noindent If $f:G\to H$ is a homomorphism, then $f(G)=\{f(x):x\in G\}$ is a subgroup of $H$.  After all, if $a,b\in f(G)$, say $a=f(x)$ and $b=f(y)$, then $ab=f(x)f(y)=f(xy)\in f(G)$, hence closure.  Since $f(1_G)=1_H$ by Proposition 1.10(i), $1_H\in f(G)$.  Finally, if $a\in f(G)$, say $a=f(x)$, then $a^{-1}=f(x)^{-1}=f(x^{-1})\in f(G)$.  Consequently, Proposition 1.3 implies that $f(G)$ is a subgroup of $H$.  $f(G)$ is called the \textbf{image} of $f$.
+
+If $f$ is a \emph{surjective} homomorphism, then $f(G)=H$.  However, if $f$ is not surjective, then $f(G)$ is some proper subgroup $H'$ of $H$.  In this case, $f$ can be thought of as a function from $G$ to $H'$ (because for each $a\in G$, $f(a)\in H'$), and in this case it is a surjective homomorphism $G\to H'$.  Thus from any homomorphism, one induces a surjective homomorphism.\\
+
+\noindent\textbf{CLASSIFICATION OF CYCLIC GROUPS}\\
+
+\noindent We recall that a group is said to be \emph{cyclic} if it is generated by a single element.  It turns out that, up to isomorphism, a cyclic group is completely determined by its order.\\
+
+\noindent\textbf{Proposition 1.11.} \emph{Let $G$ be a cyclic group, say $G=\left<a\right>$.}
+
+(i) \emph{If $a$ has finite order, say $|a|=n$, then $G\cong\mathbb Z/n\mathbb Z$.}
+
+(ii) \emph{If $a$ has infinite order, then $G\cong\mathbb Z$.}\\
+
+\noindent We immediately conclude that (a) cyclic groups are abelian; and (b) if $a$ is any element of a group, the cyclic subgroup $\left<a\right>$ has the same order as $a$ (in particular, if $a$ has infinite order then $\left<a\right>$ is infinite). % "You already said this?" I don't remember previously saying that \left<a\right> and a have the same order
+\begin{proof}
+(i) Suppose $|a|=n$ and $G=\left<a\right>$.  Define $f:\mathbb Z/n\mathbb Z\to G$ by $f(\overline k)=a^k$.  First we must show that $f$ is well-defined: that is, if $j$ and $k$ are integers such that $\overline j=\overline k$ in $\mathbb Z/n\mathbb Z$, then $f(\overline j)=f(\overline k)$.  Well, if $\overline j=\overline k$ then $j\equiv k\pmod n$; hence $a^j=a^k$ by Proposition 1.2(i), so that $f(\overline j)=f(\overline k)$.  Thus $f$ is well-defined.  $f$ is also injective because if $f(\overline j)=f(\overline k)$, then $a^j=a^k$, hence $j\equiv k\pmod n$ by Proposition 1.2(i), so that $\overline j=\overline k$ in $\mathbb Z/n\mathbb Z$.  To show that $f$ is surjective, let $G'$ be the subgroup $f(\mathbb Z/n\mathbb Z)$ of $G$.  Then $a\in G'$ because $a=f(\overline 1)$.  Since $G$ is, however, \emph{generated} by $a$, we conclude that $G'=G$ and $f$ is surjective.  Finally $f$ is a homomorphism because
+$$f(\overline j+\overline k)=f(\overline{j+k})=a^{j+k}=a^ja^k=f(\overline j)f(\overline k)$$
+Therefore $f$ is an isomorphism $\mathbb Z/n\mathbb Z\to G$.
+
+(ii) Suppose $a$ has infinite order and $G=\left<a\right>$.  Define $f:\mathbb Z\to G$ by $f(k)=a^k$.  Then $f$ is injective by Proposition 1.2(ii).  Again $f$ is surjective, because if $G'=f(\mathbb Z)$ then $a\in G'$, and hence $G'=G$ because $G$ is generated by $a$.  Finally, it is straightforward that $f$ is a homomorphism (see Example (3) beneath the definition of a homomorphism).  Thus $f$ is an isomorphism as desired.
+\end{proof}
+
+\subsection*{Exercises 1.3. (Homomorphisms and Isomorphisms)}
+\begin{enumerate}
+\item (a) Let $G_1,G_2,G_3$ be groups.  If $f:G_1\to G_2$ and $g:G_2\to G_3$ are group homomorphisms, show that $g\circ f$ is also a homomorphism.
+
+(b) Show that isomorphism is an equivalence relation on the class of all groups.
+
+\item\emph{(Cayley's Theorem.)} \---- Every group $G$ is isomorphic to a subgroup of $S(X)$ for some set $X$.  [Let $X$ be the set $G$ itself.  For each $a\in G$, let $T_a$ be the map $x\mapsto ax$ from $G$ to $G$.  Show that $T_a$ is in $S(G)$ (the set of bijective \emph{functions} from $G$ to $G$), and the map $\varphi:G\to S(G)$ given by $\varphi(a)=T_a$ is an injective homomorphism.]
+
+\item Let $f:G\to H$ be a group homomorphism.
+
+(a) If $G'$ is a subgroup of $G$, show that $f(G')=\{f(a):a\in G'\}$ is a subgroup of $H$.
+
+(b) If $H'$ is a subgroup of $H$, show that the \textbf{inverse image} $f^{-1}(H')=\{a\in G:f(a)\in H'\}$ is a subgroup of $G$.
+
+(c) If $f$ is an isomorphism, use parts (a) and (b) to obtain a bijection between the subgroups of $G$ and the subgroups of $H$.
+
+\item For $n\geqslant 3$, show that there is a unique homomorphism $f:D_n\to S_n$ such that $f(r)=\begin{pmatrix}1&2&\dots&n-1&n\\2&3&\dots&n&1\end{pmatrix}$ and $f(d)=\begin{pmatrix}1&2&\dots&n-1&n\\n&n-1&\dots&2&1\end{pmatrix}$.  Then show that $f$ is injective, but not surjective for $n>3$.
+
+\item If $a,b\in G$ and $ab=ba$, show that there is a unique homomorphism $f:\mathbb Z\times\mathbb Z\to G$ such that $f(1,0)=a$ and $f(0,1)=b$.
+
+\item If $G$ is an abelian group and $n$ is a positive integer, show that the map $f:G\to G$ given by $f(a)=a^n$ is a homomorphism.  Show that this may be false if $G$ is nonabelian.
+
+Furthermore, if $n=2$, show that $G$ is abelian if and only if $f$ is a homomorphism.  [If $n\geqslant 3$, it is possible for $f$ to be a homomorphism with $G$ nonabelian, but this is harder to prove.] % If p is an odd prime, take G = Heisenberg group of order p^3, and n = p.  Then G is nonabelian but f is constant map 1.
+
+\item (a) If $X$ and $Y$ are sets such that $|X|=|Y|$, show that $S(X)\cong S(Y)$.
+
+(b) Conclude that if $X$ is a finite set with $n$ elements, $S(X)\cong S_n$.
+
+(c) If $X$ is a set, $x_0\in X$ and $G$ is the subgroup $\{\sigma\in S(X):\sigma(x_0)=x_0\}$ of $S(X)$, show that $G\cong S(X-\{x_0\})$.
+
+(d) Now find a subgroup of $S_n$ isomorphic to $S_{n-1}$.
+
+\item Let $\mathbb R$ be the additive group of real numbers and $\mathbb R_{>0}$ the multiplicative group of positive real numbers.  Define $f:\mathbb R\to\mathbb R_{>0}$ via $f(x)=e^x$.  Show that $f$ is an isomorphism.
+
+\item (a) If $f:G\to H$ is a homomorphism, $a\in G$ and $n$ is a positive integer, show that $f(a^n)=f(a)^n$.  [Induction on $n$.]
+
+(b) Now do part (a) where $n$ is any integer.
+
+\item (a) Is $\mathbb Z/6\mathbb Z$ isomorphic to $\mathbb Z/2\mathbb Z\times\mathbb Z/3\mathbb Z$?
+
+(b) Is $\mathbb Z/8\mathbb Z$ isomorphic to $\mathbb Z/2\mathbb Z\times\mathbb Z/4\mathbb Z$?
+
+(c) Is $\mathbb Z/6\mathbb Z$ isomorphic to $S_3$?
+
+\item Let $\mathbb C_{\ne 0}$ be the multiplicative group of nonzero complex numbers.  Show that $f:\mathbb C_{\ne 0}\to\mathbb R_{>0}$ given by $f(a+bi)=a^2+b^2$ is a surjective homomorphism of groups.
+
+\item Show that the additive group $\mathbb R$ is not isomorphic to the multiplicative group $\mathbb R_{\ne 0}$.  [If $f:\mathbb R\to\mathbb R_{\ne 0}$ is an isomorphism, then $f(a)=-1$ for some $a\in\mathbb R$: now what is $f(a/2)$?]
+
+\item Let $f:G\to H$ be a group homomorphism.
+
+(a) If $f$ is surjective and $G$ is abelian, then $H$ is abelian.
+
+(b) If $f$ is injective and $H$ is abelian, then $G$ is abelian.
+
+(c) Show by example that part (a) (resp., (b)) may be false if $f$ is not surjective (resp., injective).
+
+\item If $G$ is a cyclic group, show that every subgroup of $G$ is cyclic.  [Use Proposition 1.11.]
+
+\item If $f:G\to H$ is a surjective homomorphism and $G$ is cyclic, then $H$ is cyclic.  [If $a\in G$ generates $G$, show that $f(a)$ generates $H$.]
+
+\item Let $G$ be a group such that $|G|>1$ and the only subgroups of $G$ are $\{1\}$ and $G$ itself.  Prove that $G$ is cyclic of prime order.
+\end{enumerate}
+
+\subsection*{1.4. Normal Subgroups}
+\addcontentsline{toc}{section}{1.4. Normal Subgroups}
+In Section 1.3, we have shown that any homomorphism can be made into a surjective homomorphism by changing the target (i.e., if $f:G\to H$ is a homomorphism and $H'$ is the image of $f$ then $f$ can be thought of as a surjective homomorphism $G\to H'$).  One then asks the natural question of whether a homomorphism induces an \emph{injective} homomorphism.  The answer is yes, as we now see.
+
+The intuitive idea behind this is modular arithmetic.  If $n$ is a positive integer and $a,b\in\mathbb Z$, then $a\equiv b\pmod n$ states that $n\mid(a-b)$, or what is the same thing, $a-b\in n\mathbb Z$.  The equivalence classes modulo $n$ can then be added (and multiplied, but that's not relevant here).  Here we are calling two elements of $\mathbb Z$ ``congruent'' if they differ by an element of the subgroup $n\mathbb Z$.  We now pass this idea over to arbitrary subgroups.
+
+Let $H\subset G$ be a subgroup.  If $a,b\in G$, we say that $a$ and $b$ are \textbf{left congruent modulo $H$}, denoted $a\equiv b\pmod H$, if $a^{-1}b\in H$.  This is an equivalence relation: $a^{-1}a=1\in H$, hence $a\equiv a\pmod H$, proving reflexivity.  If $a\equiv b\pmod H$ then $a^{-1}b\in H$, so that $b^{-1}a=(a^{-1}b)^{-1}\in H$ and $b\equiv a\pmod H$, hence symmetry.  Finally if $a\equiv b\pmod H$ and $b\equiv c\pmod H$, then $a^{-1}c=(a^{-1}b)(b^{-1}c)\in H$, so that $a\equiv c\pmod H$ and we have transitivity.
+
+Moreover, if $a,b,c\in G$ and $b\equiv c\pmod H$, then $ab\equiv ac\pmod H$, because $(ab)^{-1}ac=b^{-1}a^{-1}ac=b^{-1}c\in H$.  However, it is \emph{not} true in general that if $a\equiv b\pmod H$ and $c\equiv d\pmod H$, then $ac\equiv bd\pmod H$.  For example, suppose $G=D_4$ and $H$ is the subgroup $\{r_0,v\}$.  Then according to the following operation table:
+\begin{center}
+\begin{tabular}{c|cccccccc}
+$\circ$ & $r_0$ & $r_1$ & $r_2$ & $r_3$ & $v$ & $t$ & $h$ & $d$\\\hline
+$r_0$ & $r_0$ & $r_1$ & $r_2$ & $r_3$ & $v$ & $t$ & $h$ & $d$\\
+$r_1$ & $r_1$ & $r_2$ & $r_3$ & $r_0$ & $d$ & $v$ & $t$ & $h$\\
+$r_2$ & $r_2$ & $r_3$ & $r_0$ & $r_1$ & $h$ & $d$ & $v$ & $t$\\
+$r_3$ & $r_3$ & $r_0$ & $r_1$ & $r_2$ & $t$ & $h$ & $d$ & $v$\\
+$v$ & $v$ & $t$ & $h$ & $d$ & $r_0$ & $r_1$ & $r_2$ & $r_3$\\
+$t$ & $t$ & $h$ & $d$ & $v$ & $r_3$ & $r_0$ & $r_1$ & $r_2$\\
+$h$ & $h$ & $d$ & $v$ & $t$ & $r_2$ & $r_3$ & $r_0$ & $r_1$\\
+$d$ & $d$ & $v$ & $t$ & $h$ & $r_1$ & $r_2$ & $r_3$ & $r_0$
+\end{tabular}
+\end{center}
+
+* $r_2\equiv h\pmod H$, because $r_2^{-1}\circ h=r_2\circ h=v\in H$;
+
+* $r_1\equiv d\pmod H$, because $r_1^{-1}\circ d=r_3\circ d=v\in H$;
+
+* But $r_2\circ r_1\not\equiv h\circ d\pmod H$, because $(r_2\circ r_1)^{-1}\circ(h\circ d)=r_3^{-1}\circ r_1=r_1\circ r_1=r_2\notin H$.
+
+Left congruence modulo $H$ is sometimes referred to as a \textbf{left congruence relation}, because it is an equivalence relation satisfying $b\equiv c\implies ab\equiv ac$.
+
+An interesting thing about left congruence relations is that the equivalence classes of the relation are precisely the left cosets of $H$.  After all, for any $a\in G$,
+\begin{align*}
+\{x\in G:a\equiv x\pmod H\}&=\{x\in G:a^{-1}x\in H\}\\
+&=\{x\in G:x=ah\text{ for some }h\in H\}\\
+&=\{x\in G:x\in aH\}=aH.
+\end{align*}
+Therefore, for any $a,b\in G$ we have $aH=bH$ if and only if $a\equiv b\pmod H$.
+
+By the same argument, we define $a$ and $b$ to be \textbf{right congruent modulo $H$}, denoted $a\equiv'b\pmod H$, if $ab^{-1}\in H$.  This is an equivalence relation, and whenever $a,b,c\in G$ and $b\equiv'c\pmod H$, $ba\equiv'ca\pmod H$.  Such a relation is called a \textbf{right congruence relation}.  Again, the equivalence classes of this relation are precisely the right cosets of $H$.
+
+There are special kinds of subgroups $N$, which will prove very useful, for which left congruence and right congruence coincide.  In this case, it \emph{is} true that
+\begin{center}
+If $a\equiv b\pmod N$ and $c\equiv d\pmod N$, then $ac\equiv bd\pmod N$,
+\end{center}
+as Proposition 1.12 will prove.
+
+Now, saying that left congruence and right congruence coincide is tantamount to saying that the left cosets of the subgroup coincide with the right cosets (because these are the equivalence classes of the relations).  We hereby give this kind of subgroup a name.\\
+
+\noindent\textbf{Definition.} \emph{A subgroup $N$ of a group $G$ is said to be \textbf{normal} if $aN=Na$ for every $a\in G$.  This is commonly denoted $N\unlhd G$.}\\
+
+\noindent\textbf{Examples.}
+
+(1) For any group $G$, it is clear that $G$ and $\{1\}$ are normal subgroups.\\
+
+(2) Let $G$ be an abelian group and $H$ a subgroup of $G$.  Then for each $a\in G$, $aH=Ha$ because $ah=ha$ for all $h\in H$.  Thus every subgroup of an abelian group is normal.  [The converse is false; see Exercise 6.]\\
+
+(3) For any group $G$, let $C=Z(G)$ be the center of $G$ (see Exercise 11(a) of Section 1.2).  Now take any $a\in G$.  Then for every $g\in C$, $ag=ga$, by definition of the center.  Furthermore $aC=\{ag:g\in C\}=\{ga:g\in C\}=Ca$.  Hence $C$ is normal.  Similarly, any subgroup contained in $Z(G)$ is normal.\\
+
+(4) Examples (2) and (3) are rather misleading, because in general, the condition $aN=Na$ does \emph{not} mean $an=na$ for all $n\in N$.  It merely means that for each $n\in N$, there exists a (possibly different) $n_1\in N$ such that $an=n_1a$.  For example, let $N$ be the cyclic subgroup $\left<r_1\right>=\{r_0,r_1,r_2,r_3\}$ of $D_4$.  Then $N$ is a normal subgroup by Exercise 4 below.  In particular, $vN=Nv$.  It is not true that $vr_1=r_1v$; however, we do have $vr_1=r_3v$ and $r_3\in N$, thus $vr_1\in Nv$.\\
+
+(5) If $G$ and $H$ are groups, then $G\times 1=\{(g,1):g\in G\}$ and $1\times H=\{(1,h):h\in H\}$ are normal subgroups of $G\times H$.  After all, for $(a,b)\in G\times H$, $(a,b)(G\times 1)=\{(g,b):g\in G\}=(G\times 1)(a,b)$, and similarly for $1\times H$.  Note that $G\times 1\cong G$ and $1\times H\cong H$.  (Why?)\\
+
+\noindent Normality is an important concept; however, the definition above may seem to be rather cumbersome.  Without a doubt we would like a simpler definition.  The next proposition gives a few alternate definitions.\\
+
+\noindent\textbf{Proposition 1.12.} \emph{Let $N$ be a subgroup of $G$.  Then the following statements are equivalent:}
+
+(i) \emph{$N$ is normal, i.e., $aN=Na$ for all $a\in G$.}
+
+(ii) \emph{Left congruence modulo $N$ coincides with right congruence modulo $N$.}
+
+(iii) \emph{Whenever $a\equiv b\pmod N$ and $c\equiv d\pmod N$, $ac\equiv bd\pmod N$.} % This is left congruence.  Right congruence would be \equiv'
+
+(iv) \emph{$aNa^{-1}=N$ for all $a\in G$.}
+
+(v) \emph{Whenever $n\in N$ and $a\in G$, $ana^{-1}\in N$.}
+\begin{proof}
+(i) $\iff$ (ii) because the left (resp., right) cosets are the equivalence classes of left (resp., right) congruence modulo $N$.
+
+(ii) $\implies$ (iii). Since $a\equiv b\pmod N$ and $\equiv$ is a right congruence relation, $ac\equiv bc\pmod N$.  But also since $c\equiv d\pmod N$ and $\equiv$ is a left congruence relation, $bc\equiv bd\pmod N$.  Transitivity then implies that $ac\equiv bd\pmod N$.
+
+(iii) $\implies$ (ii). Suppose $a,b,c\in N$ and $b\equiv c\pmod N$.  Then since $a\equiv a\pmod N$ (by reflexivity), the hypothesis implies that $ba\equiv ca\pmod N$.  Hence, left congruence modulo $N$ is a right congruence relation.  Moreover, it is clear that $N=\{a\in G:a\equiv 1\pmod N\}$; Exercise 5 then shows that left congruence modulo $N$ coincides with right congruence modulo $N$.
+
+(i) $\iff$ (iv). Right-multiply both sides by either $a$ or $a^{-1}$.  Here we use the convention that for arbitrary \emph{subsets} $S\subset G$, $aS=\{as:s\in S\}$ and $Sa=\{sa:s\in S\}$, and we note that for $g,h\in G$, we have $(gh)S=g(hS)$, $S(gh)=(Sg)h$ and $1S=S=S1$.
+
+(iv) $\implies$ (v). If $n\in N$ and $a\in G$, then $ana^{-1}\in aNa^{-1}=N$.
+
+(v) $\implies$ (iv). Each element of $aNa^{-1}$ is of the form $ana^{-1},n\in N$.  By hypothesis $ana^{-1}\in N$; therefore $aNa^{-1}\subset N$.  Conversely, given $n\in N$, let $n_1=a^{-1}na$.  Then $n_1\in N$, because $n_1=a^{-1}n(a^{-1})^{-1}=bnb^{-1}$ where $b=a^{-1}$.  Moreover, $n=an_1a^{-1}\in aNa^{-1}$, so that $N\subset aNa^{-1}$.  Therefore $aNa^{-1}=N$ as desired.
+\end{proof}
+
+\noindent Thus any of the five conditions above can be used to prove that a subgroup is normal.  At this point we will mostly stick to condition (v), because it is a basic condition involving sets.  On rare occasions (e.g., Exercise 4), one of the other conditions is easier to handle.\\
+
+\noindent\textbf{PRODUCTS OF SUBGROUPS}\\
+
+\noindent If $H$ and $K$ are subgroups of a group $G$, define $HK=\{hk:h\in H,k\in K\}$.  Then $HK$ is \emph{not} necessarily a subgroup.  For example, if $G=D_4$, $H=\{r_0,v\}$ and $K=\{r_0,t\}$, then $H$ and $K$ are subgroups, but $HK=\{r_0,r_1,v,t\}$ is not a subgroup, because $r_1\in HK$ but $r_1\circ r_1=r_2\notin HK$.
+
+It really shouldn't come across as a surprise that you can't just multiply subgroups together whenever you want.  After all, since the group multiplication doesn't commute, sophisticated products of elements of $H$ and $K$ are not necessarily of the form $hk$ with $h\in H$ and $k\in K$; they could look something like $h_1k_1h_2k_2\dots h_nk_n$, and then the factors cannot be rearranged in general into $(h_1\dots h_n)(k_1\dots h_n)$.
+
+However, if one of the subgroups is normal, we have better luck.\\
+
+\noindent\textbf{Proposition 1.13.} \emph{Let $H$ and $K$ be subgroups of a group $G$.}
+
+(i) \emph{If $H$ or $K$ is normal, then $HK$ is a subgroup of $G$, and $HK=KH$.}
+
+(ii) \emph{If $H$ and $K$ are both normal, then $HK$ is a normal subgroup.}
+\begin{proof}
+(i) Without loss of generality, we may assume $H$ is normal.  Clearly $1=1\cdot 1\in HK$.  Suppose $a,b\in HK$, say $a=h_1k_1$ and $b=h_2k_2$ with $h_1,h_2\in H$ and $k_1,k_2\in K$.  Then since $H$ is a normal subgroup, $k_1h_2\in k_1H=Hk_1$, so there exists $h'\in H$ such that $k_1h_2=h'k_1$.  Furthermore, $ab=h_1k_1h_2k_2=h_1(k_1h_2)k_2=h_1(h'k_1)k_2=(h_1h')(k_1k_2)\in HK$.  This proves closure.  Now suppose $a\in HK$, say $a=hk$ with $h\in H$ and $k\in K$.  Then $a\in Hk=kH$, so $a=kh^*$ for some $h^*\in H$.  Furthermore $a^{-1}=(h^*)^{-1}k^{-1}\in HK$.  Therefore $HK$ is a subgroup by Proposition 1.3.
+
+The statement $HK=KH$ follows from the normality of $H$.  After all, if $a\in HK$, say $a=hk$, then $a\in Hk=kH\subset KH$, and therefore $HK\subset KH$.  The reverse inclusion is similar.
+
+(ii) $HK$ is a subgroup by part (i).  Now suppose $a\in HK$ and $x\in G$.  Then write $a=hk$ with $h\in H,k\in K$.  By normality, $xhx^{-1}\in H$ and $xkx^{-1}\in K$.  Therefore $xax^{-1}=xhkx^{-1}=(xhx^{-1})(xkx^{-1})\in HK$.  Hence $HK$ is normal by Proposition 1.12.
+\end{proof}
+
+\subsection*{Exercises 1.4. (Normal Subgroups)}
+\begin{enumerate}
+\item If $N\subset G$ is a subgroup, show that $N$ is normal if and only if for all $a,b\in G$, $ab\in N$ implies $ba\in N$.
+
+\item (a) Suppose that $N$ and $K$ are subgroups of $G$ with $N\subset K$.  If $N$ is a normal subgroup of $G$, then $N$ is a normal subgroup of $K$.
+
+(b) If $N\subset G$ is a normal subgroup and $K\subset G$ is a subgroup, then $N\cap K$ is a normal subgroup of $K$.
+
+\item Show that the intersection of a family of normal subgroups is normal.
+
+\item Prove that any subgroup of $G$ of index $2$ is normal.  [If $[G:N]=2$, then the left cosets of $N$ are necessarily $N$ and $G-N$ (why?).  Same for the right cosets.]
+
+\item Let $\equiv$ be a left (resp., right) congruence relation on a group $G$.  Show that $H=\{a\in G:a\equiv 1\}$ is a subgroup of $G$, and that $\equiv$ coincides with left (resp., right) congruence modulo $H$.
+
+\item Here is an example of a nonabelian group in which every subgroup is normal.
+Let $\mathbf 1,\mathbf i,\mathbf j,\mathbf k$ be the following $2\times 2$ complex-valued matrices:\\
+$$\mathbf 1=\begin{bmatrix}1&0\\0&1\end{bmatrix}~~~~~~~~\mathbf i=\begin{bmatrix}i&0\\0&-i\end{bmatrix}~~~~~~~~\mathbf j=\begin{bmatrix}0&1\\-1&0\end{bmatrix}~~~~~~~~\mathbf k=\begin{bmatrix}0&i\\i&0\end{bmatrix}$$
+(a) Show that (i) $\mathbf i^2=\mathbf j^2=\mathbf k^2=-\mathbf 1$, (ii) $\mathbf i\mathbf j=-\mathbf j\mathbf i=\mathbf k$, (iii) $\mathbf j\mathbf k=-\mathbf k\mathbf j=\mathbf i$, and (iv) $\mathbf k\mathbf i=-\mathbf i\mathbf k=\mathbf j$.
+
+(b) Let $Q=\{\mathbf 1,-\mathbf 1,\mathbf i,-\mathbf i,\mathbf j,-\mathbf j,\mathbf k,-\mathbf k\}$.  Show that $Q$ is a nonabelian group under matrix multiplication.  [$Q$ is called the \textbf{quaternion group}.]
+
+(c) Find the order of each element of $Q$.
+
+(d) Now list all subgroups of $Q$, and show that they are all normal.
+
+\item Suppose $K$ is a normal subgroup of $N$ and $N$ is a normal subgroup of $G$.  Is $K$ necessarily a normal subgroup of $G$?  [Consider the case $G=D_4,N=\{r_0,r_2,v,h\},K=\{r_0,v\}$.]
+
+\item Let $f:G\to H$ be a homomorphism.  Prove or disprove:
+
+(a) If $N$ is a normal subgroup of $G$ then $f(N)$ is a normal subgroup of $H$.
+
+(b) If $N$ is a normal subgroup of $H$ then $f^{-1}(N)$ is a normal subgroup of $G$.
+
+\item Let $G$ be a group, and let $[G,G]$ be the subgroup of $G$ generated by the set $\{aba^{-1}b^{-1}:a,b\in G\}$.  Show that $[G,G]$ is normal; more generally, show that any subgroup containing $[G,G]$ is normal.  [If $a\in[G,G]$ and $x\in G$, then $xax^{-1}=(xax^{-1}a^{-1})a\in[G,G]$.]  $[G,G]$ is called the \textbf{commutator subgroup} of $G$.
+
+\item Let $H$ be a subgroup of $G$, not necessarily normal.  Define $N(H)=\{a\in G:aH=Ha\}$.  Show that $N(H)$ is a subgroup of $G$ containing $H$, and that $H$ is a normal subgroup of $N(H)$.  $N(H)$ is called the \textbf{normalizer} of $H$.  Note that $H$ is a normal subgroup of $G$ if and only if $N(H)=G$.
+
+\item Let $H$ and $K$ be subgroups of $G$.  If $K\subset N(H)$, prove that $HK$ is a subgroup and $HK=KH$.  [Adapt the proof of Proposition 1.13(i).]
+
+\item Let $H_1$ be a subgroup of $G_1$ and $H_2$ a subgroup of $G_2$.
+
+(a) Show that $H_1\times H_2$ is a subgroup of $G_1\times G_2$.
+
+(b) Show that $H_1\times H_2$ is normal if and only if $H_1$ is normal in $G_1$ and $H_2$ is normal in $G_2$.
+
+\item\emph{(Internal Direct Product.)} \---- Suppose $N$ and $M$ are two normal subgroups of $G$, such that $G=NM$ and $N\cap M=\{1\}$.
+
+(a) If $a\in N$ and $b\in M$, show that $ab=ba$.  [Verify that $a^{-1}b^{-1}ab$ must be in both $N$ and $M$.]
+
+(b) Show that the map $f:N\times M\to G$ given by $f(a,b)=ab$ is an isomorphism.  Thus $G$ is naturally identified with the direct product $N\times M$, except that $N$ and $M$ are subgroups, rather than abstract operands.  This is called an \textbf{internal direct product} of $N$ and $M$.  By contrast, $N\times M$ is called the \textbf{external direct product} of $N$ and $M$.
+
+\item (a) If $G$ is a group, let $\operatorname{Aut}(G)$ be the set of isomorphisms from $G$ to $G$.  Show that $\operatorname{Aut}(G)$ is a group under function composition.
+
+(b) For each $x\in G$, show that $\chi_x:G\to G$ given by $\chi_x(a)=xax^{-1}$ is in $\operatorname{Aut}(G)$.  This is called an \textbf{inner automorphism}.
+
+(c) Define $\varphi:G\to\operatorname{Aut}(G)$ via $\varphi(x)=\chi_x$.  Show that $\varphi$ is a homomorphism.
+
+(d) Let $\operatorname{Inn}(G)$ be the image of $\varphi$.  Show that $\operatorname{Inn}(G)$ is a normal subgroup of $\operatorname{Aut}(G)$.
+
+\item If $G$ is a group, let $S(G)$ be the group of permutations of the set $G$.  Then for each $a\in G$, let $T_a$ be the map $x\mapsto ax$ from $G$ to $G$.  By Exercise 2 of Section 1.3, the map $a\mapsto T_a$ is a homomorphism from $G$ to $S(G)$; therefore its image $G_L=\{T_a:a\in G\}$ is a subgroup of $S(G)$.  It is clear that $\operatorname{Aut}(G)$ is also a subgroup of $S(G)$.
+
+(a) Show that $\operatorname{Aut}(G)\subset N(G_L)$.
+
+(b) Now show that $N(G_L)=G_L\operatorname{Aut}(G)$, i.e., the product of the subgroups $G_L$ and $\operatorname{Aut}(G)$ \---- see Exercise 11.  [$N(G_L)$ is called the \textbf{holomorph} of $G$.]
+
+\item\emph{(Semidirect Product.)} \---- Let $N$ and $K$ be groups, and $\varphi:K\to\operatorname{Aut}(N)$ a homomorphism.  Then let $G$ be the \emph{set} $N\times K$, equipped with the following binary operation:
+$$(n_1,k_1)(n_2,k_2)=(n_1\varphi(k_1)(n_2),k_1k_2)$$
+(a) Show that $G$ is a group under this operation.
+
+(b) Let $\widehat N=\{(n,1):n\in N\}$ and $\widehat K=\{(1,k):k\in K\}$.  Then $\widehat N$ is a normal subgroup of $G$ isomorphic to $N$, and $\widehat K$ is a subgroup of $G$ isomorphic to $K$.
+
+(c) $\widehat N\widehat K=G$ and $\widehat N\cap\widehat K=\{1\}$.
+
+(d) If $N$ is identified with $\widehat N$ via $n\leftrightarrow(n,1)$ and $K$ is identified with $\widehat K$ via $k\leftrightarrow(1,k)$, then for each $k\in K$, $\varphi(k)$ is the automorphism $x\mapsto kxk^{-1}$ of $N$.
+
+$G$ is denoted $N\rtimes_\varphi K$ (or sometimes $N\rtimes K$) and is called the \textbf{semidirect product of $N$ and $K$ with respect to $\varphi$}.
+
+\item Let $G$ be a group, and $N$ and $K$ subgroups of $G$, such that $N$ is normal, $G=NK$ and $N\cap K=\{1\}$.
+
+(a) Define $\varphi:K\to\operatorname{Aut}(N)$ via $\varphi(k)=\chi_k$, where $\chi_k:N\to N$ is the conjugation map $x\mapsto kxk^{-1}$.  Then $\varphi$ is a homomorphism.
+
+(b) Now show that $G$ is isomorphic to the group $N\rtimes_\varphi K$ constructed in Exercise 16.
+\end{enumerate}
+
+\subsection*{1.5. Quotient Groups and Homomorphisms}
+\addcontentsline{toc}{section}{1.5. Quotient Groups and Homomorphisms}
+Now that we have the notion of a normal subgroup $N\subset G$, we can make the congruence classes (cosets) of $N$ into a group, just as in $\mathbb Z$, the congruence classes modulo $n$ form the group $\mathbb Z/n\mathbb Z$.
+
+Let $G/N$ be the set of cosets of $N$.  Since $N$ is normal, $G/N$ can be regarded as either the set of left cosets or the set of right cosets, and it won't make a difference.  For definiteness we will think of $G/N$ as the set $\{aN:a\in G\}$ of left cosets of $N$.  Define a multiplication on $G/N$ via $(aN)(bN)=(ab)N$.
+
+First we must show that this multiplication is well-defined; i.e., the product is independent of the particular way the cosets are represented.  Well, suppose $a,b,a',b'\in G$ such that $aN=a'N$ and $bN=b'N$.  Then $a\equiv a'\pmod N$ and $b\equiv b'\pmod N$, whence by Proposition 1.12, $ab\equiv a'b'\pmod N$.  Therefore $(ab)N=(a'b')N$, and thus $(aN)(bN)=(a'N)(b'N)$.  This proves that the multiplication is well-defined.
+
+Hence we have established a binary multiplication on the set $G/N$, and now we show that $G/N$ is a group under this operation.  Closure under the operation is clear.  If $aN,bN,cN\in G/N$ then
+\begin{align*}
+((aN)(bN))(cN)&=((ab)N)(cN)=((ab)c)N\\&=(a(bc))N=(aN)((bc)N)=(aN)((bN)(cN));
+\end{align*}
+therefore the operation is associative.  The identity coset $1N$ serves as an identity because $(1N)(aN)=(1a)N=aN$, and likewise $(aN)(1N)=aN$.  Finally, if $aN\in G/N$, the coset $a^{-1}N$ is an inverse for $aN$ because $(aN)(a^{-1}N)=(aa^{-1})N=1N$, and likewise $(a^{-1}N)(aN)=1N$.  Therefore, $G/N$ is a group.
+
+$G/N$ is called the \textbf{quotient group of $G$ by the normal subgroup $N$}.  In the special case where $G=\mathbb Z$ and $N=n\mathbb Z$, $G/N$ is the additive group $\mathbb Z/n\mathbb Z$ of congruence classes modulo $n$.  Note that since $G/N$ is the set of left cosets of $N$, when $N\subset G$ is a normal subgroup, then $|G/N|=[G:N]$, the index of $N$ in $G$.  (Recall that we defined the index of a subgroup to be the number of left cosets it has.)
+
+In particular, $|G|=|N|~|G/N|$, and if $|G|$ is finite then $|G/N|=|G|/|N|$.  This explains the terminology ``quotient group.''
+
+To show how quotient groups relate to injectivity of certain homomorphisms, we define for any homomorphism the following:\\
+
+\noindent\textbf{Proposition 1.14 and Definition.} \emph{If $f:G\to H$ is a homomorphism, then the set $K=\{a\in G:f(a)=1_H\}$ is a normal subgroup of $G$.  $K$ is called the \textbf{kernel} of $f$, and is sometimes denoted $\ker f$.}
+\begin{proof}
+If $a,b\in K$, then $f(ab)=f(a)f(b)=1_H1_H=1_H$, hence $ab\in K$.  Proposition 1.10(i) implies $1_G\in K$.  If $a\in K$, then $f(a^{-1})=f(a)^{-1}=1_H^{-1}=1_H$ by Proposition 1.10(ii), therefore $a^{-1}\in K$.  Hence by Proposition 1.3, $K$ is a subgroup of $G$.
+
+To show that $K$ is normal, let $a\in K$ and $x\in G$.  Then
+$$f(xax^{-1})=f(x)f(a)f(x)^{-1}=f(x)1_Hf(x)^{-1}=f(x)f(x)^{-1}=1_H$$
+Hence $xax^{-1}\in K$, so that $K$ is normal by Proposition 1.12.
+\end{proof}
+
+\noindent For instance, the homomorphism $a\mapsto\overline a$ from $\mathbb Z\to\mathbb Z/n\mathbb Z$ has kernel $n\mathbb Z$.  The homomorphism $\det:GL_n(\mathbb R)\to\mathbb R_{\ne 0}$ in Example (2) of Section 1.3 has kernel $SL_n(\mathbb R)=\{A\in GL_n(\mathbb R):\det A=1\}$.
+
+Proposition 1.14 shows that the kernel of any homomorphism is a normal subgroup of $G$.  Conversely, every normal subgroup of $G$ is the kernel of some homomorphism:\\
+
+\noindent\textbf{Proposition 1.15.} \emph{Let $N\subset G$ be a normal subgroup, and let $G/N$ be the quotient group.  Then the map $\pi:G\to G/N$ given by $\pi(a)=aN$ is a surjective homomorphism with kernel $N$.}\\
+
+\noindent $\pi$ is called the \textbf{canonical epimorphism}, \textbf{quotient map} or \textbf{natural homomorphism} from $G$ to $G/N$.
+\begin{proof}
+To begin with, $\pi$ is a homomorphism because for $a,b\in G$,
+$$\pi(ab)=(ab)N=(aN)(bN)=\pi(a)\pi(b)$$
+$\pi$ is surjective because every element of $G/N$ is of the form $aN$ for $a\in G$, and $aN=\pi(a)$.  Finally, for any $a\in G$,
+$$\pi(a)=1N\iff aN=1N\iff a\equiv 1\pmod N\iff a^{-1}1\in N\iff a\in N$$
+Therefore, the kernel of $\pi$ is $N$.
+\end{proof}
+
+\noindent The fundamental thing about the kernel of a homomorphism is that it measures how far the homomorphism is from injectivity:\\
+
+\noindent\textbf{Proposition 1.16.} \emph{Let $f:G\to H$ be a homomorphism with kernel $K$.  Then $K=\{1_G\}$ if and only if $f$ is injective.}
+\begin{proof}
+Suppose $K=\{1_G\}$.  If $f(a)=f(b)$, then $f(ab^{-1})=f(a)f(b)^{-1}=f(a)f(a)^{-1}=1_H$.  Hence $ab^{-1}\in K=\{1_G\}$, so that $ab^{-1}=1_G$ and $a=b$.  Therefore, $f$ is injective.  Conversely, suppose $f$ is injective.  If $c\in K$, then $f(c)=1_H$, so that $f(c)=f(1_G)$ by Proposition 1.10(i).  Therefore $c=1_G$ by injectivity.  Thus $K$ consists of the single element $1_G$.
+\end{proof}
+
+\noindent We now have enough materials to induce an injective homomorphism from any homomorphism.  The intuitive idea is this: if $f:G\to H$ is an isomorphism, then $H$ is an exact copy of $G$.  However, if $f:G\to H$ is merely a surjective homomorphism, $H$ is like a projection of $G$, which is induced by $G$ but with some of the information missing.  The kernel of $f$ then tells us how much information was lost.  By directly removing said information from $G$ ourselves, we get a copy of $H$.\\
+
+\noindent\textbf{Theorem 1.17.} (\textsc{First Isomorphism Theorem}) \emph{If $f:G\to H$ is a surjective homomorphism with kernel $K$, then $G/K\cong H$.}
+\begin{proof}
+Define $\varphi:G/K\to H$ via $\varphi(aK)=f(a)$ for $aK\in G/K$.  First we must show that $\varphi$ is well-defined: suppose $aK=bK$.  Then $a\equiv b\pmod K$, so that $a^{-1}b\in K$, and therefore $f(a^{-1}b)=1_H$.  With that, $1_H=f(a^{-1}b)=f(a)^{-1}f(b)$ and hence $f(a)=f(b)$.  Therefore $\varphi(aK)=\varphi(bK)$ and $\varphi$ is well-defined.
+
+Now if $aK,bK\in G/K$ and $\varphi(aK)=\varphi(bK)$, then $f(a)=f(b)$, whence $f(a^{-1}b)=f(a)^{-1}f(b)=1_H$ and $a^{-1}b\in K$, so that $a\equiv b\pmod K$ and $aK=bK$.  Therefore $\varphi$ is injective.  For any $h\in H$, we have $h=f(a)$ by surjectivity of $f$; consequently, $h=\varphi(aK)$, from which it follows that $\varphi$ is surjective.  Finally $\varphi$ is a homomorphism because
+$$\varphi((aK)(bK))=\varphi((ab)K)=f(ab)=f(a)f(b)=\varphi(aK)\varphi(bK)$$
+for $aK,bK\in G/K$.  Therefore $\varphi$ is an isomorphism $G/K\cong H$.
+\end{proof}
+
+\noindent There are several other isomorphism theorems in group theory.  They are outlined in Exercises 3-5 of this section.
+
+At this point is it worth remarking that Theorem 1.17 gives an alternate way of classifying cyclic groups up to isomorphism (Proposition 1.11).  If $G=\left<a\right>$, then the map $f:\mathbb Z\to G$ given by $n\mapsto a^n$ is a surjective homomorphism.  If $K$ is its kernel, then $K$ is a subgroup of $\mathbb Z$, and number theory and the division algorithm show that either $K=0$ or $K=n\mathbb Z$ for some positive integer $n$.  If $K=0$, then $a$ has infinite order and $f$ is an isomorphism, so that $\mathbb Z\cong G$.  If $K=n\mathbb Z$, then $a$ has order $n$ (because $n$ is the smallest positive integer in $K$, i.e., the smallest positive integer such that $a^n=1$).  Moreover, Theorem 1.17 implies that $\mathbb Z/n\mathbb Z\cong G$.
+
+\subsection*{Exercises 1.5. (Quotient Groups and Homomorphisms)}
+\begin{enumerate}
+\item A group $G$ is said to be \textbf{simple} if $G\ne\{1\}$ and the only normal subgroups of $G$ are $\{1\}$ and $G$ itself.  Suppose $G$ is a simple group and $f:G\to H$ is a surjective homomorphism.  Show that either $f$ is an isomorphism or $H=\{1\}$.
+
+\item Let $N$ be a normal subgroup of $G$ of index $n$.  Show that $a^n\in N$ for every $a\in G$.  [Apply Exercise 12(b) of Section 1.2 to $aN\in G/N$.]
+
+In particular, if $N$ is any subgroup of $G$ of index $2$, then $a^2\in N$ for every $a\in G$ (because $N$ must be normal by Exercise 4 of Section 1.4).
+
+\item\emph{(Second Isomorphism Theorem.)} \---- Let $N$ and $K$ be subgroups of a group $G$, with $N$ normal.
+
+(a) Define $f:K\to NK/N$ via $f(a)=aN$.  Show that $f$ is a surjective homomorphism with kernel $N\cap K$.
+
+(b) Conclude that $K/(N\cap K)\cong NK/N$.
+
+(c) If $G$ is finite, show that $|N|~|K|=|NK|~|N\cap K|$.  [Recall that $|G/N|=|G|/|N|$.]
+
+\item\emph{(Subgroup Correspondence Theorem.)} \---- Let $N\subset K$ be subgroups of $G$, with $N$ normal in $G$.
+
+(a) Show that $K/N=\{aN:a\in K\}$ is a subgroup of $G/N$.
+
+(b) Every subgroup of $G/N$ is of the form $K/N$, with $K\supset N$ a subgroup of $G$.
+
+(c) Show that $K\mapsto K/N$ is a one-to-one correspondence between subgroups of $G$ containing $N$ and subgroups of $G/N$.
+
+(d) $K$ is normal in $G$ if and only if $K/N$ is normal in $G/N$.
+
+\item\emph{(Third Isomorphism Theorem.)} \---- Let $N\subset M$ be normal subgroups of $G$.  Then $(G/N)/(M/N)\cong G/M$.  [Define $f:G/N\to G/M$ via $f(aN)=aM$; show that $f$ is a well-defined, surjective homomorphism with kernel $M/N$.]
+
+\item If $G_1$ and $G_2$ are groups, and $N_1\subset G_1$ and $N_2\subset G_2$ are normal subgroups, then $N_1\times N_2$ is a normal subgroup of $G_1\times G_2$ by Exercise 12(b) of Section 1.4.  Show that $\frac{G_1\times G_2}{N_1\times N_2}\cong\frac{G_1}{N_1}\times\frac{G_2}{N_2}$.  [Show that $f:G_1\times G_2\to G_1/N_1\times G_2/N_2$ given by $f(a,b)=(aN_1,bN_2)$ is a surjective homomorphism with kernel $N_1\times N_2$.]
+
+\item Let $N$ and $M$ be normal subgroups of a group $G$.  Define $f:G\to G/N\times G/M$ via $f(a)=(aN,aM)$.
+
+(a) Show that $f$ is a homomorphism.
+
+(b) Is $f$ necessarily surjective?  [Consider the case $G=\mathbb Z,N=2\mathbb Z,M=4\mathbb Z$.]
+
+(c) What is the kernel of $f$?
+
+\item (a) Let $G=GL_n(\mathbb R)$.  Show that $\mathbb R^\times=\{aI_n:a\ne 0\text{ in }\mathbb R\}$ is a normal subgroup of $G$.  The quotient group $GL_n(\mathbb R)/\mathbb R^\times$ is denoted $PGL_n(\mathbb R)$ and is called the \textbf{projective general linear group}.
+
+(b) Define $GL^+_2(\mathbb R)=\{A\in GL_2(\mathbb R):\det(A)>0\}$.  Show that $GL^+_2(\mathbb R)$ is a subgroup of $GL_2(\mathbb R)$, and that $\mathbb R^\times\subset GL^+_2(\mathbb R)$ (where $\mathbb R^\times$ is defined as in part (a) with $n=2$).  Set $PGL^+_2(\mathbb R)=GL^+_2(\mathbb R)/\mathbb R^\times$.
+
+(c) Define $PSL_2(\mathbb R)=SL_2(\mathbb R)/\{I_2,-I_2\}$.  [After all, $\pm I_2$ are the only matrices of the form $aI_2$ that are in $SL_2(\mathbb R)$.]
+
+Show that $PGL^+_2(\mathbb R)\cong PSL_2(\mathbb R)$.
+
+\item If $G$ is a group, let $\operatorname{Aut}(G)$ be the set of isomorphisms from $G$ to $G$.  Then $\operatorname{Aut}(G)$ is a group under function composition by Exercise 14(a) of Section 1.4.  $\operatorname{Aut}(G)$ is called the \textbf{automorphism group of $G$}.
+
+For each $x\in G$, define $\chi_x:G\to G$ via $\chi_x(a)=xax^{-1}$.  Then by Exercise 14(c) of Section 1.4, $\varphi:G\to\operatorname{Aut}(G)$ given by $\varphi(x)=\chi_x$ is a homomorphism.  The image of homomorphism $\varphi$ is denoted $\operatorname{Inn}(G)$ and is called the group of \textbf{inner automorphisms of $G$}.  Exercise 14(d) of Section 1.4 shows that $\operatorname{Inn}(G)$ is a normal subgroup of $\operatorname{Aut}(G)$.  The quotient group $\operatorname{Aut}(G)/\operatorname{Inn}(G)$ is denoted $\operatorname{Out}(G)$ and called the group of \textbf{outer automorphisms of $G$}.
+
+(a) Show that the kernel of $\varphi$ is the center $Z(G)$ of $G$.  Conclude that $G/Z(G)\cong\operatorname{Inn}~G$.
+
+(b) Establish a sequence of homomorphisms
+$$\{1\}\to Z(G)\overset{\subset}{\to}G\overset{\varphi}{\to}\operatorname{Aut}(G)\to\operatorname{Out}(G)\to\{1\}$$
+and show that the kernel of each homomorphism is equal to the image of the previous one.  [Such a sequence is called an \textbf{exact sequence} of homomorphisms.  However, exact sequences are rather restrictive because the image of a homomorphism can be any subgroup, whereas the kernel must be a normal subgroup.  Usually exact sequences are dealt with in abelian groups (written additively), where all subgroups are normal.]
+
+(c) Show that a subgroup $N$ is normal if and only if $f(N)=N$ for all $f\in\operatorname{Inn}(G)$.
+
+A subgroup $K\subset G$ is said to be \textbf{characteristic} if $f(K)=K$ for all $f\in\operatorname{Aut}(G)$.  It is clear from part (c) that every characteristic subgroup is normal.  But the converse is false [$\mathbb Z\times\{0\}$ is a normal subgroup of $\mathbb Z\times\mathbb Z$ which is not characteristic].
+
+(d) If $K$ is a characteristic subgroup of $N$ and $N$ is a normal subgroup of $G$, show that $K$ is a normal subgroup of $G$.  [Compare with Exercise 7 of Section 1.4.]
+
+\item (a) Let $[G,G]\subset G$ be the commutator subgroup (Exercise 9 of Section 1.4).  Show that $G/[G,G]$ is abelian.
+
+(b) Suppose $f:G\to H$ is a homomorphism with $H$ abelian.  Then the kernel of $f$ contains $[G,G]$.
+
+(c) Now show that if $K\subset G$, then $K$ is normal and $G/K$ is abelian, if and only if $K\supset[G,G]$.
+
+\item A group $G$ is said to be \textbf{solvable} if there exists a chain $G=G_0\supset G_1\supset\dots\supset G_t=\{1\}$ such that for each $0\leqslant i<t$, $G_{i+1}$ is a normal subgroup of $G_i$ and the quotient group $G_i/G_{i+1}$ is abelian.
+
+(a) Define a sequence $G^{(0)},G^{(1)},G^{(2)},\dots$ via $G^{(0)}=G$, $G^{(n+1)}=[G^{(n)},G^{(n)}]$, the commutator subgroup of $G^{(n)}$.  Show that $G$ is solvable if and only if $G^{(n)}=\{1\}$ for some $n$.  [Use Exercise 10.]
+
+(b) Show that every subgroup and every homomorphic image of a solvable group is solvable.
+
+(c) If $N\subset G$ is a normal subgroup such that $N$ and $G/N$ are both solvable, show that $G$ is solvable.  [Use Exercise 4 to show that $G/N$ is solvable if and only if there is chain $G=G_0\supset G_1\supset\dots\supset G_t=N$ such that for each $0\leqslant i<t$, $G_{i+1}$ is normal in $G_i$ and $G_i/G_{i+1}$ is abelian.]
+
+(d) Show that if $G$ and $H$ are solvable, so is $G\times H$.  [Verify that $G\times\{1\}\subset G\times H$ is a normal subgroup, $G\times\{1\}\cong G$ and $\frac{G\times H}{G\times\{1\}}\cong H$.  Now use part (c).]
+\end{enumerate}
+
+\subsection*{1.6. Group Actions}
+\addcontentsline{toc}{section}{1.6. Group Actions}
+A remarkable thing about groups is that every group can be viewed as a group of permutations.  [Exercise 2 of Section 1.3.]  Thus the study of group theory can be reduced to the study of permutations.  Though we will not do this systematically, we will look at how groups act on sets by permutations.
+
+If $G$ is a group and $X$ is a set, a homomorphism $\rho:G\to S(X)$ is called an \textbf{action} of $G$ on $X$.  Each element of $G$ gets mapped to a permutation on the set $X$.  In this way one can view $G$ as a ``group of symmetries'' of $X$.  For example, let $D_n$ be the dihedral group of the regular $n$-gon, and $X$ be the set of vertices of the $n$-gon.  Then each transformation of $D_n$ permutes the vertices, thus yielding a function $D_n\to S(X)$.  Since it is clear that composing two transformations composes the permutations of the vertices, this function is also a homomorphism.\\
+
+\noindent\textbf{Definition.} \emph{A \textbf{group action} of a group $G$ on a set $X$ is a group homomorphism $\rho:G\to S(X)$.}\\
+
+\noindent We will now give a different definition and show that it is equivalent to the previous one.  If $G$ is a group and $X$ is a set, we take a map $\eta:(g,x)\mapsto g\cdot x$ from $G\times X\to X$ such that:
+
+(i) $gh\cdot x=g\cdot(h\cdot x)$ for $g,h\in G,x\in X$;
+
+(ii) $1\cdot x=x$ for all $x\in X$;
+
+and we say $G$ \textbf{acts} on $X$ via the map $(g,x)\mapsto g\cdot x$.\\
+
+\noindent\textbf{Note.} Many authors make the blunder of saying that ``$G$ acts on $X$ if there exists a function $(g,x)\mapsto g\cdot x$ satisfying [the above conditions].''  Such a function certainly exists for any group $G$ and set $X$; for example, one can define $g\cdot x=x$ for all $g\in G,x\in X$.  Since the notion of a group acting on a set is an algebraic structure and not a mere proposition, the definition of a group acting on a set has been given more carefully above.\\
+
+\noindent To show that this definition of an action agrees with the one we have given, first observe that if $\rho:G\to S(X)$ is a homomorphism, then the map $(g,x)\mapsto\rho(g)(x)$ is a function $G\times X\to X$ satisfying conditions (i) and (ii) above.  Conversely, suppose $\eta:G\times X\to X$ is a function satisfying the conditions.  Then for each $g\in G$, let $\alpha_g:X\to X$ be defined by $\alpha_g(x)=\eta(g,x)$.  The $\alpha_g$ are functions from $X$ to $X$; we do not yet know if they are bijective.  However, the conditions in the definition imply that $\alpha_{gh}=\alpha_g\circ\alpha_h$ for $g,h\in G$, and that $\alpha_1=1_X$.  Moreover, we have for $g\in G$
+$$\alpha_g\circ\alpha_{g^{-1}}=\alpha_{gg^{-1}}=\alpha_1=1_X$$
+and similarly $\alpha_{g^{-1}}\circ\alpha_g=1_X$.  Thus $\alpha_g$ admits $\alpha_{g^{-1}}$ as a two-sided inverse, and is therefore bijective.  Hence $\alpha_g\in S(X)$ for all $g$, and $g\mapsto\alpha_g$ is a homomorphism $G\to S(X)$.  The reader can readily verify that these two conversions are inverses of one another.
+
+Since $\alpha_g$ and $\alpha_{g^{-1}}$ are inverse functions, we take note that
+\begin{center}
+If $g\in G$ and $x,y\in X$, then $g\cdot x=y$ if and only if $g^{-1}\cdot y=x$.
+\end{center}
+Now for some examples of group actions.\\
+
+\noindent\textbf{Examples.}
+
+(1) If $X$ is the set of vertices of a regular $n$-gon, then $D_n$ acts on $X$ as previously established: if $g\in D_n$ and $x\in X$, then $g\cdot x$ is the vertex that $x$ is mapped to via the transformation $g$.\\
+
+(2) $GL_n(\mathbb R)$ acts on $\mathbb R^n$ via multiplication of a matrix times a column vector, $(A,\vec v)\mapsto A\vec v$.  From the associativity of matrix multiplication and by virtue of the identity matrix, the conditions in the definition of a group action are satisfied.\\
+
+(3) For any group $G$ and any set $X$, there is the \textbf{trivial action}, $g\cdot x=x$ for all $g\in G,x\in X$.\\
+
+(4) If $X$ is any set, then $S(X)$ acts on $X$ in the obvious way, $\sigma\cdot x=\sigma(x)$.  Note that this action viewed in the first sense (i.e., homomorphism $G\to S(X)$) is the identity map $\sigma\mapsto\sigma$ on $S(X)$.\\
+
+(5) Let $G$ be any group.  Then $G$ acts on $G$ by left multiplication, $g\cdot x=gx$.  After all, $(gh)x=g(hx)$ and $1x=x$.\\
+
+(6) In general, $G$ does \emph{not} act on $G$ via $g\cdot x=xg$.\footnote{The ``$\cdot$'' symbol is important here because the group action uses a different operation from the group multiplication.}  Instead of $gh\cdot x=g\cdot(h\cdot x)$, we would have $gh\cdot x=h\cdot(g\cdot x)$ with this operation:
+$$gh\cdot x=x(gh)=(xg)h=(g\cdot x)h=h\cdot(g\cdot x)$$
+This is very different if $G$ is nonabelian.  However, $G$ does act on $G$ via $g\cdot x=xg^{-1}$.  This follows from Proposition 1.1(iii): $gh\cdot x=x(gh)^{-1}=x(h^{-1}g^{-1})=(xh^{-1})g^{-1}=g\cdot(xh^{-1})=g\cdot(h\cdot x)$.
+
+This example shows why the action we have defined is often called a \textbf{left action}.\\
+
+(7) $G$ also acts on $G$ via $g\cdot x=gxg^{-1}$.  After all, $gh\cdot x=ghx(gh)^{-1}=ghx(h^{-1}g^{-1})$ by Proposition 1.1(iii), and $ghx(h^{-1}g^{-1})=g(hxh^{-1})g^{-1}=g\cdot(h\cdot x)$.  Also, $1\cdot x=x$ is clear.  This action is called the \textbf{action by conjugation} in $G$, and $G$ is said to \textbf{act on $G$ by conjugation}.
+
+Note, by the way, that if $N$ is any normal subgroup of $G$, then $G$ acts on $N$ by conjugation, because Proposition 1.12 implies that whenever $g\in G,x\in N$, we have $g\cdot x\in N$.\\
+
+(8) Let $H$ be a subgroup of $G$, and $G/H$ the set of left cosets of $H$.  [$G/H$ is not a group if $H$ is not normal, but the notation is still common.]  Then $G$ acts on $G/H$ via $g\cdot aH=(ga)H$.  We leave it to the reader to verify that this is well-defined, and is an action of $G$ on the set $G/H$.  Similarly, $G$ acts on the set $G\backslash H$ of right cosets of $H$ by $g\cdot Ha=H(ag^{-1})$.\\
+
+(9) Let $X$ be the set of subgroups of $G$.  Then $G$ acts on $X$ by conjugation: $g\cdot H=gHg^{-1}$.  Exercise 10(a) of Section 1.2 shows that $gHg^{-1}$ is a subgroup, and it is readily verified that this is an action.\\
+
+(10) If $G$ acts on two sets $X$ and $Y$, then $G$ acts on the product $X\times Y$ via $g\cdot(x,y)=(g\cdot x,g\cdot y)$.  The reasons are obvious.  In particular, an action of $G$ on $X$ induces an action on $X\times X$.\\
+
+(11) Suppose $G$ acts on a set $X$, and $H$ is a subgroup of $G$.  Then the map $(h,x)\mapsto h\cdot x$ from $H\times X\to X$ is certainly an action of $H$ on the set $X$.  It is called the \textbf{restriction of the action of $G$ to $H$}.
+
+In particular, if $X$ is the set of subgroups of $G$, then $H$ acts on $X$ by conjugation.  $H$ also acts on any subset $X'\subset X$ satisfying the conditions $K\in X',h\in H\implies hKh^{-1}\in X'$.  In this case, we say that $H$ acts on $X'$ by conjugation.  Similarly, $H$ acts on $G$ (the set of \emph{elements} of $G$) by conjugation as well.\\
+
+\noindent Now that we have the notion of a group action, let us define some terms revolving around it.  If $G$ acts on $X$ and $x\in X$, the \textbf{orbit} of $x$, denoted $\mathcal O_{X/G}(x)$ [or $\mathcal O_X(x)$ if $G$ is clear], is defined to be the set $\{g\cdot x:g\in G\}$.  Since $x=1\cdot x\in\mathcal O_X(x)$, the orbits of all the elements of $X$ are nonempty sets whose union is $X$.  Now we will show that:\\
+
+\noindent\textbf{Proposition 1.18.} \emph{If $G$ acts on $X$, then any two orbits are either disjoint or identical.}\\
+
+\noindent It will follow that the orbits partition the set $X$.
+\begin{proof}
+Take any $x,y\in X$.  If $\mathcal O_X(x)\cap\mathcal O_X(y)=\varnothing$, then they are disjoint, and we are done.  Now suppose that $\mathcal O_X(x)\cap\mathcal O_X(y)\ne\varnothing$.  Pick $z\in\mathcal O_X(x)\cap\mathcal O_X(y)$.  Then since $z\in\mathcal O_X(x)$, $z=g\cdot x$ for some $g\in G$.  Similarly $z=h\cdot y$ for some $y$.  Moreover, $y=h^{-1}\cdot z=h^{-1}\cdot(g\cdot x)=h^{-1}g\cdot x\in\mathcal O_X(x)$.  Furthermore, $\mathcal O_X(y)\subset\mathcal O_X(x)$, because each element of $\mathcal O_X(y)$ is of the form $a\cdot y$ with $a\in G$, and $a\cdot y=a\cdot(h^{-1}g\cdot x)=ah^{-1}g\cdot x$.  The same argument with the roles of $x$ and $y$ reversed shows that $x=g^{-1}h\cdot y$ and $\mathcal O_X(x)\subset\mathcal O_X(y)$.  Therefore, $\mathcal O_X(x)=\mathcal O_X(y)$, and the orbits are identical.
+\end{proof}
+Alternatively one can prove Proposition 1.18 by observing that the relation
+\begin{center}
+$x\sim y$ if there exists $g\in G$ such that $g\cdot x=y$
+\end{center}
+is an equivalence relation, and that the orbits are its equivalence classes.  [$1\cdot x=x$ so that $x\sim x$; we have symmetry since $g\cdot x=y\implies g^{-1}\cdot y=x$; and transitivity because $g\cdot x=y$ and $h\cdot y=z$ imply $hg\cdot x=z$.]
+
+If $X\ne\varnothing$ and $\mathcal O_X(x)=X$ for some (and hence every) $x\in X$, the action is said to be \textbf{transitive}.  For instance, $S(X)$ acts transitively on $X$, because for any $x,y\in X$ there exists a permutation $\sigma\in S(X)$ such that $\sigma(x)=y$.  The group $D_n$ also acts transitively on the vertices of the regular $n$-gon, because any vertex can be moved to any other vertex.  $G$ acts transitively on $G$ by left multiplication, because for any $x,y\in G$, $(yx^{-1})x=y$.  $GL_n(\mathbb R)$ however, does \emph{not} act transitively on $\mathbb R^n$.  Its orbits are the sets $\{\vec 0\}$ and $\mathbb R^n-\{\vec 0\}$.
+
+We emphasize that transitivity of the action does \emph{not} imply that the homomorphism $f:G\to S(X)$ is surjective.  It merely implies that the image $f(G)$ is large enough so that for any $x,y\in X$ there exists $\sigma\in f(G)$ sending $x\mapsto y$.  For example, the action of $G$ on $G$ is transitive, but the homomorphism $G\to S(G)$ is far from surjective; for $|G|=n$ implies $|S(G)|=n!$, which is much larger than $n$.  Exercise 2(e) effectively classifies transitive actions.
+
+If $x\in X$, then the \textbf{stabilizer} of $x$ \---- denoted $\operatorname{Stab}(x)$ \---- is defined to be $\{g\in G:g\cdot x=x\}$.  It is the set of group elements that keep $x$ fixed.  This is a subgroup of $G$: if $g,h\in\operatorname{Stab}(x)$, then $gh\cdot x=g\cdot(h\cdot x)=g\cdot x=x$, so $gh\in\operatorname{Stab}(x)$.  $1\cdot x=x$ by condition (ii) in the definition of a group action, hence $1\in\operatorname{Stab}(x)$.  If $g\in\operatorname{Stab}(x)$, then $g^{-1}\cdot x=g^{-1}\cdot(g\cdot x)=g^{-1}g\cdot x=1\cdot x=x$, so $g^{-1}\in\operatorname{Stab}(x)$.
+
+Observe that $\bigcap_{x\in X}\operatorname{Stab}(x)=\{g\in G:g\cdot x=x\text{ for all }x\in X\}$.  This is the set of group elements that fix every $x\in X$.  Exercise 4(a) shows that this is a normal subgroup; it is called the \textbf{kernel} of the action.  The action is said to be \textbf{faithful} if $\bigcap_{x\in X}\operatorname{Stab}(x)=\{1\}$.
+
+If $\operatorname{Stab}(x)=G$, which means that $g\cdot x=x$ for all $g\in G$, then $x$ is said to be a \textbf{fixed point} of the action.  For example, $\vec 0$ is a fixed point of the action of $GL_n(\mathbb R)$ on $\mathbb R^n$.  Observe that $x$ is a fixed point if and only if $\mathcal O_X(x)=\{x\}$.\\%This is no accident, as we are about to see how the orbit and stabilizer of $x$ are related.\\
+
+\noindent\textbf{Theorem 1.19.} (\textsc{Orbit-Stabilizer Theorem}) \emph{If $G$ acts on a set $X$ and $x\in X$, then $|\mathcal O_X(x)|~|\operatorname{Stab}(x)|=|G|$.}
+\begin{proof}
+Let $H=\operatorname{Stab}(x)$, and let $G/H$ be the set of left cosets of $H$.  Define a function $f:G/H\to\mathcal O_X(x)$ via $f(aH)=a\cdot x$.
+
+First we show that $f$ is well-defined: if $aH=bH$, then $a\equiv b\pmod H$, so that $a^{-1}b\in H=\operatorname{Stab}(x)$ and hence $a^{-1}b\cdot x=x$.  Therefore $a\cdot x=a\cdot(a^{-1}b\cdot x)=aa^{-1}b\cdot x=b\cdot x$, so that $f(aH)=f(bH)$.  Hence $f$ is well-defined.
+
+We claim that $f$ is bijective.
+
+Suppose $f(aH)=f(bH)$.  Then $a\cdot x=b\cdot x$, hence $a^{-1}b\cdot x=a^{-1}\cdot(b\cdot x)=a^{-1}\cdot(a\cdot x)=a^{-1}a\cdot x=1\cdot x=x$.  Thus $a^{-1}b\in\operatorname{Stab}(x)=H$.  Hence $a\equiv b\pmod H$ and $aH=bH$.  Therefore, $f$ is injective.
+
+Also, $f$ is surjective by definition of an orbit: if $y\in\mathcal O_X(x)$ then there exists $g\in G$ such that $g\cdot x=y$; with that, $y=f(gH)$.
+
+Since $f$ is a bijection $G/H\to\mathcal O_X(x)$, it follows that $|G/H|=|\mathcal O_X(x)|$.  However, $|G/H|$ is merely the index $[G:H]$ of $H$ in $G$, and the remarks preceding Theorem 1.8 show that $|G|=|H|~[G:H]$.  Therefore $|G|=|H|~|\mathcal O_X(x)|$ as desired.
+\end{proof}
+
+\noindent For example, suppose $X$ is the set of vertices of a regular $n$-gon and $D_n$ acts on $X$.  Then $|X|=n$.  Since the action is transitive, $\mathcal O_X(x)=X$ for any $x\in X$, and hence $|\mathcal O_X(x)|=n$.  But also, $\operatorname{Stab}(x)$ consists of the identity and the reflection over the line through $x$ and the center of the polygon.  Hence $|\operatorname{Stab}(x)|=2$.  It follows from Theorem 1.19 that $|D_n|=2n$.  This is another proof that $|D_n|=2n$, a fact we have known since Section 1.1.\\
+
+\noindent\textbf{BASIC TERMS AND PROPOSITIONS FOR LATER}\\
+
+\noindent If $G$ acts on a set $X$, and $Y$ is a set (the set $Y$ does not have an action of $G$), then a function $f:X\to Y$ is said to be a \textbf{function on orbits} if $f|_{\mathcal O_X(x)}$ is constant for every $x\in X$; or equivalently, whenever $g\in G,x\in X$ we have $f(g\cdot x)=f(x)$.
+
+For instance, suppose $G=GL_n(\mathbb R)$ acts on itself by conjugation.  Then $\det:G\to\mathbb R_{\ne 0}$ is a function on orbits, because for any $g,h\in G$, $\det(ghg^{-1})=\det(g)\det(h)\det(g)^{-1}=\det(h)$.  Since it is well-known in linear algebra that similar matrices have the same trace,\footnote{In fact, whenever $A,B$ are $n\times n$ matrices, not necessarily nonsingular, then $\operatorname{tr}(AB)=\operatorname{tr}(BA)$ because both are equal to $\sum_{j=1}^n\sum_{k=1}^nA_{jk}B_{kj}$.} the function $\operatorname{tr}:G\to\mathbb R$ is also a function on orbits.
+
+Another basic example of a function on orbits is this: if $H$ is a subgroup of $G$, and $H$ acts on $G$ by left multiplication, then let $G\backslash H$ be the set of right cosets of $H$.  With that, $f:G\to G\backslash H$ given by $f(a)=Ha$ is a function on orbits.  (Why?) % Typical elements of the same orbit are g, hg with g\in G and h\in H.  f(g) = f(hg) because Hg = (Hh)g = Hhg. [The action isn't conjugation here]
+
+When $f:X\to Y$ is a function on orbits, then one can think of $f$ as an attribute of certain elements of the set $X$, such that $G$ consists of ``symmetries'' with respect to that attribute: the attribute is invariant under the transformations in $G$.  This will be especially useful when $X$ consists of subsets of a space, and $G$ consists of the isometries of the space: then $G$'s transformations will preserve lengths and angles, hence these will be functions on orbits on the $G$-set $X$.
+
+Now for a few basic propositions about functions on orbits.\\
+
+\noindent\textbf{Proposition 1.20.} \emph{Suppose $G$ acts on $X$ and $X'\subset X$ is a subset satisfying this property:}
+
+(*) \emph{For any $x\in X$, there exists $g\in G$ such that $g\cdot x\in X'$.}
+
+\emph{If $Y$ is a set and $f_1,f_2:X\to Y$ are functions on orbits such that $f_1|_{X'}=f_2|_{X'}$, then $f_1=f_2$.}
+
+\begin{proof}
+Take any $x\in X$.  By (*), there exists $g\in G$ such that $g\cdot x\in X'$.  Since $f_1|_{X'}=f_2|_{X'}$, we have $f_1(g\cdot x)=f_2(g\cdot x)$.  However, $f_1(g\cdot x)=f_1(x)$ and $f_2(g\cdot x)=f_2(x)$ since they are functions on orbits; therefore $f_1(x)=f_1(g\cdot x)=f_2(g\cdot x)=f_2(x)$.  Moreover, $f_1(x)=f_2(x)$ for all $x\in X$, so $f_1=f_2$.
+\end{proof}
+
+\noindent\textbf{Proposition 1.21.} \emph{Suppose $G$ acts on $X$, $X'\subset X$ is a subset and $f:X'\to Y$ is a function to a set $Y$.  Furthermore, suppose that:}
+
+(i) \emph{For any $x\in X$, there exists $g\in G$ such that $g\cdot x\in X'$.}
+
+(ii) \emph{Whenever $x,y\in X'$ and $g\in G$ with $g\cdot x=y$, we have $f(x)=f(y)$.}
+
+\emph{Then $f$ extends to a unique function on orbits $X\to Y$.}
+
+\begin{proof}
+Define $f^*:X\to Y$ as follows: for each $x\in X$, pick $g\in G$ such that $g\cdot x\in X'$, then set $f^*(x)=f(g\cdot x)$.
+
+First we need to show that $f^*$ is well-defined, and the value of $f^*(x)$ is independent of which $g\in G$ is picked.  Well, suppose $g,h\in G$ such that $g\cdot x$ and $h\cdot x$ are both in $X'$.  Then, since $g\cdot x=gh^{-1}\cdot(h\cdot x)$, we have $f(g\cdot x)=f(h\cdot x)$ by condition (ii).  This proves that $f^*$ is well-defined.
+
+Now, $f^*$ clearly extends $f$: after all, if $x\in X'$, then $1\cdot x\in X'$, and thus $f^*(x)=f(1\cdot x)=f(x)$ by definition of $f^*$.  Moreover, if $x\in X$, then there exists $g\in G$ such that $g\cdot x\in X'$.  Now for any $h\in G$, we have $gh^{-1}\cdot(h\cdot x)\in X'$, and thus $f^*(h\cdot x)=f(gh^{-1}\cdot(h\cdot x))=f(g\cdot x)=f^*(x)$.
+Therefore $f^*$ is a function on orbits $X\to Y$ which extends $f$.
+
+To show uniqueness, suppose $f':X\to Y$ is also a function on orbits extending $f$; then $f^*|_{X'}=f'|_{X'}=f$.  Now, $X'$ satisfies the property (*) in the hypothesis of Proposition 1.20, because that property is condition (i) here.  Thus Proposition 1.20 applies to show $f^*=f'$, and therefore $f^*$ is unique.
+\end{proof}
+
+\noindent It is convenient to be able to conclude that a function is a function on orbits just by casework on generators of $G$.  The following proposition shows that we can do this.\\
+
+\noindent\textbf{Proposition 1.22.} \emph{Suppose $S\subset G$ is a generating set of $G$.  If $G$ acts on a set $X$, and $f:X\to Y$ is a function such that $f(g\cdot x)=f(x)$ for all $g\in S,x\in X$, then $f$ is a function on orbits.}
+
+\begin{proof}
+Let $H=\{g\in G:f(g\cdot x)=f(x)\text{ for all }x\in X\}$.  We claim that $H$ is a subgroup of $G$.
+
+If $g,h\in H$, then for all $x\in X$, $f(gh\cdot x)=f(g\cdot(h\cdot x))=f(h\cdot x)=f(x)$; therefore $gh\in H$ and $H$ is closed.  Since $1\cdot x=x$ for all $x\in X$, we manifestly have $f(1\cdot x)=f(x)$; therefore, $1\in H$.  Finally, suppose $g\in H$; then for any $x\in X$, $f(g^{-1}\cdot x)=f(g\cdot(g^{-1}\cdot x))$ [because $g\in H$] $=f(gg^{-1}\cdot x)=f(1\cdot x)=f(x)$, from which $g^{-1}\in H$ follows.  Therefore $H$ is a subgroup by Proposition 1.3.
+
+Now, $H\supset S$ by the hypothesis that $f(g\cdot x)=f(x)$ for all $g\in S,x\in X$.  Since $S$ generates $G$, it follows that $H=G$.  Therefore $f(g\cdot x)=f(x)$ for all $g\in G,x\in X$, and $f$ is a function on orbits.
+\end{proof}
+
+\noindent\textbf{BURNSIDE'S COUNTING THEOREM}\\
+
+\noindent We conclude the chapter with a result in group theory and combinatorics, known as \textbf{Burnside's Counting Theorem}\footnote{It is alternatively known as the \emph{Cauchy-Frobenius Lemma}, or \emph{The Lemma that is not Burnside's}, because Cauchy and Frobenius established it before William Burnside.}.  It provides a simple way of counting mathematical objects, when taking symmetry into account.  Effectively, it enables one to compute the number of orbits of a group action, by using casework on the group elements, instead of the backbreaking casework on the set $X$ on which it acts.\\
+
+\noindent\textbf{Theorem 1.23.} (\textsc{Burnside's Counting Theorem}) \emph{Suppose a finite group $G$ acts on a finite set $X$.  Then the number of orbits of the action is equal to $\frac 1{|G|}\sum_{g\in G}|\{x\in X:g\cdot x=x\}|$.}\\
+
+\noindent It is worth remarking that without this theorem, it is not so clear that the expression in the statement is even an integer (because of the denominator of $|G|$).  However, we will prove that the expression is an integer, as well as implying that it is the number of orbits.
+\begin{proof}
+Let $S=\{(g,x)\in G\times X:g\cdot x=x\}$.  We find $|S|$ in two ways.  On the one hand, we have:
+$$|S|=\sum_{g\in G}|\{x\in X:g\cdot x=x\}|$$
+After all, for each $g\in G$, set $S_g=\{(g,x):x\in X\}\cap S$.  (Note that $g$ occurs free in this expression, whereas it did not in the definition of $S$.)  It is clear that $S=\bigsqcup_{g\in G}S_g$ (this means that $S=\bigcup_{g\in G}S_g$ and $g\ne h\implies S_g\cap S_h\ne\varnothing$, and hence the $S_g$'s partition $S$), so that $|S|=\sum_{g\in G}|S_g|$.  But also $|S_g|=|\{x\in X:g\cdot x=x\}|$, because $x\mapsto(g,x)$ is clearly a bijection from the set $\{x\in X:g\cdot x=x\}$ to $S_g$.  Hence, $|S|=\sum_{g\in G}|\{x\in X:g\cdot x=x\}|$.
+
+On the other hand, we also have
+$$|S|=\sum_{x\in X}|\{g\in G:g\cdot x=x\}|=\sum_{x\in X}|\operatorname{Stab}(x)|$$
+by pretty much the same argument, but this time taking $S^x=\{(g,x):g\in G\}\cap S$, then noting that $S=\bigsqcup_{x\in X}S^x$ and $|S^x|=|\operatorname{Stab}(x)|$.  Thus we have
+$$\frac 1{|G|}\sum_{g\in G}|\{x\in X:g\cdot x=x\}|=\frac 1{|G|}|S|=\frac 1{|G|}\sum_{x\in X}|\operatorname{Stab}(x)|=\sum_{x\in X}\frac{|\operatorname{Stab}(x)|}{|G|}$$
+However, by the Orbit-Stabilizer Theorem (1.19), $|\mathcal O_X(x)|~|\operatorname{Stab}(x)|=|G|$ for every $x\in X$, and therefore
+$$\sum_{x\in X}\frac{|\operatorname{Stab}(x)|}{|G|}=\sum_{x\in X}\frac 1{|\mathcal O_X(x)|}$$
+Let $\mathcal O_1,\mathcal O_2,\dots,\mathcal O_k$ be the (distinct) orbits of the action.  Since they partition $X$, any summation over the elements of $X$ can be considered as a summation over the orbits, where each summand runs through the elements of the orbit.  Thus
+$$\sum_{x\in X}\frac 1{|\mathcal O_X(x)|}=\sum_{j=1}^k\sum_{x\in\mathcal O_j}\frac 1{|\mathcal O_X(x)|}=\sum_{j=1}^k\sum_{x\in\mathcal O_j}\frac 1{|\mathcal O_j|}=\sum_{j=1}^k|\mathcal O_j|\frac 1{|\mathcal O_j|}=\sum_{j=1}^k1=k$$
+Therefore $\frac 1{|G|}\sum_{g\in G}|\{x\in X:g\cdot x=x\}|$ is equal to $k$, the number of orbits, as desired.
+\end{proof}
+
+\noindent As an application of Burnside's Counting Theorem, we will solve the following problem.
+
+\emph{Suppose there are $n$ available colors, where $n$ is a positive integer.  Each vertex of a square is to be colored with one of these colors.  Two colorings are considered to be the same if one can be obtained from the other through rotating/flipping the square.  How many different ways are there to color the vertices?}
+
+If we were not taking rotations and flips into consideration, the answer would obviously be $n^4$, because each of the four vertices has one of $n$ possible colors.  Let $X$ be the set of all vertex colorings of a fixed square; then $|X|=n^4$.  However, $D_4$ acts on $X$ by applying a transformation to a square with the colored vertices; here is an example of what the rotation $r_1$ does to a square with four different colors:
+\begin{center}\includegraphics[scale=.4]{ColoredSquares.png}\end{center}
+Since two colorings are considered the same if and only if they're in the same orbit of the group action, the question is effectively asking for the number of orbits of this action.  It is hard to do this directly, because there are many special cases.  What if two adjacent colors are the same?  What if two colors across the diagonal are the same?  Three colors?  The orbit sizes vary for exactly these reasons (because, e.g., if two colors across the diagonal are the same, the stabilizer contains a diagonal reflection).
+
+Thanks to Burnside's Counting Lemma, this is rather easy, even with the number of available colors being a variable.
+
+For each $g\in D_4$, we find $|\{x\in X:g\cdot x=x\}|$, the number of colorings fixed by $g$.  If $g=r_0$, which is the identity, clearly every element of $X$ is fixed, so in this case the number is $n^4$.  If $g=r_1$, then a coloring of the square is fixed by $g$ if and only if all four vertices have the same color, as can be visualized easily.  In this case there are $n$ colorings \---- one for each available color.  Similarly, for $g=r_3$ the number of fixed colorings is $n$.  But for $g=r_2$ (rotation by a half-turn), opposite vertices get swapped, and so a coloring is fixed whenever each pair of opposite vertices is in one color.  The pairs need not have the same color as each other.  Since there are two choices of color, there are $n^2$ colorings fixed by $r_2$.
+
+$v$ swaps the top two vertices and swaps the bottom two vertices; thus there are $n^2$ colorings fixed by $v$, because these are the colorings where the top two vertices have the same color and the bottom two vertices have the same color.  Similarly $h$ fixes $n^2$ of the colorings in $X$.  However, $t$ fixes $n^3$ of them, because $t$ swaps two vertices and leaves the other two fixed; the latter two vertices can have any colors, yet the two swapped vertices must have the same color, in order for the coloring to be fixed by $t$.  Similarly, $d$ fixes $n^3$ of the elements of $X$.
+
+Thus, the number of orbits of the action is equal to
+\begin{align*}
+\frac 1{|D_4|}\sum_{g\in D_4}|\{x\in X:g\cdot x=x\}|&=\frac 18(\overset{\begin{matrix}r_0\\\downarrow\end{matrix}}{n^4}
++\overset{\begin{matrix}r_1\\\downarrow\end{matrix}}{n}
++\overset{\begin{matrix}r_2\\\downarrow\end{matrix}}{n^2}
++\overset{\begin{matrix}r_3\\\downarrow\end{matrix}}{n}
++\overset{\begin{matrix}v\\\downarrow\end{matrix}}{n^2}
++\overset{\begin{matrix}t\\\downarrow\end{matrix}}{n^3}
++\overset{\begin{matrix}h\\\downarrow\end{matrix}}{n^2}
++\overset{\begin{matrix}d\\\downarrow\end{matrix}}{n^3})\\&=\frac{n^4+2n^3+3n^2+2n}8
+\end{align*}
+There are $\frac{n^4+2n^3+3n^2+2n}8$ ways to color the vertices of the square.  Note that one can use pure number theory (not Burnside's Lemma) to show that this expression is an integer whenever $n$ is an integer.  Here is a table of this expression for the first few small values of $n$.
+\begin{center}
+\begin{tabular}{c|c}
+Number of colors & Number of colorings\\\hline
+$1$ & $1$\\
+$2$ & $6$\\
+$3$ & $21$\\
+$4$ & $55$\\
+$5$ & $120$\\
+$6$ & $231$\\
+$7$ & $406$
+\end{tabular}
+\end{center}
+For example, if $n=1$, there is only one way to color the square because there is only one color that can be used.  If $n=2$, there are six colorings of the square, as shown below:
+\begin{center}\includegraphics[scale=.3]{Colorings.png}\end{center}
+This same tactic can be used to answer various similar combinatorical questions.  See Exercises 16-17, as well as Exercise 8 of Section 2.7.
+
+\subsection*{Exercises 1.6. (Group Actions)}
+\begin{enumerate}
+\item Let $G$ be a group acting on a set $X$.
+
+(a) If $x\in X$ and $y\in\mathcal O_X(x)$, then $\operatorname{Stab}(y)$ and $\operatorname{Stab}(x)$ are conjugate subgroups.
+
+(b) Every conjugate subgroup of $\operatorname{Stab}(x)$ is of the form $\operatorname{Stab}(y)$ for some $y\in\mathcal O_X(x)$.
+
+\item Suppose $G$ is a group and $X$ and $Y$ are two sets on which $G$ acts.  A \textbf{$G$-equivariant map} is a function $\varphi:X\to Y$ such that for all $g\in G,x\in X$, $\varphi(g\cdot x)=g\cdot\varphi(x)$.
+
+(a) If $\varphi:X\to Y$ is a $G$-equivariant map and $x\in X$, then $\varphi(\mathcal O_X(x))=\mathcal O_Y(\varphi(x))$, and hence, $\varphi$ maps orbits to orbits.
+
+(b) If $\varphi:X\to Y$ is a $G$-equivariant map and $x\in X$, then $\operatorname{Stab}(x)\subset\operatorname{Stab}(\varphi(x))$, but it may be a proper inclusion.
+
+(c) If $\varphi,\psi:X\to Y$ are $G$-equivariant maps, then $\{x\in X:\varphi(x)=\psi(x)\}$ is a union of orbits.
+
+(d) Now suppose $X'\subset X$ and $\eta:X'\to Y$ is a function.  Furthermore, suppose that:
+
+~~~~(i) For all $x\in X$, there exists $g\in G$ such that $g\cdot x\in X'$;
+
+~~~~(ii) Whenever $x,y\in X'$ and $y=g\cdot x$, $\eta(y)=g\cdot\eta(x)$.
+
+Then $\eta$ extends to a unique $G$-equivariant map $X\to Y$.
+
+(e) An \textbf{isomorphism} (of $G$-sets) $X\to Y$ is a bijective $G$-equivariant map.  If $G$ acts transitively on $X$, show that there is a subgroup $H$ and an isomorphism between $X$ and the set $G/H$ of left cosets of $H$ on which $G$ acts by left multiplication.  [Let $H$ be the stabilizer of some element of $X$.]
+
+\item Complete this inductive proof that $|S_n|=n!$.  The statement is clear for $n=1$.  Now suppose inductively that $|S_{n-1}|=(n-1)!$.  Then $S_n$ acts transitively on the set $\{1,2,\dots,n\}$ in the obvious way.  Show that the stabilizer of the element $n$ is isomorphic to $S_{n-1}$.  Now use the Orbit-Stabilizer Theorem.
+
+\item Suppose a group $G$ acts on a set $X$.
+
+(a) Let $N=\bigcap_{x\in X}\operatorname{Stab}(x)=\{g\in G:g\cdot x=x\text{ for all }x\in X\}$.  Show that $N$ is a normal subgroup of $G$.
+
+(b) Show that $G/N$ acts on $X$ via $gN\cdot x=g\cdot x$.
+
+(c) More generally, let $\mathcal O$ be an orbit of the action.  Show that $\bigcap_{x\in\mathcal O}\operatorname{Stab}(x)$ is a normal subgroup of $G$.
+
+(d) If $N$ is an \emph{abelian} normal subgroup of $G$, show that $G/N$ acts on $N$ by conjugation.
+
+\item\emph{(Factorial formula for binomial coefficients.)} \---- Let $0\leqslant k\leqslant n$ be integers, and $X$ the set of $k$-element subsets of $\{1,2,\dots,n\}$.  Then $|X|={n\choose k}$ by definition.  Let $S_n$ act on $X$ via $\sigma\cdot\{a_1,\dots,a_k\}=\{\sigma(a_1),\dots,\sigma(a_k)\}$ for $\sigma\in S_n$ and $a_1,\dots,a_k$ distinct elements of $\{1,2,\dots,n\}$.
+
+(a) Show that the action is transitive.
+
+(b) Show that the stabilizer of the set $\{1,2,\dots,k\}$ is isomorphic to $S_k\times S_{n-k}$.
+
+(c) Conclude that $|X|=\frac{n!}{k!(n-k)!}$.
+
+\item\emph{(Another proof of Lagrange's Theorem.)} \---- Let $G$ be a finite group, and $H$ a subgroup of $G$.  Then $H$ acts on $G$ by left multiplication.
+
+(a) Explain why the stabilizer of any $x\in G$ is trivial.
+
+(b) Show that $|G|=n|H|$, where $n$ is the number of orbits of the action.  Conclude that $|H|$ divides $|G|$.
+
+\item Suppose $|G|=p^n$ where $p$ is prime.  If $X$ is a finite set on which $G$ acts, and $X_0\subset X$ is the set of fixed points of the action, then $|X|\equiv|X_0|\pmod p$.  [What are all possible sizes of orbits in the action?]
+
+\item Suppose $|G|=p^n$ where $p$ is prime and $n>0$.  Then $Z(G)\ne 1$.  [$G$ acts on itself by conjugation.]
+
+\item\emph{(Wilson's Theorem.)} \---- If $p$ is prime, prove that $(p-1)!\equiv -1\pmod p$.  [$\mathbb Z/2\mathbb Z$ acts on the set $(\mathbb Z/p\mathbb Z)^\times=\{\overline 1,\overline 2,\dots,\overline{p-1}\}$ by the involution $x\mapsto x^{-1}$.  The product of any orbit of size $2$ is equal to $1$ (why?), so the product of the elements of $(\mathbb Z/p\mathbb Z)^\times$ is equal to the product of the involution's fixed points.]
+
+\item\emph{(Cauchy's Theorem.)} \---- Let $G$ be a finite group, and $p$ a prime divisor of $|G|$.  We show that $G$ contains an element of order $p$.
+
+(a) Let $X=\{(a_1,a_2,\dots,a_p):a_1,\dots,a_p\in G,a_1\dots a_p=1\}$.  Show that $|X|=|G|^{p-1}$, hence is divisible by $p$.
+
+(b) If $(a_1,a_2,\dots,a_p)\in X$, then $(a_2,\dots,a_p,a_1)\in X$.  (In other words, $X$ is closed under ``rotation'' of the tuple.)
+
+(c) The cyclic group $\mathbb Z/p\mathbb Z$ acts on $X$ via rotations, i.e., if $k\in\mathbb Z/p\mathbb Z$ then $k\cdot(a_1,a_2,\dots,a_p)=(a_{k+1},\dots,a_p,a_1,\dots,a_k)$.
+
+(d) Conclude that $G$ has an element of order $p$.  [$(1,1,\dots,1)\in X$ is a fixed point of the action.  By Exercise 7, there must be another fixed point.]
+
+\item\emph{(Class equation.)} \---- If $G$ is a finite group, show that one has
+$$|G|=|Z(G)|+[G:C(a_1)]+\dots+[G:C(a_m)],$$
+where $Z(G)$ is the center of $G$, and each $a_i\in G-Z(G)$, so that $C(a_i)$, the centralizer of $a_i$ (from Exercise 11(b) of Section 1.2), is a proper subgroup.
+[$G$ acts on itself by conjugation.  Think of $|G|$ as the sum of the sizes of the orbits.  Then use the Orbit-Stabilizer Theorem.]
+
+\item\emph{(Sylow Theorems.)} \---- Let $G$ be a finite group.
+
+(a) If $p$ is prime and $p^n$ divides $|G|$, then $G$ has a subgroup of order $p^n$.  [Use complete induction on $|G|$.  Use Exercise 11 to write $|G|=|Z(G)|+[G:C(a_1)]+\dots+[G:C(a_m)]$.  If there exists $i$ such that $p$ does not divide $[G:C(a_i)]$, then $p^n$ divides $|C(a_i)|$.  Thus by induction, $C(a_i)$ has a subgroup of order $p^n$.  Contrariwise, if $p$ divides every $[G:C(a_i)]$, then $p$ divides $|Z(G)|=|G|-\sum_{i=1}^n[G:C(a_i)]$.  By Cauchy's Theorem, $Z(G)$ has an element $a$ of order $p$.  Since $a$ is central, $\left<a\right>$ is a normal subgroup, and $G/\left<a\right>$ has a subgroup of order $p^{n-1}$ by induction; now take the inverse image of that subgroup through the homomorphism $G\to G/\left<a\right>$.]
+
+If $p$ is prime, a \textbf{Sylow $p$-subgroup} of $G$ is defined to be a subgroup whose order is the largest power of $p$ dividing $G$.  In other words, if $|G|=p^nm$ with $p\nmid m$, a Sylow $p$-subgroup is a subgroup of order $p^n$.  Note that by part (a), $G$ has at least one Sylow $p$-subgroup.
+
+(b) If $Q$ is a Sylow $p$-subgroup, $|x|=p^k$ and $xQx^{-1}=Q$, then $x\in Q$. [The hypothesis $xQx^{-1}=Q$ states that $x\in N(Q)$, where $N(Q)$ is the normalizer of $Q$.  Since $Q$ is a normal subgroup of $N(Q)$, $N(Q)/Q$ is a well-defined group.  Explain why $p\nmid|N(Q)/Q|$ and the order of $xQ\in N(Q)/Q$ is a power of $p$; then use Lagrange's Theorem.]
+
+(c) Any two Sylow $p$-subgroups of $G$ are conjugate.  [If $P$ and $Q$ are Sylow $p$-subgroups, then let $G$ act on the set $X$ of conjugates of $Q$ by conjugation.  Then the Orbit-Stabilizer Theorem implies that $|X|=[G:\operatorname{Stab}(Q)]\mid[G:\operatorname{Stab}(Q)][\operatorname{Stab}(Q):Q]=[G:Q]=m$.  Therefore $p$ does not divide $|X|$.  If $P$ acts on $X$ by conjugation, then Exercise 7 implies that the action has at least one fixed point.  Now use part (b) to show that the fixed point is equal to $P$.]
+
+(d) The number of Sylow $p$-subgroups divides $|G|$ and is $\equiv 1\pmod p$.  [By part (a) there exists a Sylow $p$-subgroup $P$.  Now, if $X$ is the set of conjugates of $P$, then by part (c) $X$ is the set of all Sylow $p$-subgroups.  If $G$ acts on $X$ by conjugation, then $|X|=[G:\operatorname{Stab}(P)]$ by the Orbit-Stabilizer Theorem, hence $|X|$ divides $|G|$.  Moreover, if $P$ acts on $X$ by conjugation, part (b) shows that the only fixed point of the action is $P$; now use Exercise 7.]
+
+\item\emph{(Symmetric and Alternating Groups.)} \---- Let $X$ be a finite set, $|X|\geqslant 2$.  If $x_1,x_2,\dots,x_n\in X$ are distinct elements, then the permutation in $S(X)$ given by
+$$x_k\mapsto x_{k+1},1\leqslant k<n,~~~~~~~~x_n\mapsto x_1,~~~~~~~~x\mapsto x\text{ for }x\notin\{x_1,\dots,x_n\}$$
+is denoted $(x_1x_2\dots x_n)$ and is called an \textbf{$n$-cycle}.\footnote{$(x_1x_2\dots x_n)$ is the same permutation as $(x_2\dots x_nx_1)$.  In the notation, we will allow cycles to rotate without being considered different from what they were before.}  For example, if $X=\{1,2,3,4,5,6\}$, then $(1325)$ is the permutation
+$$\begin{pmatrix}1&2&3&4&5&6\\3&5&2&4&1&6\end{pmatrix}$$
+(Observe that any $1$-cycle is the identity permutation on one element.  We drop these from the notation.)  Two cycles $(x_1x_2\dots x_n)$ and $(y_1y_2\dots y_m)$ are said to be \textbf{disjoint} if $x_i\ne y_j$ for all $1\le i\le n,1\le j\le m$.
+
+(a) Show that if $\sigma$ and $\tau$ are disjoint cycles then $\sigma\tau=\tau\sigma$.
+
+(b) Show that every $\sigma\in S(X)$ is a product of disjoint cycles in a unique way.  [$S(X)$ acts on $X$ in the obvious way.  Now restrict this action to the cyclic subgroup $\left<\sigma\right>$.  Each orbit then gives rise to a cycle.]
+
+(c) A 2-cycle is called a \textbf{transposition}.  Thus a transposition is a permutation of the form $(x_1x_2)$ (with $x_1,x_2\in X$ distinct), which sends $x_1\mapsto x_2$, $x_2\mapsto x_1$ and $x\mapsto x$ for $x\ne x_1,x_2$.  Show that every $\sigma\in S(X)$ is a product of transpositions.  [Verify that $(x_1x_2\dots x_n)=(x_1x_n)(x_1x_{n-1})\dots(x_1x_2)$.  Now use part (b).]
+
+(d) Show that $1_X$ cannot be written as the product of an odd number of transpositions.  [Suppose $1_X=\tau_{2k+1}\dots\tau_2\tau_1$, where the $\tau_i$ are transpositions and $k$ is as small as possible.  Clearly $k$ can't be zero.  Now let $c$ be any element of $X$ which occurs somewhere in these transpositions.  Consider the \emph{rightmost} transposition $\tau_r$ in which $c$ occurs; i.e., $\tau_r=(cd)$ and $c$ does not occur in $\tau_1,\dots,\tau_{r-1}$.  If $r=2k+1$, we would have $1_X(c)=d$, which is impossible since $d\ne c$.  Thus we must have $r<2k+1$, and depending on whether $c$ or $d$ or both is in $\tau_{r+1}$, the pair $\tau_{r+1}\tau_r$ must look like one of these (with $x,y,c,d$ distinct elements of $X$):
+$$(xy)(cd)~~~~~~~~(xd)(cd)~~~~~~~~(cy)(cd)~~~~~~~~(cd)(cd)$$
+Verify that $(xy)(cd)=(cd)(xy)$, $(xd)(cd)=(xc)(xd)$, and $(cy)(cd)=(cd)(dy)$.  Thus in any of the first three cases, you can substitute the pair of transpositions to move the rightmost transposition in which $c$ occurs one transposition to the left.  You can repeat this process as long as the rightmost transposition with $c$ satisfies either of the first three cases.  Eventually the fourth case must be reached, otherwise we would reach a product where the rightmost transposition involving $c$ is at the very left, yielding the same impossibility as before.  However in the fourth case, since $(cd)(cd)=1_X$, the two transpositions can be deleted, yielding $1_X$ as the product of $2k-1=2(k-1)+1$ transpositions.  This contradicts that $k$ is as small as possible.]
+
+(e) Show that no $\sigma\in S(X)$ can be written both as the product of an even number of transpositions, and as the product of an odd number of transpositions.  [If $\sigma=\tau_{2j}\dots\tau_2\tau_1$ and $\sigma=\tau'_{2k+1}\dots\tau'_2\tau'_1$, then $1_X=\tau_1\tau_2\dots\tau_{2j}\tau'_{2k+1}\dots\tau'_2\tau'_1$: this contradicts part (d).]
+
+(f) Define a permutation in $S(X)$ to be \textbf{even} if it is the product of an even number of transpositions, and \textbf{odd} if it is the product of an odd number of transpositions.  By (c) every element of $S(X)$ is either even or odd, and by (e) no element of $S(X)$ is both even and odd.  Define $s:S(X)\to\mathbb Z/2\mathbb Z$ via $s(\sigma)=0$ if $\sigma$ is even and $1$ if $\sigma$ is odd.  Show that $s$ is a surjective homomorphism.  The kernel of $s$ is denoted $A(X)$ and is called the \textbf{alternating group with respect to $X$}.
+
+If $X=\{1,2,\dots,n\}$, then $A(X)$ is alternatively denoted $A_n$, just as $S(X)$ is denoted $S_n$.
+
+(g) $A(X)$ is generated by the $3$-cycles.  [Every element of $A(X)$ is the product of an even number of transpositions.  Now verify that $(ab)(ab)=1_X$, $(ab)(ac)=(acb)$ and $(ab)(cd)=(adb)(adc)$.]
+
+(h) $A(X)$ is the only subgroup of $S(X)$ of index $2$.  [If $N\subset S(X)$ is a subgroup of index $2$, then Exercise 2 of Section 1.5 shows that $\sigma^2\in N$ for all $\sigma\in S(X)$.  Thus $N$ contains all the $3$-cycles (why?).  Use part (g).]
+
+\item Recall that a group $G$ is \textbf{solvable} if there exists a chain $G=G_0\supset G_1\supset\dots\supset G_t=\{1\}$ such that for each $0\leqslant i<t$, $G_{i+1}$ is normal in $G_i$ and $G_i/G_{i+1}$ is abelian.  [Exercise 11 of Section 1.5.]
+
+For $n\geqslant 5$, show that $S_n$ is not solvable.  [Suppose $S_n=G_0\supset G_1\supset\dots\supset G_t=\{1\}$ is a chain satisfying the above requirements.  Then $aba^{-1}b^{-1}\in G_{k+1}$ for all $a,b\in G_k$, by Exercise 10(c) of Section 1.5.  If $(abc)$ is any $3$-cycle, then there exist $u,v\in\{1,\dots,n\}$ other than $a,b,c$ (because $n\geqslant 5$), and it can be verified that
+$$(auc)(cbv)(auc)^{-1}(cbv)^{-1}=(abc)$$
+Thus it follows from induction that $G_k$ contains all the $3$-cycles for all $k\geqslant 0$.  In particular, $G_t=\{1\}$ contains all the $3$-cycles: contradiction.]
+
+\item If Lagrange's Theorem (1.8) had a converse, it would probably go like this: ``If $G$ is a finite group and $n$ is a divisor of $|G|$, then $G$ has a subgroup of order $n$.''  Show that this is false by showing that $A_4$ is a group of order $12$ with no subgroup of order $6$.  [If $N\subset A_4$ and $|N|=6$, then $[A_4:N]=2$.  Hence $\sigma^2\in N$ for all $\sigma\in A_4$.  But does $N$ have enough room for all these elements?]
+
+\item (a) Let $n$ be a positive integer.  If there are $n$ available colors, then how many ways are there to color the six vertices of a regular hexagon, if rotating and flipping the hexagon is not considered to change the coloring?
+
+(b) If $p$ is prime and there are $n$ available colors, then how many ways are there to color the vertices of a regular $p$-gon?
+
+\item An \textbf{(undirected) graph} is a pair $(V,E)$ where $V$ is a finite set, and $E$ is an irreflexive, symmetric relation on $V$.  (In other words $(x,x)\notin E$ for all $x\in V$, but if $(x,y)\in E$ then $(y,x)\in E$.)  $V$ is the set of \textbf{vertices} and $E$ is the set of \textbf{edges}.
+
+Two graphs $(V,E)$ and $(V',E')$ are said to be \textbf{isomorphic} if there is a bijection $f:V\to V'$ such that for $x,y\in V$, $(x,y)\in E$ if and only if $(f(x),f(y))\in E'$.
+
+(a) How many nonisomorphic graphs with $4$ vertices are there?  [Verify that if $V$ is a given set with $|V|=4$, then $S(V)$ acts on the set of graphs of the form $(V,E)$.  To avoid having to do $4!=24$ separate additions, partition $S(V)$ into its conjugacy classes (i.e., orbits when it acts on itself by conjugation).  Verify that two permutations in $S(V)$ are conjugate if and only if, when writing one of them as a product of disjoint cycles, the labels can be replaced with other elements of $V$ to get the other permutation.  Then use Burnside's lemma.]
+
+(b) How many nonisomorphic graphs with $5$ vertices are there?
+
+(c) How many nonisomorphic graphs with $6$ vertices are there?
+
+%(c) Define a \textbf{directed graph} to be a pair $(V,E)$ where $V$ is a finite set, and $E$ is an irreflexive relation on $V$ which may not be symmetric.  Now answer parts (a) and (b) with ``directed graph'' in place of ``graph.''
+\end{enumerate}
+
+\end{document}

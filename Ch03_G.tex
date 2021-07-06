@@ -1,0 +1,942 @@
+\documentclass[leqno]{book}
+\usepackage[small,nohug,heads=vee]{diagrams}
+\diagramstyle[labelstyle=\scriptstyle]
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage{mathabx}
+\usepackage{enumitem}
+\usepackage{multicol}
+%\usepackage[utf8]{inputenc}
+
+\makeatletter
+\newcommand*\bcd{\mathpalette\bcd@{.5}}
+\newcommand*\bcd@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+\begin{document}
+
+\chapter{Projective Geometry}
+
+Projective geometry studies structures of things as they are directly viewed by the eye.  It takes place in a space with more ``outsider'' points than the Euclidean space, and has several remarkable properties that are not possessed in Euclidean geometry.  We shall introduce this space in the first two sections of this chapter.  In projective geometry, we lose the Euclidean notion of distance between two points, and the notion of angle.  In Section 3.3, we shall learn about a property of points, analogous to the distance, that is invariant in the projective viewpoint.  Later, Section 3.7 will prove some famous results.  This material will reappear in Section 4.8.
+
+\subsection*{3.1. Perspective Projections}
+\addcontentsline{toc}{section}{3.1. Perspective Projections}
+Imagine a standard sheet of paper.  Rectangular, dimensions 8.5 x 11 inches, a useful thing to write on.  But what if the sheet of paper were flat on the tabletop and you were peering at it with your eyes directly facing the wall?  Would it look like a rectangle?  Of course not.  In fact, the top edge of the sheet of paper would appear to be shorter than the bottom edge.  Exactly how is this explained?  Why does the top edge \emph{look} shorter when it is really the same length?
+
+The answer is, of course, because it is farther away from your eyes.  Each eye, when thought of as a point, registers an object when the light reflected from the object travels in a straight line towards the eye.  Thus the size of an object (or part of an object) as perceived by the eye depends on the structure of the cone taken from the eye to the shape of the object.  With the eye thought of as a point, this cone is thinner and has a smaller tip angle when an object is farther away, explaining its small appearance.  [Technically, you have two eyes, and they see things through different cones at different angles, but our brains combine the two images.]
+
+The general concept of an object looking different when you look at it from a different direction is called \emph{perspective}.  Thus when you look at the paper in the sense explained in the first paragraph, you are seeing it from a different perspective than you normally would when writing on it.  There are other examples of the perspective concept.  Suppose you take a carrot and hold it vertically, and then someone flies above you, saying ``nice-looking circle-shaped green vegetable!''  The carrot is, obviously not such a vegetable, but that is what it \emph{looks} like from the point of view directly above.  The flier looked \emph{down} at the carrot, hence saw the green stem, without seeing the orange part which was blocked from their sight.  There's also the example where you're standing next to a sign with the number 68 on it, and someone walks by you upside-down on their hands, and later tells their friend, ``He's at the 89 sign.''
+
+With this idea in mind, we proceed to define a perspective projection.  We will then seek mathematical formulas which describe it, to get a starting glimpse of projective geometry.\\
+
+\noindent\textbf{Definition.} \emph{Let $P_1$ and $P_2$ be hyperplanes in $\mathbb R^n$, and let $p\in\mathbb R^n$ be a point which is not in either hyperplane.  The \textbf{perspective projection} from $p$ sends a point $x\in P_1$, to the intersection of line $\overset{\longleftrightarrow}{p~x}$ with $P_2$.}\\
+
+\noindent For instance, in $\mathbb R^3$, if $P_1$ is the $xy$-plane and $P_2$ is the $xz$-plane, then a perspective projection takes every point in the $xy$-plane, connects it straight to the eye point, and sees where all the connections meet the $xz$-plane, as shown below.  Thus the $xz$-plane captures what the eye directly sees from its position.
+\begin{center}\includegraphics[scale=.5]{PerspProjection.png}\end{center}
+Of course, the perspective projection is not generally a well-defined function $P_1\to P_2$.  Indeed, it is not (yet) defined at any $x\in P_1$ with the property $\overset{\longleftrightarrow}{p~x}\parallel P_2$.  Also, there are points in $P_2$ which are not (yet) hit by any point in $P_1$; if $y\in P_2$ and $\overset{\longleftrightarrow}{p~y}\parallel P_1$, then no point in $P_1$ maps to $y$ (why?).
+
+It really shouldn't be a surprise that a perspective projection is not defined everywhere.  Indeed, if you take a picture of an outdoor scene, you see the grass cut off right below the sky, even though it doesn't technically stop at an edge like that.  The fact of the matter is, when you are looking directly at the edge, your eyes make an angle with the grass that avoids ever hitting it.  The grass continues, but out of your direct vision.  Our instinct tells us that we should add ``infinitely far'' points to the plane at which parallel things can meet, with the aim of making a perspective projection bijective.  But how do we approach this?
+
+To get a starting idea, we shall return to our example where $P_1$ is the $xy$-plane and $P_2$ is the $xz$-plane.  Let $p$ be any point which is not on either plane; e.g., $(0,2,3)$.  Now let $(x,y,0)\in P_1$.  Suppose that the perspective projection from $p$ maps $(x,y,0)\mapsto(x',0,z')\in P_2$.  Then the following three points are collinear:
+$$(0,2,3),~~~~(x,y,0),~~~~(x',0,z')$$
+There are many ways to interpret this fact; one way is to observe that if $\vec a,\vec b,\vec c\in\mathbb R^3$ are vectors, then $\vec a,\vec b,\vec c$ are collinear $\iff\vec a-\vec b$ and $\vec a-\vec c$ lie in the same line $\iff(\vec a-\vec b)\times(\vec a-\vec c)=\vec 0$, where $\times$ denotes the cross product [see Exercise 4 of Section 2.5; that last equivalence of statements follows from part (h)].  In particular, if $\vec a=(0,2,3)$, $\vec b=(x,y,0)$ and $\vec c=(x',0,z')$, then
+$$\vec 0=(\vec a-\vec b)\times(\vec a-\vec c)=(-x,2-y,3)\times(-x',2,3-z')$$
+$$=((2-y)(3-z')-6,-3x'+x(3-z'),-2x+x'(2-y))$$
+As the above vector is zero, we can compute $x'$ and $z'$ from $x$ and $y$.  First, $-2x+x'(2-y)=0$, so that $x'(2-y)=2x$ and $x'=\frac{2x}{2-y}$.  [We assume $2-y\ne 0$, since $y=2$ would imply that the line $\overset{\longleftrightarrow}{p~x}$ is parallel to the second plane.]  Also, $(2-y)(3-z')=6$, which means that $z'=3-\frac 6{2-y}=\frac{-3y}{2-y}$.  Hence, through the perspective projection
+$$(x,y,0)\mapsto\left(\frac{2x}{2-y},0,\frac{-3y}{2-y}\right)$$
+Thinking about it as just a function from $\mathbb R^2$ to itself, it is given by
+\begin{equation}\tag{*}(x,y)\mapsto(x',y')=\left(\frac{2x}{2-y},\frac{-3y}{2-y}\right)\end{equation}
+It is only defined (in Euclidean space) when $y\ne 2$, and the range only consists of points $(x',y')$ with $y'\ne 3$.  And as we expected, it is not a linear or affine transformation; there are denominators with variables.  However, observe that both expressions have the \emph{same} denominator, namely $2-y$.  This is no coincidence; formulating a perspective projection will always give you fractions with matching denominators.  In fact, there is a clever way we can \emph{see} that map as a linear map.
+
+Think of $\mathbb R^3$ as the union of the lines through the origin.  Let $q=(x,y,z)$ be a point in $\mathbb R^3$; assume $q$ is not the origin (because the origin is on all of the lines).  Now think of all points of the form $(\lambda x,\lambda y,\lambda z),\lambda\ne 0$, and declare them to be ``essentially similar'' to $q$.  It is clear that this is an equivalence relation on nonzero vectors; moreover, every point outside the $xy$-plane is essentially similar to a unique point of the form $(x,y,1)$ (why?), thus embedding $\mathbb R^2$ in this set of equivalence classes.  There are also equivalence classes in the $xy$-plane, which are not part of the embedding.
+
+If we apply (*) to the point $(x,y,1)$, while thinking about the embedding of $\mathbb R^2$, we get $(2x/(2-y),-3y/(2-y),1)$.  Yet this output is essentially similar to $(2x,-3y,2-y)$ \---- this is our trick.  Moreover, we have a linear map on $\mathbb R^3$ sending $(x,y,1)\mapsto(2x,-3y,2-y)$; namely, take $(x,y,z)\mapsto(2x,-3y,2z-y)$.  It is given by the matrix $\begin{bmatrix}2&0&0\\0&-3&0\\0&-1&2\end{bmatrix}$.  Thus, although our perspective projection is not linear, we have viewed it as a linear map by switching over to a set of equivalence classes in $3$-space.  The equivalence classes in the $xy$-plane \---- called ``points at infinity'' \---- are output when $y=2$, and when they are input they return a result with $z'=3$. % My bad, forgot the notation from earlier...
+
+We will eventually see that this kind of thing can be done for all perspective projections.  We now introduce the notion of a projective plane.\\
+
+\noindent\textbf{Definition.} \emph{On $\mathbb R^3-\{\vec 0\}$, let $\sim$ be the equivalence relation on two vectors $(x,y,z),(x',y',z')$ stating that there exists $\lambda\ne 0$ in $\mathbb R$ such that $x'=\lambda x,y'=\lambda y,z'=\lambda z$.  The equivalence class for $(x,y,z)$ is denoted $[x:y:z]$.  The set of equivalence classes is denoted $P^2(\mathbb R)$ and is called the \textbf{projective plane}.  We assume $\mathbb R^2$ to be identified with its image in the embedding $(x,y)\mapsto[x:y:1]$; points outside this image (i.e., points of the form $[x:y:0]$) are called \textbf{points at infinity}.}\\
+
+\noindent Note that this $\mathbb R^2$ is an affine plane, not naturally a vector space (why?).
+
+The projective plane is just like the Euclidean plane, but with extra points added that are infinitely far away.  These extra points form a line.  Moreover, any perspective projection is a well-defined bijection of this plane, even though it is not bijective for the Euclidean plane; e.g., the one above given by $(x,y)\mapsto\left(\frac{2x}{2-y},\frac{-3y}{2-y}\right)$ can be rewritten as $[x:y:z]\mapsto[2x:-3y:2z-y]$; it is easy to see that this is well-defined and bijective.
+
+We now introduce the concept of lines in the projective plane.\\
+
+\noindent\textbf{Definition.} \emph{A \textbf{line} in $P^2(\mathbb R)$ is defined to be the image under the quotient map\footnote{By this, of course, we mean the map $(x,y,z)\mapsto[x:y:z]$.} $\mathbb R^3-\{\vec 0\}\to P^2(\mathbb R)$ of a plane in $\mathbb R^3$ through the origin.}\\
+
+\noindent Observe that if $P$ is a plane in $\mathbb R^3$ \emph{through the origin}, then $(x,y,z)\in P\implies(\lambda x,\lambda y,\lambda z)\in P$ (why?), which means that $P$ is a union of equivalence classes given in the definition of $P^2(\mathbb R)$ (along with the origin).  Moreover, the line is the set of these equivalence classes.  We easily conclude that $P$ can be recovered from the line as a subset of $P^2(\mathbb R)$, simply by taking the union of the equivalence classes.
+
+Corresponding to the $xy$-plane is the set of all points at infinity, which we call the \textbf{line at infinity}.  Every other line is obtained by taking a Euclidean line in $\mathbb R^2$ and adjoining one infinity point.  After all, suppose the line $\ell\subset P^2(\mathbb R)$ is given by a plane through the origin $Ax+By+Cz=0$ which is not the $xy$-plane.  Then $A$ and $B$ are not both zero.  Moreover, $[B:-A:0]$ is the unique point at infinity on $\ell$ (recall that $Ax+By=0\implies B/(-A)=x/y\implies[B:-A:0]=[x:y:0]$).  A Euclidean-plane point $[x:y:1]$ is in $\ell$ if and only if $Ax+By=-C$; this is the equation of a line in the Euclidean plane.
+
+Conversely, every Euclidean line extends to a unique projective line, by addition of a single infinity point.  Let $Ax+By=C$ be a Euclidean line ($A,B$ not both zero).  Then $Ax+By-Cz=0$ is a plane through the origin which defines a projective line.  The only infinity point on this line is $[B:-A:0]$.  This plane is unique (for every such plane must contain all points $(x,y,z)$ such that $z\ne 0$ and $Ax+By=Cz$: check!).
+
+The interesting thing about points and lines in the projective plane is this:\\
+
+\noindent\textbf{Proposition 3.1.} \emph{In the projective plane $P^2(\mathbb R)$:}
+
+(i) \emph{Any two points determine a line;}
+
+(ii) \emph{Any two lines intersect in a unique point.}
+\begin{proof}
+By identifying points in $P^2(\mathbb R)$ with lines through the origin in $\mathbb R^3$ as defined above, and identifying lines in $P^2(\mathbb R)$ with planes through the origin in $\mathbb R^3$, we translate both these statements to basic facts in linear algebra.  After all, lines (resp., planes) through the origin are $1$-dimensional (resp., $2$-dimensional) subspaces of the vector space $\mathbb R^3$.
+
+(i) Given two distinct lines $\ell_1,\ell_2$ through the origin in $\mathbb R^3$, suppose $\ell_1$ is spanned by the nonzero vector $\vec v$ and $\ell_2$ by the nonzero vector $\vec w$.  Since the lines are distinct, neither $\vec v$ nor $\vec w$ is a multiple of the other.  Hence they are linearly independent; their span is a plane through the origin, which is the unique plane through the origin containing both lines.
+
+(ii) If $P_1$ and $P_2$ are distinct planes through the origin, then by Proposition 2.43(i), $P_1\cap P_2$ is either the empty set or a line.  But $P_1\cap P_2$ contains the origin, hence is not empty.  Therefore $P_1\cap P_2$ is a line, and this line certainly contains the origin.  This is the unique line contained in both planes, hence corresponds to the unique point given by the statement.
+\end{proof}
+
+\noindent\emph{Remarks}: (ii) is not true in general for the Euclidean plane, in which there are parallel lines, and such lines do not intersect at all.  However, in $P^2(\mathbb R)$, lines that appear parallel actually intersect at a point at infinity.  For example, the lines extending the Euclidean (vertical) lines given by $x=0$ and $x=1$ intersect at the point $[0:1:0]$: after all, $[x:y:z]$ is in the first line if and only if $x=0$, and $[x:y:z]$ is in the second line if and only if $x=z$.  Thus, the first line is $\{[0:y:z]:y,z\in\mathbb R\}$ and the second line is $\{[x,y,x]:x\in\mathbb R\}$, and so their intersection is $\{[0,x,0]:x\in\mathbb R\}$< which consists of $[0:1:0]$ alone.  Contrariwise, lines that intersect in the Euclidean plane do not intersect at infinity, as they meet the line at infinity at different points.
+
+In part (i), if the two points are both at infinity, the line determined by them is the line at infinity.
+
+The special case of (ii) where one of the lines is the line at infinity, shows that every line other than the line at infinity has exactly one infinity point.\\
+
+\noindent In the projective plane, distances and angles do not make any sense (among other reasons, what is the distance from the origin to an infinity point?).  Section 3.3 will cover an invariant that does make sense, except that it uses four points as input, rather than just two.
+
+The most commonly studied concept in the projective plane involves collinearity of points and concurrence of lines.  We define three or more points to be \textbf{collinear} if there exists a line passing through all of them.  We define three or more lines to be \textbf{concurrent} if they all intersect in a common point.
+
+Higher-dimensional projective spaces can be defined similarly, and the perspective projections generalize to the concept of a projective transformation; this will be covered in the next section.
+
+\subsection*{Exercises 3.1. (Perspective Projections)} % Explain the concept of a perspective projection, then introduce the projective plane.
+% Show basic things about points and lines: any two points determine a line, and any two lines intersect in a point.
+\begin{enumerate}
+\item In $\mathbb R^3$, let $P_1$ be the $xy$-plane and $P_2$ the $xz$-plane.
+
+(a) Find a formula for the perspective projection $P_1\to P_2$ from the point $p=(5,-7,2)$.
+
+(b) Write it as a well-defined bijection from $P^2(\mathbb R)$ to itself, as done above.
+
+\item (a) A perspective projection preserves lines and conic sections.  [See Exercise 9 of Section 2.2 and Exercise 9 of Section 2.6.]
+
+(b) Show by example that a perspective projection need not send a circle to a circle.
+
+\item Establish a natural bijection between $P^2(\mathbb R)$ and the set of unordered pairs of antipodal points in the sphere $S^2$.  We will revisit this in Chapter 5.
+
+\item In $P^2(\mathbb R)$, find an equation for:
+
+(a) The line determined by $(2,3)$ and $(4,7)$;
+
+(b) The line determined by $(1,-1)$ and the infinity point $[3:5:0]$.
+
+\item In each of the following cases, you are given two lines in the Euclidean plane $\mathbb R^2$.  Extend them to lines in the projective plane, then find the intersection point of the lines.
+
+(a) $2x+3y=8$, $5x-y=3$
+
+(b) $x+y=7$, $x=0$
+
+(c) $3x+4y=11$, $3x+4y=15$
+
+\item Let $\ell_1$ and $\ell_2$ be lines in $P^2(\mathbb R)$, and let $p$ be a point that is not on either line.  Then perspective projection from $p$ is a well-defined bijection $\ell_1\to\ell_2$.  [$p$ could be an infinity point, or either line could be the line at infinity.]
+\end{enumerate}
+
+\subsection*{3.2. Projective $n$-Space.  Projective Transformations}
+\addcontentsline{toc}{section}{3.2. Projective $n$-Space.  Projective Transformations}
+The definition of projective $n$-space $P^n(\mathbb R)$ mirrors that of $P^2(\mathbb R)$, starting from the set of lines through the origin in $\mathbb R^{n+1}$.  This space shares many properties with Euclidean $n$-space, as we will later see.  It is formally defined as follows:\\
+
+\noindent\textbf{Definition.} \emph{On $\mathbb R^{n+1}-\{\vec 0\}$, let $\sim$ be the equivalence relation defined by $\vec v\sim\vec w\iff\vec v=\lambda\vec w$ for some $\lambda\ne 0$ in $\mathbb R$.  The equivalence class for $(x_1,\dots,x_{n+1})$ is denoted $[x_1:\dots:x_{n+1}]$.  The set of equivalence classes is denoted $P^n(\mathbb R)$ and is called \textbf{projective $n$-space}.}
+
+\emph{We will identify $\mathbb R^n$ with its image in the embedding $(x_1,\dots,x_n)\mapsto[x_1:\dots:x_n:1]$.  Points outside this image (i.e., points of the form $[x_1:\dots:x_n:0]$) are called \textbf{points at infinity}.}
+
+\emph{If $0\leqslant k\leqslant n$, then a \textbf{(projective) $k$-plane} in $P^n(\mathbb R)$ is defined to be the image in $P^n(\mathbb R)$ of some $(k+1)$-plane in $\mathbb R^{n+1}$ through the origin (i.e., a $(k+1)$-dimensional subspace of the vector space $\mathbb R^{n+1}$).  $0$-planes are called \textbf{points}, $1$-planes are called \textbf{lines}, $2$-planes are called \textbf{planes}, and $(n-1)$-planes in $P^n(\mathbb R)$ are called \textbf{hyperplanes}.}\\
+
+\noindent With this definition, the reader can readily make the following observations (using linear algebra):
+\begin{itemize}
+\item If a $(k+1)$-dimensional subspace $V$ of $\mathbb R^{n+1}$ yields a $k$-plane $\Pi$ in projective $n$-space, then $V$ can be recovered from $\Pi$, because it is the set of points in $\mathbb R^{n+1}$ with images in $\Pi$, along with $\vec 0$.  There is a bijective correspondence between $(k+1)$-dimensional subspaces of $\mathbb R^{n+1}$ and $k$-planes in $P^n(\mathbb R)$.
+
+\item Every $k$-plane in $P^n(\mathbb R)$ comes in a bijection with $P^k(\mathbb R)$ given by a projective transformation.
+
+\item The set of all points at infinity is a hyperplane (which we henceforth call the \textbf{hyperplane at infinity}).  It corresponds to the linear subspace of $\mathbb R^{n+1}$ given by $x_{n+1}=0$; and this subspace has dimension $n$.  In particular, $P^1(\mathbb R)$ has a unique point at infinity (represented by $[1:0]$), and thus we have $P^1(\mathbb R)=\mathbb R\sqcup\{\infty\}$.
+
+\item A $k$-plane ($k\geqslant 1$) in $P^n(\mathbb R)$ is either contained in the hyperplane at infinity, or it is the union of a Euclidean $k$-plane in $\mathbb R^n$ with a $(k-1)$-plane in the hyperplane at infinity.  Moreover, every Euclidean $k$-plane extends to a unique projective $k$-plane.
+\end{itemize}
+\noindent Thus, we have a notion of projective $n$-space and $k$-planes in the space.  However, the closest reasonable thing to $k$-spheres are ``quadric $k$-surfaces''; these are conics when $n=2,k=1$, and will be studied in Section 3.5.
+
+We now introduce the notion of a projective transformation.  We recall from Section 3.1 that a perspective projection between $2$-dimensional planes can be obtained by taking a nonsingular linear transformation of $\mathbb R^3$ and considering its action on the lines through the origin.  The concept generalizes to higher dimensions, as we will now see.\\
+
+\noindent\textbf{Definition.} \emph{A \textbf{projective transformation} from $P^m(\mathbb R)$ to $P^n(\mathbb R)$ is a function $T:P^m(\mathbb R)\to P^n(\mathbb R)$ of the form $[\vec v]\mapsto[\varphi(\vec v)]$, where $\varphi:\mathbb R^{m+1}\to\mathbb R^{n+1}$ is an injective linear map of vector spaces, and $[\vec v]$ is the image of $\vec v\in\mathbb R^{m+1}-\{\vec 0\}$ in $P^m(\mathbb R)$.}\\
+
+\noindent Observe that since $\varphi(k\vec v)=k\varphi(\vec v)$ for $k\in\mathbb R$, the above function $T$ is well defined for any linear $\varphi$.
+
+Also, note that the injectivity of $\varphi$ is necessary for $T$ to be defined, because $[\vec v]$ is only defined when $\vec v\ne\vec 0$.  In particular, it follows that $m\leqslant n$ and that the image of $T$ is a (projective) $m$-plane in $P^n(\mathbb R)$.  In particular, \emph{a projective transformation from $P^n(\mathbb R)$ to itself is always bijective and invertible}.
+
+It is clear that projective transformations preserve $k$-planes.  However, projective transformations do \emph{not} generally preserve parallel lines the same way linear maps do \---- indeed, there is not really such a thing as ``parallel lines'' at all.  What a projective transformation does intuitively is take a figure on a sheet of paper, then rotate the paper away so that the eye's perspective meets it at a different angle.  For example, if $\varphi$ is the linear operator $\begin{bmatrix}1&0&0\\0&0&1\\0&1&0\end{bmatrix}$ of $\mathbb R^3$, then the corresponding projective transformation $T$ on $P^2(\mathbb R)$ sends $[x:y:z]\mapsto[x:z:y]$; in particular, it maps a Euclidean-plane point $(x,y),y\ne 0$ to $\left(\frac xy,\frac 1y\right)$.  Here is what $T$ does to a square with vertices $(\pm 1,1),(\pm 1,3)$ with a circle in it:
+\begin{multicols}{2}
+\includegraphics[scale=.5]{SquareCircle.png}
+
+\emph{The original figure.}\\
+\includegraphics[scale=.16666667]{SquareCircleTrans.png}
+
+\noindent\emph{The figure after the transformation $T$.}
+\end{multicols}
+\noindent Since a projective transformation $T$ is defined based on an injective linear map $\varphi:\mathbb R^{m+1}\to\mathbb R^{n+1}$, it is natural to ask whether $\varphi$ is completely determined by $T$.  The answer to this question is \emph{no}: let $k\ne 0$ be an element of $\mathbb R$, and let $\psi=k\varphi$, which is also an injective linear map.  Then for any $\vec v\in\mathbb R^{m+1}$, $\psi(\vec v)=k\varphi(\vec v)$, from which it follows that $[\psi(\vec v)]=[\varphi(\vec v)]$ in $P^n(\mathbb R)$.  This means that $\psi$ induces the \emph{same} projective transformation $P^m(\mathbb R)\to P^n(\mathbb R)$ that $\varphi$ does.  Obviously $\psi\ne\varphi$ if $k\ne 1$.
+
+Thus, a projective transformation $T$ actually comes from an infinite family ($\lambda\varphi,0\ne\lambda\in\mathbb R$) of linear transformations.  Exercise 1 shows that these are the only linear maps which induce $T$.
+
+Since all projective transformations on $P^n(\mathbb R)$ are invertible, they form a group $G$ under function composition; and we now have enough information to identify this group.  There is a map $\theta:GL_{n+1}(\mathbb R)\to G$ sending each nonsingular $\varphi:\mathbb R^{n+1}\to\mathbb R^{n+1}$ to the transformation $[\vec v]\mapsto[\varphi(\vec v)]$.  It is clear that $\theta$ is a homomorphism, and $\theta$ is surjective because every projective transformation comes from a nonsingular linear map by definition.  By Exercise 1, a projective transformation $\varphi$ is in $\ker\theta$ if and only if $\varphi=\lambda I_{n+1}$ for some $\lambda\ne 0$ in $\mathbb R$.  Supposing $\mathbb R^*=\ker\theta=\{\lambda I_{n+1}:\lambda\ne 0\text{ in }\mathbb R\}$, we get $GL_{n+1}(\mathbb R)/\mathbb R^*\cong G$ by Theorem 1.17.
+
+We thus make the following definition: noting that $\mathbb R^*$ is a normal subgroup of $GL_{n+1}(\mathbb R)$ (central for that matter), the quotient group $GL_n(\mathbb R)/\mathbb R^*$ is denoted $PGL_n(\mathbb R)$ and called the \textbf{projective general linear group}.  [This was introduced in Exercise 8 of Section 1.5, but now we have a better view of the intuition behind it.]
+
+The tricky thing is that $PGL_n(\mathbb R)$ is \emph{not} the group of projective transformations on projective $n$-space.  Instead, it is the group of projective transformations on projective $(n-1)$-space.  This is because the linear space has dimension one more than the projective space defined off of it.  The notation can get confusing for this reason.  The reader is advised to understand $PGL_n(\mathbb R)$ as a quotient of $GL_n(\mathbb R)$, so as to not make flawed arguments.
+
+An important example of a projective transformation is one on the projective line $P^1(\mathbb R)$.  Such a transformation is given by a nonsingular linear operator on $\mathbb R^2$.  Suppose $\begin{bmatrix}a&b\\c&d\end{bmatrix}$ is the matrix for this operator (with $ad-bc\ne 0$).  Then the transformation $T$ on $P^1(\mathbb R)$ sends $[x:y]\mapsto[ax+by:cx+dy]$; hence, when $P^1(\mathbb R)$ is viewed as $\mathbb R\sqcup\{\infty\}$ with $\infty=[1:0]$, we have the following:
+\begin{itemize}
+\item For any $x\in\mathbb R$ such that $cx+d\ne 0$, $T(x)=\frac{ax+b}{cx+d}$.  [In other words, $T$ is mostly given by a quotient of linear polynomials.]
+
+\item If $c=0$, then $T(\infty)=\infty$.
+
+\item If $c\ne 0$, then $T(-d/c)=\infty$ and $T(\infty)=a/c$.  [Observe that when only real numbers are involved, $x\mapsto\frac{ax+b}{cx+d}$ has $-d/c$ outside its domain and has $a/c$ outside its range.]
+\end{itemize}
+Such a transformation $T$ is called a \textbf{homography} of the projective line.  The homographies form a group isomorphic to $PGL_2(\mathbb R)$, and they will spark great significance.\\ % Only called a "M\"obius transform" over the field \mathbb C
+
+\noindent\textbf{RELATION TO PERSPECTIVE PROJECTIONS}\\
+
+\noindent More generally, if $P'$ is a $k'$-plane in $P^{n'}(\mathbb R)$, and $P$ is a $k$-plane in $P^n(\mathbb R)$, we define a \textbf{projective transformation} $P'\to P$ to be the function $[\vec v]\mapsto[\varphi(\vec v)]$ given by an injective linear map $\varphi$ of the corresponding subspaces of $\mathbb R^{n'+1},\mathbb R^{n+1}$.  [For these to exist, we must have $k'\leqslant k$, and if $k'=k$ then every projective transformation is bijective.]
+
+Our aim in the rest of this section is to show that a perspective projection from one hyperplane to another is a projective transformation.  Let $H_1$ and $H_2$ be distinct hyperplanes in $P^n(\mathbb R)$, and $p$ a point which is in neither hyperplane; we will use linear algebra to identify the perspective projection $H_1\to H_2$ from $p$.
+
+$H_1,H_2$ correspond to vector subspaces $V_1,V_2$ of $\mathbb R^{n+1}$.  By definition $\dim(V_1)=\dim(V_2)=n$; also, since $V_1$ and $V_2$ are distinct, $\dim(V_1\cap V_2)=n-1$ by elementary linear algebra.  Also, the point $p$ is given by a line $\ell\subset\mathbb R^{n+1}$ through the origin (i.e., a one-dimensional subspace).  Suppose $\vec p$ is a nonzero vector which spans $\ell$.  Then $\vec p\notin V_1,V_2$ (why?).
+
+Let $\{\vec u_1,\dots,\vec u_{n-1}\}$ be a basis of $V_1\cap V_2$, and let $\vec w_1\in V_1-V_2$ and $\vec w_2\in V_2-V_1$ be vectors.  Then the reader can readily verify:
+\begin{itemize}
+\item For each $j=1,2$, $\{\vec u_1,\dots,\vec u_{n-1},\vec w_j\}$ is a basis of $V_j$;
+
+\item $\{\vec u_1,\dots,\vec u_{n-1},\vec w_1,\vec w_2\}$ is a basis of $\mathbb R^{n+1}$.
+\end{itemize}
+We will use these bases to construct a nonsingular linear map from $V_1$ to $V_2$.  First, we may write $\vec p$ as a linear combination of the basis of $\mathbb R^{n+1}$:
+$$\vec p=c_1\vec u_1+\dots+c_{n-1}\vec u_{n-1}+d_1\vec w_1+d_2\vec w_2$$
+Since $\vec p$ is not in $V_1$ or $V_2$, we have that $d_1,d_2$ are nonzero.  Now, we define a linear map $\varphi:V_1\to V_2$ using the following action on the basis:
+$$\varphi(\vec u_j)=\vec u_j\text{ for }j=1,\dots,n-1$$
+$$\varphi(\vec w_1)=-\frac 1{d_1}(c_1\vec u_1+\dots+c_{n-1}\vec u_{n-1}+d_2\vec w_2)$$ % What do you mean, c_1,\dot,sc_{n-1},d_2 being free variables?  They are constants, and I defined a linear map \varphi by giving the action on the basis.  Every set function from a basis extends to a unique linear map.
+There are many ways to see that $\varphi$ is nonsingular; one way is to write out the matrix for $\varphi$ with respect to the bases $\{\vec u_1,\dots,\vec u_{n-1},\vec w_j\}$, and observe that its determinant is $-\frac{d_2}{d_1}\ne 0$.  Our main claim is:\\
+
+\noindent\textbf{Lemma 3.2.} \emph{For every vector $\vec v\ne\vec 0$ in $V_1$, the vector $\varphi(\vec v)$ lies in the plane spanned by $\vec p$ and $\vec v$.\footnote{$\vec p$ and $\vec v$ are necessarily linearly independent, since $\vec v\ne\vec 0$ in $V_1$ and $\vec p\notin V_1$.  Hence, they span a plane.}}
+\begin{proof}
+We use our basis of $V_1$ to write $\vec v=a_1\vec u_1+\dots+a_{n-1}\vec u_{n-1}+b_1\vec w_1$.  With that, we have
+$$\varphi(\vec v)=a_1\vec u_1+\dots+a_{n-1}\vec u_{n-1}-\frac{b_1}{d_1}(c_1\vec u_1+\dots+c_{n-1}\vec u_{n-1}+d_2\vec w_2)$$
+$$=\left(a_1-\frac{b_1c_1}{d_1}\right)\vec u_1+\dots+\left(a_{n-1}-\frac{b_1c_{n-1}}{d_1}\right)\vec u_{n-1}-\frac{b_1d_2}{d_1}\vec w_2$$
+by definition of $\varphi$.  Direct calculation then shows that $\varphi(\vec v)=\vec v-\frac{b_1}{d_1}\vec p$.  Hence, $\varphi(\vec v)$ is in the plane spanned by $\vec v$ and $\vec p$ as desired.
+\end{proof}
+\noindent As one more preliminary, we note that if $\ell$ is a line in $P^n(\mathbb R)$ such that $\ell\not\subset H_2$, $\ell\cap H_2$ consists of a single point, as can be seen easily through linear algebra.\\
+
+\noindent\textbf{Proposition 3.3.} \emph{Let $T$ be the projective transformation $H_1\to H_2$ determined by $\varphi$.  Then $T$ is the perspective projection $H_1\to H_2$ from $p$.  Therefore, every perspective projection of hyperplanes is a projective transformation.}
+\begin{proof}
+Translating Lemma 3.2 from a linear-algebra setting to a projective setting, we get that for every $x\in H_1$, $T(x)$ is on the line $\ell$ determined by the points $p$ and $x$, which implies that it is the unique intersection point of $\ell$ and $H_2$.  In other words, $T$ takes a point $x\in H_1$ and returns the intersection of line $\overset{\longleftrightarrow}{px}$ with $H_2$, so that $T$ is the perspective projection $H_1\to H_2$ from $p$ as desired.
+\end{proof}
+\noindent In particular, in a perspective projection from the $xy$-plane to the $xz$-plane in $P^3(\mathbb R)$, one gets quotients of linear combinations with matching denominators, as stated in the previous section.  The reader should take the time to see this.
+
+Note that if $T:H_1\to H_2$ is a perspective projection, then $T(x)=x$ for every $x\in H_1\cap H_2$.  The reasons are obvious.  Conversely, Exercise 10 shows that every projective transformation $T:H_1\to H_2$ such that $T(x)=x$ for all $x\in H_1\cap H_2$ is a perspective projection.
+
+\subsection*{Exercises 3.2. (Projective $n$-Space.  Projective Transformations)} % Introduce higher-dimensional projective spaces, and prove
+% certain things with the aid of linear algebra.  Also go over projective transformations, and show that every perspective projection between hyperplanes is one.
+% POTENTIAL EXERCISES: If \ell_1 and \ell_2 are lines in P^2(\mathbb R), a projective transformation \ell_1\to\ell_2 is a perspective projection iff it fixes the point \ell_1\cap\ell_2
+\begin{enumerate}
+\item If $\varphi_1,\varphi_2$ are injective linear maps $\mathbb R^{m+1}\to\mathbb R^{n+1}$, let $T_1,T_2$ be the projective transformations $P^m(\mathbb R)\to P^n(\mathbb R)$ determined by them respectively.  Show that $T_1=T_2$ if and only if $\varphi_1=\lambda\varphi_2$ for some $\lambda\ne 0$ in $\mathbb R$.
+
+\item If $T:P^m(\mathbb R)\to P^n(\mathbb R)$ and $U:P^n(\mathbb R)\to P^p(\mathbb R)$ are projective transformations, show that $U\circ T:P^m(\mathbb R)\to P^p(\mathbb R)$ is a projective transformation.
+
+\item (a) Let $\ell_1$ and $\ell_2$ be projective lines in $P^3(\mathbb R)$.  Show that $\ell_1\cap\ell_2\ne\varnothing$ if and only if $\ell_1$ and $\ell_2$ lie in a common plane.  [If $\ell_1$ and $\ell_2$ do not satisfy these conditions, they are said to be \textbf{skew} lines.]
+
+(b) Explain why part (a) may be false if $\ell_1$ and $\ell_2$ are Euclidean lines in $\mathbb R^3$.
+
+\item For a fixed $k$, the group of projective transformations on $P^n(\mathbb R)$ acts transitively on the $k$-planes.
+
+\item (a) Show that three points $p_1,p_2,p_3\in P^2(\mathbb R)$ are collinear if and only if there exists a projective transformation on $P^2(\mathbb R)$ sending all of them to infinity points.  [Any line can be transformed to the line at infinity.]
+
+(b) Show that three lines $\ell_1,\ell_2,\ell_3\subset P^2(\mathbb R)$ are concurrent if and only if there exists a projective transformation sending all of them to lines which are parallel in the Euclidean plane.
+
+(c) If $\ell_1$ is the line at infinity, then $\ell_1,\ell_2,\ell_3$ are concurrent if and only if $\ell_2$ and $\ell_3$ are parallel in the Euclidean plane.
+
+\item If $n$ is even, show that every projective transformation $P^n(\mathbb R)\to P^n(\mathbb R)$ has a fixed point.  [Observe that the fixed points correspond to the eigenvectors of the linear operator.]  Show by example that this may not hold if $n$ is odd.
+
+\item Let $a,b,c$ be distinct points in $P^1(\mathbb R)=\mathbb R\sqcup\{\infty\}$.  Show that there exists a unique homography $T:P^1(\mathbb R)\to P^1(\mathbb R)$ such that $T(a)=\infty$, $T(b)=0$ and $T(c)=1$.  We say that the homographies are \textbf{uniquely triply transitive} on the projective line.
+
+\item Let $a,b,c$ be distinct points in $P^1(\mathbb R)$, and let $a',b',c'$ be distinct points of $P^1(\mathbb R)$ as well.  [We are not requiring that $a\ne a',a\ne b'$, etc.; only that $a,b,c$ are distinct from each other, as are $a',b',c'$.]  Then there is a unique homography $T:P^1(\mathbb R)\to P^1(\mathbb R)$ such that $T(a)=a'$, $T(b)=b'$ and $T(c)=c'$.  [Use Exercise 7.]
+
+\item Show that the homographies $x\mapsto x+a$ ($a\in\mathbb R$), $x\mapsto bx$ ($b\ne 0$) and $x\mapsto\frac 1x$ generate the group $PGL_2(\mathbb R)$ of all homographies on $P^1(\mathbb R)$.
+
+\item (a) Let $\ell_1$ and $\ell_2$ be projective lines in $P^2(\mathbb R)$.  If $\varphi:\ell_1\to\ell_2$ is a projective transformation, show that $\varphi$ is a perspective projection from some point if and only if $\varphi(\ell_1\cap\ell_2)=\ell_1\cap\ell_2$.  [If $\varphi(\ell_1\cap\ell_2)=\ell_1\cap\ell_2$, then let $q_1,q_2\in\ell_1$ be points which are distinct from $\ell_1\cap\ell_2$ and from each other.  Then let $q_1'=\varphi(q_1),q_2'=\varphi(q_2)$ and let $p$ be the intersection of the lines $\overset{\longleftrightarrow}{q_1~q_1'}$ and $\overset{\longleftrightarrow}{q_2~q_2'}$.  Then $\varphi$ and the perspective projection from $p$ are projective transformations which agree on the points $\ell_1\cap\ell_2$, $q_1$ and $q_2$; use Exercise 8.]
+
+(b) More generally, if $H_1,H_2$ are hyperplanes in $P^n(\mathbb R)$, a projective transformation $\varphi:H_1\to H_2$ is a perspective projection if and only if $\varphi(x)=x$ for all $x\in H_1\cap H_2$.
+
+\item In $P^3(\mathbb R)$, show that there is a projective transformation $T$ from the $xy$-plane to the $xz$-plane sending a Euclidean-space point $(x,y,0)\mapsto(x,0,y)$.  By Exercise 10, $T$ is a perspective projection; what point does it project from?
+
+\item A projective transformation $T:P^n(\mathbb R)\to P^n(\mathbb R)$ is said to be \textbf{affine} if $T$ fixes the hyperplane $H_\infty$ at infinity (though not necessarily pointwise).
+
+(a) There is a bijection between affine transformations of $P^n(\mathbb R)$ and invertible affine transformations of $\mathbb R^n$ (i.e., compositions of elements of $GL_n(\mathbb R)$ with translations).  This bijection restricts an affine transformation of $P^n(\mathbb R)$ to $\mathbb R^n$.
+
+(b) An affine transformation $T$ fixes $H_\infty$ pointwise if and only if the restriction of $T$ to $\mathbb R^n$ is the composition of a scaling and a translation.  [The scaling could be by a negative scalar.]
+
+(c) If $T:P^n(\mathbb R)\to P^n(\mathbb R)$ is a projective transformation (not necessarily affine), then there exists an $(n-2)$-plane $P\subset H_\infty$ such that $T(P)\subset H_\infty$.  Conclude that there exists a hyperplane $H\ne H_\infty$ such that $T|_H$ is an affine transformation from $H$ to some hyperplane, either the same one or a different one.  [Consider $H_\infty\cap T^{-1}(H_\infty)$.]
+\end{enumerate}
+
+\subsection*{3.3. The Cross Ratio: A Projective Invariant}
+\addcontentsline{toc}{section}{3.3. The Cross Ratio: A Projective Invariant}
+In Euclidean $n$-space, one can take a pair of points, and measure how far apart they are, through the notion of the distance.  The distance between two points is invariant under isometries (by definition), and therefore part of Euclidean $n$-space's intrinsic geometry.\footnote{``Intrinsic geometry'' intuitively refers to anything that is invariant under whatever group is operating.  In Euclidean geometry, that group is the isometries.}
+
+However, in projective $n$-space, what happens if we try to define the distance between two points?  We run into trouble.  We cannot define the distance between two points to be the Euclidean distance, because one of the points could be at infinity.  More generally, the projective transformations act \emph{transitively} on pairs of distinct points in $P^n(\mathbb R)$.  [In fact, Exercise 1 below shows that they act transitively on triples of distinct points.]  Thus if $\rho:P^n(\mathbb R)\times P^n(\mathbb R)\to X$ were \emph{any} kind of distance function invariant under the projective transformations, $\rho$ would be constant on all the pairs $(x,y),x\ne y$, and so this distance would be useless.\footnote{In Section 5.6, however, we will see projective $n$-space in a different light.  There will be a distance metric, and we will define isometries to be maps which preserve distance.  Moreover, the isometries will be projective transformations (not all of them).}
+
+So perhaps we would find a more convenient measure which inputs a more than two points on a single line?  From Exercise 1 one sees that three points is still not enough; any invariant would be mostly constant.  However, four is the perfect amount for this scenario, as we will now see.
+
+It is best to start with the projective line, and generalize to higher dimensions later.  Let $a,b,c,d$ be distinct points of $P^1(\mathbb R)$.  By Exercise 7 of the previous section, there is a unique homography $T:P^1(\mathbb R)\to P^1(\mathbb R)$ such that $T(a)=\infty$, $T(b)=0$ and $T(c)=1$.  With that, the point $T(d)$ will then be a reasonable ``measure'' of the quadruple $(a,b,c,d)$.  If $a,b,c,d\ne\infty$, then $T$ is given by $T(x)=\frac{c-a}{c-b}\left(\frac{x-b}{x-a}\right)$ [see the hint of Exercise 7].  Hence, $T(d)=\frac{c-a}{c-b}\left(\frac{d-b}{d-a}\right)=\frac{(c-a)(d-b)}{(d-a)(c-b)}$.  Note that the denominator is nonzero because $a,b,c,d$ are distinct.
+
+Moreover, we observe from the previous paragraph that the map $(a,b,c,d)\mapsto\frac{(c-a)(d-b)}{(d-a)(c-b)}$ is invariant under homographies.  Indeed, if $(A(a),A(b),A(c),A(d))=(a',b',c',d')$ and $T:P^1(\mathbb R)\to P^1(\mathbb R)$ is the homography sending $a'\mapsto\infty,b'\mapsto 0,c'\mapsto 1$, then $T(d')=\frac{(c'-a')(d'-b')}{(d'-a')(c'-b')}$; yet also $T\circ A$ is a homography sending $a\mapsto\infty,b\mapsto 0,c\mapsto 1$ which implies $T(d')=T(A(d))=\frac{(c-a)(d-b)}{(d-a)(c-b)}$.  This leads to the following definition.\\
+
+\noindent\textbf{Definition.} \emph{Let $[a:a_0],[b:b_0],[c:c_0],[d:d_0]\in P^1(\mathbb R)$.  Assume that given any three of those points, they are not all equal.  Then we define the \textbf{cross ratio} of the points via}
+$$[\![[a:a_0],[b:b_0],[c:c_0],[d:d_0]]\!]=[(a_0c-c_0a)(b_0d-d_0b):(a_0d-d_0a)(b_0c-c_0b)].$$
+
+\noindent We have given a complicated definition using the equivalence classes of vectors in $\mathbb R^2$, so that we could be conscientious about how the cross ratio is defined when any of the inputs (or the output) are $\infty$.  We will see that the definition is easier to understand when using our chosen embedding of $\mathbb R$ into $P^1(\mathbb R)$.
+
+It is easy to verify that the above expression $[(a_0c-c_0a)(b_0d-d_0b):(a_0d-d_0a)(b_0c-c_0b)]$ is independent of the particular way the inputs from $P^1(\mathbb R)$ are represented, hence is well-defined.  Also, we recall that a point $[x:y]$ is not defined when $x$ and $y$ are both zero, so we need to make sure the expressions on the two sides are not both zero.  The reader can readily verify that this holds if and only if, given any three of the input points, they are not all equal.  This is exactly the condition assumed in the definition.\footnote{Thus, $[\![a,a,b,b]\!]$ is a well-defined cross ratio if $a\ne b$, but $[\![a,a,a,b]\!]$ is not defined because it has three equal inputs.} % a_0c-c_0a if and only if [a:a_0]=[c:c_0].  After all, the vectors (a,a_0,0),(c,c_0,0)\in\mathbb R^3 are both nonzero, hence their cross product (which is (0,0,a_0c-c_0a)) is zero \iff they are linearly dependent \iff they are scalar multiples.  Similarly for b_0d-d_0b, etc.  This acn be used to verify that the cross ratio is the undefined [0:0] if and only if there are three equal inputs.
+
+To get a better understanding of the cross ratio, we consider the case where $a_0=b_0=c_0=d_0=1$.  In this case, the points are identified with the real numbers $a,b,c,d$ (recall that $x\in\mathbb R$ is identified with $[x:1]$).  Moreover, the definition entails $[\![a,b,c,d]\!]=[(c-a)(d-b):(d-a)(c-b)]$.  If $(d-a)(c-b)=0$, this is $\infty$; otherwise, it is the real number $\frac{(c-a)(d-b)}{(d-a)(c-b)}$.  Thus we have\\
+
+\noindent\textbf{Proposition 3.4.} \emph{If $a,b,c,d\in\mathbb R$ and $(d-a)(c-b)\ne 0$, then $[\![a,b,c,d]\!]=\frac{(c-a)(d-b)}{(d-a)(c-b)}$.}\\
+
+\noindent and we can compute cross ratios of real numbers without referring back to the original definition of the projective line.  Also, if exactly one of the points $a,b,c,d$ is equal to $\infty$, the cross ratio is obtained by taking $\frac{(c-a)(d-b)}{(d-a)(c-b)}$ and deleting the factor in both the numerator and the denominator with this variable.  (E.g., $[\![a,b,\infty,d]\!]=\frac{d-b}{d-a}$.)  If more than one of them is $\infty$, Proposition 3.5(i)-(iii) gives the cross ratio.
+
+Now for a few basic properties of cross ratios on the projective line.  Throughout this book, whenever we refer to $[\![a,b,c,d]\!]$ we will assume that it's well-defined (i.e., the inputs don't consist of three equal points).\\
+
+\noindent\textbf{Proposition 3.5.} \emph{If $a,b,c,d\in P^1(\mathbb R)$, then}
+
+(i) \emph{$[\![a,b,c,d]\!]=\infty$ if and only if either $a=d$ or $b=c$;}
+
+(ii) \emph{$[\![a,b,c,d]\!]=0$ if and only if either $a=c$ or $b=d$;}
+
+(iii) \emph{$[\![a,b,c,d]\!]=1$ if and only if either $a=b$ or $c=d$;}
+
+(iv) \textsc{(Invariance under homographies)} \emph{If $T:P^1(\mathbb R)\to P^1(\mathbb R)$ is a homography, then $[\![T(a),T(b),T(c),T(d)]\!]=[\![a,b,c,d]\!]$.}
+\begin{proof}
+(i), (ii) and (iii) can be easily proved using the definition of the cross ratio (note that $[x:y]=\infty\iff y=0$).  We leave the verifications to the reader.
+
+As for (iv), we let
+$$X=\{(a,b,c,d):a,b,c,d\in P^1(\mathbb R),\text{no three are all equal}\}.$$
+The group $PGL_2(\mathbb R)$ of homographies acts on $X$ via $T\cdot(a,b,c,d)=(T(a),T(b),T(c),T(d))$.  Moreover, we may define a function $f:X\to P^1(\mathbb R)$ given by $f(a,b,c,d)=[\![a,b,c,d]\!]$.
+
+Now (iv) states that $f$ is a function on orbits from the set $X$ on which the group acts.  Let $S$ be the subset of $PGL_2(\mathbb R)$ consisting of the homographies $x\mapsto x+r$ ($r\in\mathbb R$), $x\mapsto sx$ ($s\ne 0$) and $x\mapsto\frac 1x$.  By Exercise 9 of the previous section, $S$ is a generating set.  Thus, by Proposition 1.22, it suffices to show that $f(T\cdot x)=f(x)$ for all $T\in S,x\in X$.
+
+First suppose $T$ is of the form $x\mapsto x+r$.  Then for points $a,b,c,d$, if $a,b,c,d\in\mathbb R$ and $a\ne d,b\ne c$,
+$$[\![T(a),T(b),T(c),T(d)]\!]=\frac{[(c+r)-(a+r)][(d+r)-(b+r)]}{[(d+r)-(a+r)][(c+r)-(b+r)]}$$
+$$=\frac{(c-a)(d-b)}{(d-a)(c-b)}=[\![a,b,c,d]\!]$$
+The reader can readily verify the cases where any inputs or the output is $\infty$.  Thus, $f(T\cdot x)=f(x)$ in this case.
+
+Likewise, if $T$ is of the form $x\mapsto sx$ with $s\ne 0$, then
+$$[\![T(a),T(b),T(c),T(d)]\!]=\frac{(sc-sa)(sd-sb)}{(sd-sa)(sc-sb)}=\frac{s^2(c-a)(d-b)}{s^2(d-a)(c-b)}$$
+$$=\frac{(c-a)(d-b)}{(d-a)(c-b)}=[\![a,b,c,d]\!]$$
+The case where $T(x)=\frac 1x$ is the least trivial.  However, experience with complex fractions helps us sort it out:
+$$[\![T(a),T(b),T(c),T(d)]\!]=\frac{\left(\frac 1c-\frac 1a\right)\left(\frac 1d-\frac 1b\right)}{\left(\frac 1d-\frac 1a\right)\left(\frac 1c-\frac 1b\right)}$$
+$$=\frac{abcd\left(\frac 1c-\frac 1a\right)\left(\frac 1d-\frac 1b\right)}{abcd\left(\frac 1d-\frac 1a\right)\left(\frac 1c-\frac 1b\right)}=\frac{ac\left(\frac 1c-\frac 1a\right)\cdot bd\left(\frac 1d-\frac 1b\right)}{ad\left(\frac 1d-\frac 1a\right)\cdot bc\left(\frac 1c-\frac 1b\right)}=\frac{(a-c)(b-d)}{(a-d)(b-c)}$$
+$$=\frac{(c-a)(d-b)}{(d-a)(c-b)}=[\![a,b,c,d]\!].$$
+\end{proof}
+
+\noindent Note that, using Proposition 3.4 and the statements right after it, one can see that every $d\in P^1(\mathbb R)$ satisfies $[\![\infty,0,1,d]\!]=d$.  Furthermore, if $a,b,c\in P^1(\mathbb R)$ are distinct points, and $T$ is the homography sending $a\mapsto\infty,b\mapsto 0,c\mapsto 1$, then $T(d)=[\![T(a),T(b),T(c),T(d)]\!]=[\![a,b,c,d]\!]$ by Proposition 3.5(iv).  Moreover, $T$ is precisely the map $d\mapsto[\![a,b,c,d]\!]$, which proves
+\begin{center}
+\textbf{If $a,b,c\in P^1(\mathbb R)$ are distinct points, then the map $d\mapsto[\![a,b,c,d]\!]$ is precisely the homography of $P^1(\mathbb R)$ sending $a\mapsto\infty,b\mapsto 0,c\mapsto 1$.  In particular, it is bijective.}
+\end{center}
+\noindent Thus we have the \emph{cancellation law for cross ratios}: if $[\![a,b,c,d]\!]=[\![a,b,c,d']\!]$ then $d=d'$.  Note, however, that this is false if $a,b,c$ are not all distinct (why?).
+
+We have thus far defined cross ratios on the projective line.  They can also be defined in higher dimensions, but only on points that are on a common line.  We now suppose $a,b,c,d\in P^n(\mathbb R)$ are points such that:
+\begin{itemize}
+\item $a,b,c,d$ lie on a common line $\ell$;
+
+\item Given any three of $a,b,c,d$, they are not all equal.
+\end{itemize}
+Note that $\ell$ is unique (because $a,b,c,d$ are not all equal, they consist of at least two distinct points, so that the line is determined by Proposition 3.1(i)).  We define the \textbf{cross ratio} $[\![a,b,c,d]\!]$ as follows: let $T:\ell\to P^1(\mathbb R)$ be a projective transformation (it is clear that it exists), and set $[\![a,b,c,d]\!]=[\![T(a),T(b),T(c),T(d)]\!]$.
+
+Several things need justification.  First, there are many homographies $T:\ell\to P^1(\mathbb R)$, so we need to show that the cross ratio is well defined and independent of the particular one used.  Well, suppose $T':\ell\to P^1(\mathbb R)$ is also a projective transformation.  Set $U=T'\circ T^{-1}:P^1(\mathbb R)\to P^1(\mathbb R)$; this is a projective transformation of the projective line, a.k.a.~a homography.  Moreover, we have $T'=U\circ T$, so that
+$$[\![T'(a),T'(b),T'(c),T'(d)]\!]=[\![U(T(a)),U(T(b)),U(T(c)),U(T(d))]\!]$$
+$$\overset{(*)}=[\![T(a),T(b),T(c),T(d)]\!]$$
+where $(*)$ uses Proposition 3.5(iv).  This proves that the cross ratio is well defined.
+
+Moreover, we leave it to the reader to prove the following facts using the previously established results about cross ratios on $P^1(\mathbb R)$.\\
+
+\noindent\textbf{Proposition 3.6.} \emph{Let $a,b,c,d\in P^m(\mathbb R)$ such that $[\![a,b,c,d]\!]$ is defined.}
+
+(i) \emph{$[\![a,b,c,d]\!]=\infty$ if and only if either $a=d$ or $b=c$;}
+
+(ii) \emph{$[\![a,b,c,d]\!]=0$ if and only if either $a=c$ or $b=d$;}
+
+(iii) \emph{$[\![a,b,c,d]\!]=1$ if and only if either $a=b$ or $c=d$;}
+
+(iv) \emph{If $T:P^m(\mathbb R)\to P^n(\mathbb R)$ is a projective transformation, then $[\![T(a),T(b),T(c),T(d)]\!]=[\![a,b,c,d]\!]$.  More generally this holds if $T$ is a projective transformation between $k$-planes (various $k$) with $a,b,c,d$ in the domain.}\\
+
+\noindent Thus, we know that the cross ratio is invariant under projective transformations.  It is our desired projective-geometry analogue of the Euclidean distance between points.  Note that $[\![\infty,0,1,d]\!]=d$; this is analogous to the fact that on the Euclidean line $\mathbb R$, the distance from $d$ to $0$ is $|d|$.  The cross ratio does notably have some nice properties.
+
+For example, in the projective-plane construction below, $[\![a,b,c,d]\!]=[\![a',b',c',d']\!]$:
+\begin{center}\includegraphics[scale=.4]{PerspCrossRatio.png}\end{center}
+The reason is that the perspective projection from $p$ is a projective transformation of the lines by Proposition 3.3; hence the statement follows from Proposition 3.6(iv).
+
+Cross ratios have been used to prove certain famous results, such as Pappus' Hexagon Theorem (to be covered in Section 3.7).  The concept will reappear in Chapters 4 and 5, but using complex numbers instead of real numbers.
+
+\subsection*{Exercises 3.3. (The Cross Ratio: A Projective Invariant)}
+\begin{enumerate}
+\item Let $\ell$ and $\ell'$ be lines in $P^n(\mathbb R)$.  Suppose $a,b,c$ are distinct points on $\ell$, and $a',b',c'$ are distinct points on $\ell'$.  Show that there exists a projective transformation $T\in PGL_{n+1}(\mathbb R)$ such that $T(a)=a',T(b)=b',T(c)=c'$.
+
+\item Let $x_1,x_2,x_3,x_4\in P^1(\mathbb R)$ and $\sigma\in S_4$.  If $\lambda=[\![x_1,x_2,x_3,x_4]\!]$ and $\mu=[\![x_{\sigma(1)},x_{\sigma(2)},x_{\sigma(3)},x_{\sigma(4)}]\!]$, then:
+
+(a) $\mu$ is not necessarily equal to $\lambda$.  In other words, permuting the inputs in a cross ratio may change the result.
+
+(b) For a fixed $\sigma\in S_4$, the relation $\lambda\mapsto\mu$ is a homography which depends only on $\sigma$.  [Since the permutations $\sigma$ satisfying these statements are manifestly closed under composition, you may assume (Exercise 13(c) of Section 1.6) that $\sigma$ is a transposition.  There are six transpositions in $S_4$; use casework.]  Moreover, $\mu$ depends on only $\lambda$ and $\sigma$, and not on the particular points $x_j$.
+
+(c) For each $\sigma\in S_4$, the homography given in part (b) is one of the following:
+$$\lambda\mapsto\lambda~~~~~~~~\lambda\mapsto 1-\lambda~~~~~~~~\lambda\mapsto\frac 1{\lambda}$$
+$$\lambda\mapsto\frac 1{1-\lambda}~~~~~~~~\lambda\mapsto\frac{\lambda-1}{\lambda}~~~~~~~~\lambda\mapsto\frac{\lambda}{\lambda-1}$$
+[Use Proposition 3.5(i)-(iii).]
+
+(d) Use parts (b) and (c) to get a group homomorphism $S_4\to PGL_2(\mathbb R)$ with kernel $V=\{(1),(12)(34),(13)(24),(23)(14)\}$.  [$V$ is known as the \textbf{canonical Klein 4-group} of $S_4$.]
+
+\item Let $A\in PGL_2(\mathbb R)$ be a homography of $P^1(\mathbb R)$ which is not the identity but fixes at least two points of $P^1(\mathbb R)$. % Part (a) is false if I just say "fixes at least one point" because x\mapsto x+1 is a homography which fixes only \infty.  [Note: the corresponding 2\times 2 matrix is a Jordan block, hence is not diagonalizable even over \mathbb C]
+
+(a) Show that $A$ fixes exactly two points.  We will refer to these points as $x_1$ and $x_2$.
+
+(b) Let $x\ne x_1,x_2$ be a point of $P^1(\mathbb R)$.  Show that the following statements are equivalent:
+
+~~~~(i) $A^2=\overline{I_2}$, where $\overline{I_2}$ is the identity element of $PGL_2(\mathbb R)$; % "Why the bar on I_2?"  I_2 is the identity matrix, and \overline{I_2} is its congruence class modulo \mathbb R^*.  Ever since the chapter on universal algebra, I used \overline for equivalence classes in a quotient set
+
+~~~~(ii) $A^2(x)=x$;
+
+~~~~(iii) $[\![x_1,x_2,x,A(x)]\!]=-1$.
+
+[(i) $\iff$ (ii): According to part (a), no homography other than the identity can have more than two fixed points.  (ii) $\iff$ (iii): Use the invariance of cross ratios under homographies, Exercise 2, and the cancellation law for cross ratios.]
+
+In particular, since statement (i) doesn't involve the particular point $x$, it follows that (ii) and (iii) depend on only $A$ and the fixed points $x_1,x_2$, and not $x$.
+
+\item If $a,b,c,d\in P^1(\mathbb R)$ and $[\![a,b,c,d]\!]=-1$, then $d$ is said to be the \textbf{harmonic conjugate} of the ordered triple $(a,b,c)$.  [The word ``the'' is justified by the fact that $a,b,c$ must be distinct (why?), and hence $x\mapsto[\![a,b,c,x]\!]$ is a homography.]
+
+(a) If $a\ne b$ in $P^1(\mathbb R)$, define $T:P^1(\mathbb R)\to P^1(\mathbb R)$ as follows: $T(a)=a,T(b)=b$ and for $c\ne a,b$, $T(c)$ is the harmonic conjugate of $(a,b,c)$.  Then $T$ is the unique homography such that $T(a)=a$, $T(b)=b$, $T^2=\overline{I_2}$ and $T\ne\overline{I_2}$.  [Use Exercise 3.]
+
+(b) If $c$ is a nonzero real number, the harmonic conjugate of $(0,\infty,c)$ is $-c$.  More generally, the harmonic conjugate of $(a,\infty,c)$ is $2a-c$.  The harmonic conjugate of $(a,b,\infty)$ is $\frac{a+b}2$.  The harmonic conjugate of $(a,b,c)$ (when $c\ne a,b,\frac{a+b}2$) is $\frac{(a+b)c-2ab}{2c-(a+b)}$.
+
+(c) Let $a,b,c\in P^2(\mathbb R)$ be three collinear points; say they lie in the line $\ell$.  Let $h$ be a point outside $\ell$, and let $\ell'$ be a line through $c$.  Set $m=\ell'\cap\overset{\longleftrightarrow}{h~a}$ and $n=\ell'\cap\overset{\longleftrightarrow}{h~b}$.  Let $k=\overset{\longleftrightarrow}{a~n}\cap\overset{\longleftrightarrow}{b~m}$ and let $d=\overset{\longleftrightarrow}{h~k}\cap\ell$.  Then $d$ is the harmonic conjugate of $(a,b,c)$.  [By applying a projective transformation, one may assume $a=(-1,0),b=(1,0),c=[1:0:0]$ and $h=[0:1:0]$.]
+
+\item Let $a,b,c,d,a',b',c',d'\in P^n(\mathbb R)$ be points.  Suppose that all the necessary conditions are satisfied so that $[\![a,b,c,d]\!]$ and $[\![a',b',c',d']\!]$ are defined.  Then there exists a projective transformation $T:P^n(\mathbb R)\to P^n(\mathbb R)$ sending $a\mapsto a',b\mapsto b',c\mapsto c',d\mapsto d'$ if and only if $[\![a,b,c,d]\!]=[\![a',b',c',d']\!]$.
+
+\item Consider the following diagram in $P^2(\mathbb R)$.  It involves two points and two lines [but the lines are only partially drawn in the figure].
+\begin{center}\includegraphics[scale=.4]{PassDiagram.png}\end{center}
+Draw the diagram resulting from passing this through the projective transformation given by $\begin{bmatrix}0&2&0\\0&0&1\\1&0&0\end{bmatrix}\in PGL_3(\mathbb R)$.
+
+\item Suppose that the following is constructed in the Euclidean plane $\mathbb R^2$, and then the plane is embedded into $P^2(\mathbb R)$ the usual way.
+\begin{center}\includegraphics[scale=.4]{CRAngles.png}\end{center}
+Show that $[\![A,B,C,D]\!]=\frac{(\sin m\angle APC)(\sin m\angle BPD)}{(\sin m\angle APD)(\sin m\angle BPC)}$.  [Multiply the numerator and denominator of that fraction by $\frac 14(PA)(PB)(PC)(PD)$, then use Exercise 2.3(a) to write them in terms of areas of triangles.]
+\end{enumerate}
+
+\subsection*{3.4. The Fundamental Theorem of Projective Geometry}
+\addcontentsline{toc}{section}{3.4. The Fundamental Theorem of Projective Geometry}
+Projective geometry may be less familiar than Euclidean geometry.  In this chapter we shall cover a fundamental theorem which can help to simplify the study of projective geometry further.
+
+We recall (Section 3.2, Exercise 7) that if $a,b,c\in P^1(\mathbb R)$ are distinct points, and $a',b',c'\in P^1(\mathbb R)$ are distinct points as well, then there is a unique homography $T$ such that $T(a)=a'$, $T(b)=b'$ and $T(c)=c'$.  There are similar kinds of subsets of $P^n(\mathbb R)$ that satisfy the analogous property.  They are called \emph{projective frames}, and they will be covered in detail in this section.
+
+A projective frame is a finite list of points which is analogous to a basis of a vector space.  Just like a basis spans, a projective frame is supposed to span the space (in other words, not be contained in a single hyperplane).  It is also not supposed to have too many collinear points, as that would be similar to linear dependence of a set of vectors.  With enough conditions, projective frames are determined up to projective transformations, and can be used to define a coordinate system which describes every point of the projective space.  The full definition is given as follows:\\
+
+\noindent\textbf{Definition.} \emph{A \textbf{projective frame} in $P^n(\mathbb R)$ is an ordered list $(p_1,p_2,\dots,p_{n+2})$ of points of $P^n(\mathbb R)$, such that if $\vec v_1,\dots,\vec v_{n+2}$ are nonzero vectors in $\mathbb R^{n+1}$ with $p_j=[\vec v_j]$, then for every $1\leqslant j\leqslant n+2$, $\vec v_1,\dots,\vec v_{j-1},\vec v_{j+1},\dots,\vec v_{n+2}$ are linearly independent (and therefore form a basis of $\mathbb R^{n+1}$).  In other words, any $n+1$ of the vectors are linearly indenepdent.}\\
+
+\noindent If $n=1$, a projective frame is precisely an ordered list of three distinct points.  After all, two vectors in $\mathbb R^2$ are linearly independent if and only if neither is a scalar multiple of the other, i.e., they induce different points in $P^1(\mathbb R)$.
+
+If $n=2$, things start to get more interesting.  A projective frame cannot contain three collinear points (even though it always does for $n=1$).  If $(p_1,p_2,p_3,p_4)$ were a projective frame and, for example, $p_1,p_2,p_3$ were collinear, then $\vec v_1,\vec v_2,\vec v_3$ would span a plane and therefore not be a basis of $\mathbb R^3$; this contradicts the definition.  In fact, a projective frame in $P^2(\mathbb R)$ is \emph{equivalent} to a list of four points, no three of which are collinear.  [Note that such points must be distinct \---- why?]  An example is the list of vertices of a quadrilateral in the Euclidean plane, as it is embedded in $P^2(\mathbb R)$.
+
+For more general $n$, one can think of a projective frame as a list of $n+2$ points such that no $n+1$ of them lie in a single hyperplane.  It is clear that this is equivalent to the definition given above.
+
+We shall first establish a way to transform the projective frame concept to a linear-algebra setting.\\
+
+\noindent\textbf{Proposition 3.7.} (i) \emph{Let $p_1,\dots,p_{n+2}\in P^n(\mathbb R)$.  Then $(p_1,\dots,p_{n+2})$ is a projective frame if and only if there exist $\vec u_1,\dots,\vec u_{n+2}\in\mathbb R^{n+1}$ with $p_j=[\vec u_j]$, such that the $\vec u$'s span $\mathbb R^{n+1}$ and $\vec u_1+\dots+\vec u_{n+2}=\vec 0$.} % Wrong font?  I always head these statements without italics.  Maybe I should remove the italics from the reference in the next line
+
+\emph{Moreover, if $\vec u_1,\dots,\vec u_{n+2}\in\mathbb R^{n+1}$ are vectors satisfying the condition in part }(i)\emph{:}
+
+(ii) \emph{For $c_1,\dots,c_{n+2}\in\mathbb R$, $c_1\vec u_1+\dots+c_{n+2}\vec u_{n+2}=\vec 0$ if and only if $c_1=\dots=c_{n+2}$.}
+
+(iii) \emph{Every $\vec v\in\mathbb R^{n+1}$ is of the form $a_1\vec u_1+\dots+a_{n+2}\vec u_{n+2}$ with $a_1,\dots,a_{n+2}\in\mathbb R$, $a_1+\dots+a_{n+2}=0$.}
+
+(iv) \emph{If $a_1+\dots+a_{n+2}=0$ and the $a_j$ are not all zero, the projective point $[a_1\vec u_1+\dots+a_{n+2}\vec u_{n+2}]$ is determined by the projective points $[\vec u_j]\in P^n(\mathbb R)$ and the coefficients $a_j\in\mathbb R$ (subject to the $\vec u$'s satisfying the condition in part (i)).}\\
+
+\noindent It is worth remarking that (iv) states that we can take linear combinations of points in a projective frame (via $a_1[\vec u_1]+\dots+a_{n+2}[\vec u_{n+2}]=[a_1\vec u_1+\dots+a_{n+2}\vec u_{n+2}]$), where the coefficients are not all zero and their sum is zero.  Notice also that the coefficients are only unique up to scalar multiplication by a nonzero real number.  Such coefficients are called \textbf{barycentric coordinates}.
+
+\begin{proof}
+(i) Suppose $(p_1,\dots,p_{n+2})$ is a projective frame.  Let $\vec v_1,\dots,\vec v_{n+2}\in\mathbb R^{n+1}$ be nonzero vectors such that $p_j=[\vec v_j]$.  Then since there are $n+2$ $\vec v$'s in an $(n+1)$-dimensional space, they are linearly dependent, thus we have a relation of the form
+$$c_1\vec v_1+c_2\vec v_2+\dots+c_{n+2}\vec v_{n+2}=0$$
+with $c_1,\dots,c_{n+2}\in\mathbb R$, not all zero.  Observe that none of the $c_j$ can be zero: for if $c_j=0$, then $\vec v_1,\dots,\vec v_{j-1},\vec v_{j+1},\dots,\vec v_{n+2}$ would be linearly dependent, contradicting the definition of a projective frame.  Now take $\vec u_j=c_j\vec v_j$; then $p_j=[\vec v_j]=[\vec u_j]$, these vectors sum to zero, and they span $\mathbb R^{n+1}$ because any $n+1$ of the $\vec v$'s does.  Thus they satisfy the conditions in the statement.
+
+Conversely, suppose $\vec u_1,\dots,\vec u_{n+2}\in\mathbb R^{n+1}$ are vectors which satisfy the conditions.  First, if $\vec u_j=\vec 0$, then the remaining $n+1$ $\vec u$'s must form a basis of $\mathbb R^{n+1}$ (because they span), but they must also sum to zero, which is a contradiction.  Therefore, every $\vec u_j\ne\vec 0$.  Now take any $j$; we show that $\{\vec u_1,\dots,\vec u_{j-1},\vec u_{j+1},\dots,\vec u_{n+2}\}$ spans $\mathbb R^{n+1}$; it will follow that it is a basis, and hence $(p_1,\dots,p_{n+2})$ is a projective frame as required.
+
+Let $\vec w\in\mathbb R^{n+1}$ be arbitrary.  Since the $\vec u$'s span $\mathbb R^{n+1}$, we have a relation of the form
+$$\vec w=c_1\vec u_1+\dots+c_{n+2}\vec u_{n+2}.$$
+Yet, $c_j\vec u_1+\dots+c_j\vec u_{n+2}=c_j(\vec u_1+\dots+\vec u_{n+2})=\vec 0$.  Subtracting this off from the above equation gives
+$$\vec w=(c_1-c_j)\vec u_1+\dots+(c_{n+2}-c_j)\vec u_{n+2}.$$
+Since the $\vec u_j$ coefficient is $c_j-c_j=0$, the above is a linear combination of $\vec u_1,\dots,\vec u_{j-1},\vec u_{j+1},\dots,\vec u_{n+2}$.  Hence those $n+1$ vectors span $\mathbb R^{n+1}$ as required.
+
+(ii) If $c_1=\dots=c_n=c$ say, then $c_1\vec u_1+\dots+c_{n+2}\vec u_{n+2}=c(\vec u_1+\dots+\vec u_{n+2})=\vec 0$.
+
+Conversely, suppose $c_1\vec u_1+\dots+c_{n+2}\vec u_{n+2}=\vec 0$ with $c_1,\dots,c_{n+1}\in\mathbb R$.  Subtracting $c_1(\vec u_1+\dots+\vec u_{n+2})=\vec 0$ from this equation, we have $(c_2-c_1)\vec u_2+\dots+(c_{n+2}-c_1)\vec u_{n+2}=\vec 0$.  Yet the proof of part (i) shows that the $n+1$ vectors $\vec u_2,\dots,\vec u_{n+2}$ form a basis of $\mathbb R^{n+1}$.  Therefore $c_2-c_1=\dots=c_{n+2}-c_1=0$, and so $c_1=c_2=\dots=c_{n+2}$.
+
+(iii) Every $\vec v\in\mathbb R^{n+1}$ is of the form $c_1\vec u_1+\dots+c_{n+2}\vec u_{n+2}$ because the $\vec u$'s span the space.  Now, set $c=\frac{c_1+\dots+c_{n+2}}{n+2}$, and let $a_j=c_j-c$ for each $j$.  Then
+$$\vec v=\vec v-\vec 0=(c_1\vec u_1+\dots+c_{n+2}\vec u_{n+2})-c(\vec u_1+\dots+\vec u_{n+2})=a_1\vec u_1+\dots+a_{n+2}\vec u_{n+2},$$
+and $a_1+\dots+a_{n+2}=c_1+\dots+c_{n+2}-(n+2)c=0$.
+
+(iv) Suppose $\vec u'_1,\dots,\vec u'_{n+2}\in\mathbb R^{n+1}$ also satisfy the condition in part (i), and $[\vec u'_j]=[\vec u_j]$ for every $j$.  Then this means that there is a nonzero real number $c_j$ with $\vec u'_j=c_j\vec u_j$.  Since
+$$\vec 0=\vec u'_1+\dots+\vec u'_{n+2}=c_1\vec u_1+\dots+c_{n+2}\vec u_{n+2},$$
+we have, by part (ii), $c_1=\dots=c_{n+2}=$ say $c$.  Then $a_1\vec u'_1+\dots+a_{n+2}\vec u_{n+2}=c(a_1\vec u_1+\dots+a_{n+2}\vec u_{n+2})$, and so $[a_1\vec u'_1+\dots+a_{n+2}\vec u'_{n+2}]=[a_1\vec u_1+\dots+a_{n+2}\vec u_{n+2}]$ as desired.
+\end{proof}
+
+\noindent We remark that (ii) can alternatively be proved using the rank-nullity theorem.  The linear map $\varphi:\vec e_{n+2}\mapsto\vec u_{n+2}$ from $\mathbb R^{n+2}\to\mathbb R^{n+1}$ has rank $n+1$ (because the $\vec u$'s span, and so $\varphi$ is surjective); therefore, since $\operatorname{rank}+\operatorname{nullity}=\dim(\mathbb R^{n+2})=n+2$, $\varphi$ has nullity $1$.  This means $\ker\varphi$ is a one-dimensional subspace.  Since $(1,1,\dots,1)$ is a nonzero vector in $\ker\varphi$, we conclude $\ker\varphi=\operatorname{span}(1,1,\dots,1)$, which is identical to the statement of (ii).
+
+If $(p_1,\dots,p_{n+2})$ is a projective frame and $T:P^n(\mathbb R)\to P^n(\mathbb R)$ is a projective transformation, it is clear that $(T(p_1),\dots,T(p_{n+2}))$ is also a projective frame.  The results of Proposition 3.7 enable us to easily generalize the ``unique homography'' statement to projective spaces of various dimensions:\\
+
+\noindent\textbf{Theorem 3.8.} \textsc{(The Fundamental Theorem of Projective Geometry)} \emph{If $(p_1,\dots,p_{n+2})$ and $(q_1,\dots,q_{n+2})$ are projective frames, then there is a unique projective transformation $T:P^n(\mathbb R)\to P^n(\mathbb R)$ such that $T(p_j)=q_j$ for all $j$.}
+\begin{proof}
+By Proposition 3.7(i), there exist $\vec u_1,\dots,\vec u_{n+2}\in\mathbb R^{n+1}$ such that $p_j=[\vec u_j]$, the $\vec u$'s span $\mathbb R^{n+1}$ and $\vec u_1+\dots+\vec u_{n+2}=\vec 0$.  Similarly, there exist vectors $\vec v_1,\dots,\vec v_{n+2}$ which represent the $q_j$, span $\mathbb R^{n+1}$ and sum to zero.
+
+Let $\psi_1:\mathbb R^{n+2}\to\mathbb R^{n+1}$ be the linear map sending $\vec e_j\mapsto\vec u_j$ for each $j=1,2,\dots,n+2$.  $\psi_1$ is surjective due to the $\vec u$'s spanning $\mathbb R^{n+1}$.  By Proposition 3.7(ii) (or the rank-nullity theorem), $(c_1,\dots,c_{n+2})\in\ker\psi_1\iff c_1=c_2=\dots=c_{n+2}$; in other words, $\ker\psi_1=\operatorname{span}(1,1,\dots,1)$.  Moreover, by Theorem 1.17, $\psi_1$ induces an isomorphism $\overline{\psi_1}$ from the quotient space $\mathbb R^{n+2}/\operatorname{span}(1,1,\dots,1)$ to $\mathbb R^{n+1}$.  We have $\overline{\psi_1}(\overline{\vec e_j})=\vec u_j$ for each $j$.
+
+Repeating the above argument with the $\vec v$'s in place of the $\vec u$'s gives an isomorphism $\overline{\psi_2}:\mathbb R^{n+2}/\operatorname{span}(1,1,\dots,1)\to\mathbb R^{n+1}$ satisfying $\overline{\psi_2}(\overline{\vec e_j})=\vec v_j$ for each $j$.  Let $\varphi=\psi_2\circ\psi_1^{-1}$; this is a vector space isomorphism $\mathbb R^{n+1}\to\mathbb R^{n+1}$, hence induces a projective transformation $T$ on $P^n(\mathbb R)$.  By construction, $\varphi(\vec u_j)=\vec v_j$ for all $j$, hence $T(p_j)=q_j$.
+
+What remains is to show that $T$ is unique.  Suppose $T':P^n(\mathbb R)\to P^n(\mathbb R)$ is also a projective transformation such that $T'(p_j)=q_j$ for all $j$.  Represent $T'$ by a linear map $\varphi':\mathbb R^{n+1}\to\mathbb R^{n+1}$.  Since $T([\vec u_j])=[\vec v_j]$, there exists $c_j\ne 0$ in $\mathbb R$ such that $\varphi'(\vec u_j)=c_j\vec v_j$.  Now,
+$$\vec 0=\varphi'(\vec 0)=\varphi'(\vec u_1+\dots+\vec u_{n+2})=c_1\vec v_1+\dots+c_{n+2}\vec v_{n+2},$$
+from which $c_1=\dots=c_{n+2}$ follows from Proposition 3.7(ii).  Letting $c=c_1(=\dots=c_{n+2})$, we have $\varphi'(\vec u_j)=c\vec v_j$ for all $j$.  Since the $\vec u$'s span, we conclude that $\varphi'=c\varphi$ (because the linear maps agree on all of the $\vec u$'s).  Therefore, $\varphi',\varphi$ induce the same projective transformation and $T'=T$, proving uniqueness.
+\end{proof}
+\noindent The special case where $n=1$ (so that a projective frame is any ordered triple of distinct points), gives Exercise 7 of Section 3.2.
+
+The reason why the theorem is fundamental is this: whenever we have a construction made out of projective intrinsics, and we observe a projective frame from it, we may (by applying a projective transformation) assume this projective frame to be whatever will make things easy for us.  It will help for the projective frame to have several points at infinity, since lines through an infinity point are parallel to the Euclidean eye.  With any event, we will be using this to our advantage in Section 3.7.
+
+\subsection*{Exercises 3.4. (The Fundamental Theorem of Projective Geometry)} % https://en.wikipedia.org/wiki/Homography#Fundamental_theorem_of_projective_geometry
+\begin{enumerate}
+\item If $(p_1,\dots,p_{n+2})$ is a projective frame, and $\sigma\in S_{n+2}$, then $(p_{\sigma(1)},\dots,p_{\sigma(n+2)})$ is also a projective frame.  Use this to construct an injective homomorphism from $S_{n+2}$ to the group $PGL_{n+1}(\mathbb R)$ of projective transformations of $P^n(\mathbb R)$.
+
+\item\emph{(Pappus' Hexagon Theorem)} \---- In $P^2(\mathbb R)$, suppose $\ell$ is a line with points $A,B,C$, and $\ell'$ is a line with points $A',B',C'$.  If $D=\overset{\longleftrightarrow}{AB'}\cap\overset{\longleftrightarrow}{A'B}$, $E=\overset{\longleftrightarrow}{AC'}\cap\overset{\longleftrightarrow}{A'C}$ and $F=\overset{\longleftrightarrow}{BC'}\cap\overset{\longleftrightarrow}{B'C}$, show that the points $D,E,F$ are collinear.  [We may assume $A,A',D,\ell\cap\ell'$ form a projective frame \---- if, contrariwise, any three of them are collinear, then the problem is easy.  By Theorem 3.8, we may further assume that $A=(-1,1),A'=(-1,-1),D=(0,0)$ and $\ell\cap\ell'=[1:0:0]$.]
+
+This is a sample use of Proposition 3.8; we will delve more into results like these in Section 3.7.
+
+\item Every projective frame of $P^n(\mathbb R)$ must have at least two points away from infinity.  Show this in two ways:
+
+(a) Directly from the definition.  [Think of the hyperplane at infinity.]
+
+(b) Using Theorem 3.8.  [Exercise 12(b) classifies the projective transformations which fix every point at infinity.  Use this to show that a projective frame with at most one point away from infinity cannot exist.]
+
+\item Tell whether each of the following quadruples is a projective frame in $P^2(\mathbb R)$.  For the ones that are, represent them with nonzero vectors in $\mathbb R^3$ which span and add to zero.
+
+(a) $((0,0),(0,1),(1,0),(1,1))$
+
+(b) $((0,0),(0,1),(1,0),(0,2))$
+
+(c) $((0,0),(0,1),(1,0),(5,17))$
+
+(d) $((0,0),(0,1),(2,0),[3:1:0])$
+
+(e) $((0,0),(13,1),(0,0),(3,7))$
+
+(f) $((0,0),(0,1),[1:0:0],[0:1:0])$
+
+(g) $((0,0),(0,1),[1:0:0],[1:1:0])$
+
+\item In each case, explicitly describe the projective transformation of $P^2(\mathbb R)$ which sends the first projective frame to the second one.
+
+(a) $((0,0),(0,1),(1,0),(1,1)) \mapsto ((0,0),(0,1),(1,1),(1,0))$
+
+(b) $((0,0),(0,1),(1,0),(1,1)) \mapsto ((0,0),(0,1),(2,0),(3,3))$
+
+(c) $((0,0),(0,1),(1,0),(1,1)) \mapsto ((0,0),(0,1),[1:0:0],[1:1:0])$
+
+(d) $((0,0),(0,1),(2,0),(3,3)) \mapsto ((-5,-5),(-5,5),(5,-5),(5,5))$
+
+\item Explain why $((0,0),[1:0:0],[1:1:0],[0:1:0])$ is \emph{not} a projective frame of $P^2(\mathbb R)$.
+
+\item Let $(p_1,\dots,p_{n+2})$ be a projective frame of $P^n(\mathbb R)$.  For $k<n$, show that no $k+2$ of the points $p_j$ lie in a common $k$-plane.  [Represent the points using nonzero vectors in $\mathbb R^{n+1}$ and use linear algebra.]  Note that this statement is obviously false if $k=n$.
+
+\item Let $\ell_1$ and $\ell_2$ be distinct lines in $P^2(\mathbb R)$, $p$ a point on neither line, and fix $r\in\mathbb R$, $r\ne 0,1$.  Let $S$ be the set of points $q\in P^2(\mathbb R)$ such that if $\ell=\overset{\longleftrightarrow}{p~q}$, then $[\![p,q,\ell\cap\ell_1,\ell\cap\ell_2]\!]=r$.  Show that $S$ is a line which is concurrent with $\ell_1,\ell_2$, but missing the point of concurrence.  [Assume $\ell_1\cap\ell_2=[1:0:0]$.]
+\end{enumerate}
+
+\subsection*{3.5. Conics}
+\addcontentsline{toc}{section}{3.5. Conics}
+For the remaining sections of this chapter, we will stick to the projective plane $P^2(\mathbb R)$.
+
+In the Euclidean plane, we recall that a circle is the set of points with a given distance $r$ from a given point $O$.  They are the basic curves that are not lines, and many things have been proven about them.
+
+In the projective plane, however, there isn't a notion of distance between two points.  Instead, there is the cross ratio between four points, but the points have to be collinear, so we can't get clever ``loci'' out of them directly.  Our best attempt for a one-dimensional locus is obtained by letting two of the three points move along lines, but by Exercise 8 of the previous section, that will get us nothing but another line.
+
+We may, however, still consider the circle $x^2+y^2=1$ when it is embedded into $P^2(\mathbb R)$.  What is a projectively-intrinsic description of this thing?  To answer this question, we transfer the setting to $\mathbb R^3$.  The reader can readily verify that the circle becomes the surface given by $x^2+y^2=z^2$, which is a cone.\footnote{Remember, if $z\ne 0$, then $[x:y:z]=[x/z:y/z:1]=(x/z,y/z)$ in $P^2(\mathbb R)$.}
+
+If $\vec x=(x,y,z)$ and $A=\begin{bmatrix}1&0&0\\0&1&0\\0&0&-1\end{bmatrix}$, the cone can alternatively be given by the equation $\vec x\cdot A\vec x=0$.  This leads to the following concept: if $A$ is an $n\times n$ real matrix, then the map $\vec x\mapsto\vec x\cdot A\vec x$ from $\mathbb R^n\to\mathbb R$ is called a \textbf{quadratic form}.  Note that this is a homogeneous degree-$2$ polynomial in the components of $\vec x$.  $A$ may be assumed to be a \emph{symmetric} matrix: it is readily verified that $\vec x\cdot A\vec x=\vec x\cdot A^T\vec x=\vec x\cdot\left(\frac{A+A^T}2\right)\vec x$, and $\frac{A+A^T}2$ is symmetric.
+
+Whenever $A$ is a symmetric $n\times n$ matrix, the equation $\vec x\cdot A\vec x=0$ gives either the origin alone, or else a union of lines in $\mathbb R^n$ through the origin (why?).  In the latter case, the lines spell out a quadric hypersurface in $P^{n-1}(\mathbb R)$.
+
+In this section we shall stick to the case where $n=3$.  In this case we have conic sections in the projective plane.  More succinctly, a \textbf{conic section} is a nonempty subset of $P^2(\mathbb R)$ given by the equation $\vec x\cdot A\vec x=0$, where $A$ is a nonsingular symmetric $3\times 3$ real matrix.
+
+Perhaps the most surprising thing about conics is that projective transformations act transitively on them.  Circles, ellipses, parabolas and hyperbolas are all the same in $P^2(\mathbb R)$.\\
+
+\noindent\textbf{Proposition 3.9.} \emph{Let $\omega$ be the unit circle.  If $\omega_1$ is an arbitrary conic in $P^2(\mathbb R)$, then there exists a projective transformation $T$ such that $T(\omega)=\omega_1$.  Therefore, the projective transformations act transitively on the conics.} % Yes, it'll use linear forms, which will be covered in the first few Exercises.
+\begin{proof}
+Let $\omega_1$ be given by $\vec x\cdot A\vec x=0$.  Since $A$ is nonsingular, all its eigenvalues are nonzero, and real by Exercise 1(c), hence its signature (Exercise 3) is an odd integer.  Depending on the signature, $A$ is congruent to one of the following matrices:
+$$\begin{bmatrix}1\\&1\\&&1\end{bmatrix},~~~~\begin{bmatrix}1\\&1\\&&-1\end{bmatrix},~~~~\begin{bmatrix}1\\&-1\\&&-1\end{bmatrix},~~~~\begin{bmatrix}-1\\&-1\\&&-1\end{bmatrix}$$
+Represent such a matrix as $P^TAP$ with $P\in GL_3(\mathbb R)$.  If $P^TAP=I_3$ (the first matrix), then $A$ is positive definite, which means $\vec x\ne\vec 0\implies\vec x\cdot A\vec x>0$, and $\omega_1$ does not contain any points of $P^2(\mathbb R)$.  By our definition, then, $\omega_1$ is not a conic.  Likewise, $P^TAP$ cannot be the fourth matrix $-I_3$ either.
+
+If $P^TAP=D=\begin{bmatrix}1\\&1\\&&-1\end{bmatrix}$, then for any $\vec x=(x,y,z)\ne\vec 0$,
+$$(P\vec x)\cdot A(P\vec x)=0\iff P\vec x\cdot AP\vec x=0\iff \vec x\cdot P^TAP\vec x=0$$
+$$\iff \vec x\cdot D\vec x=0\iff x^2+y^2=z^2$$
+This means that if $[\vec x]\in P^2(\mathbb R)$, then $[P\vec x]\in\omega_1$ if and only if $[\vec x]$ is on the unit circle $\omega$.  If $T$ is the projective transformation given by $P$, it follows that $T(\omega)=\omega_1$ as desired.
+
+If $P^TAP=\begin{bmatrix}1\\&-1\\&&-1\end{bmatrix}$, then taking $Q$ to be the orthogonal matrix $\begin{bmatrix}&&1\\1\\&1\end{bmatrix}$, we have $(PQ)^TA(PQ)=Q^T(P^TAP)Q=Q^T\begin{bmatrix}1\\&-1\\&&-1\end{bmatrix}Q=\begin{bmatrix}-1\\&-1\\&&1\end{bmatrix}=-D$.  Thus, adapting the previous argument shows $[PQ\vec x]\in\omega_1$ if and only if $[\vec x]\in\omega$; hence this time, let $T$ be the projective transformation given by $PQ$.
+\end{proof}
+
+\noindent We have just studied conics from a linear-algebra point of view.  From this point onwards, we shall think of them in projective setting.
+
+First observe that if $\ell$ is a line and $\omega$ is a conic, then $\ell\cap\omega$ can consist of zero, one or two points, but no more.  This is easy to prove if $\omega$ is the unit circle; and then Proposition 3.9 entails it for arbitrary conics.  If $|\ell\cap\omega|=1$ then $\ell$ is said to be \textbf{tangent} to $\omega$; and if $|\ell\cap\omega|=2$ then $\ell$ is said to be \textbf{secant} to $\omega$.
+
+Let $\ell_\infty$ be the line at infinity.  If $\ell_\infty\cap\omega=\varnothing$, $\omega$ is called an \textbf{ellipse}; if $\ell_\infty$ is tangent to $\omega$, $\omega$ is called a \textbf{parabola}; and if $\ell_\infty$ is secant to $\omega$ then $\omega$ is called a \textbf{hyperbola}.  This is not a projectively intrinsic property (because the line at infinity is not); however, it is clear from the definitions that these properties are preserved by affine transformations (Exercise 12 of Section 3.2).
+
+We can, in fact, relate this to Exercise 9 of Section 2.6.  A quadratic curve in $\mathbb R^2$ is given by $\mathfrak ax^2+\mathfrak bxy+\mathfrak cy^2+\mathfrak dx+\mathfrak ey+\mathfrak f=0$, where $\mathfrak a,\mathfrak b,\mathfrak c,\mathfrak d,\mathfrak e,\mathfrak f\in\mathbb R$ and $\mathfrak a,\mathfrak b,\mathfrak c$ are not all zero.  If we view it in the projective plane, it contains all $[x:y:z]\in\mathbb R^3$ with $z\ne 0$ satisfying:
+\begin{equation}\tag{*}\mathfrak ax^2+\mathfrak bxy+\mathfrak cy^2+\mathfrak dxz+\mathfrak eyz+\mathfrak fz^2=0\end{equation}
+because when $z\ne 0$, $[x:y:z]=(x/z,y/z)$, and dividing by $z^2$ throughout shows that this point is in the Euclidean plane curve.  It is thus natural for us to extend this equation (*) to points of the form $[x:y:0]$.  Since (*) is a homogeneous polynomial, it indeed gives a well-defined subset of $P^2(\mathbb R)$, which is obtained by (possibly) adjoining infinity points to the Euclidean plane curve.
+
+Note that if $A$ is the symmetric matrix $\begin{bmatrix}\mathfrak a&\frac 12\mathfrak b&\frac 12\mathfrak d\\\frac 12\mathfrak b&\mathfrak c&\frac 12\mathfrak e\\\frac 12\mathfrak d&\frac 12\mathfrak e&\mathfrak f\end{bmatrix}$, then the above equation is tantamount to $\vec x\cdot A\vec x=0$ for $\vec x=(x,y,z)$.  However, $A$ may be singular, and in this case the quadratic curve is really a union of two lines.  We will assume that $A$ is nonsingular, and hence we have a conic in $P^2(\mathbb R)$ in the original sense that we defined.
+
+It is clear that an infinity point $[x:y:0]$ is on the conic if and only if $\mathfrak ax^2+\mathfrak bxy+\mathfrak cy^2=0$.  This is a homogeneous quadratic polynomial in two variables, which can be sorted by completing the square:
+$$\mathfrak ax^2+\mathfrak bxy+\mathfrak cy^2=0$$
+$$\mathfrak a^2x^2+\mathfrak a\mathfrak bxy+\mathfrak a\mathfrak cy^2=0$$
+$$\mathfrak a^2x^2+\mathfrak a\mathfrak bxy=-\mathfrak a\mathfrak cy^2$$
+$$\mathfrak a^2x^2+\mathfrak a\mathfrak bxy+\frac{\mathfrak b^2}4y^2=\left(\frac{\mathfrak b^2}4-\mathfrak a\mathfrak c\right)y^2$$
+$$\left(\mathfrak ax+\frac{\mathfrak b}2y\right)^2=\left(\frac{\mathfrak b^2-4\mathfrak a\mathfrak c}4\right)y^2$$
+Thus we consider $\mathfrak b^2-4\mathfrak a\mathfrak c$ the discriminant of the conic.
+
+If $\mathfrak b^2-4\mathfrak a\mathfrak c<0$, the equation has no real solution, because the right-hand side must either be negative (contradicting that the left-hand side is a square), or zero (in which case $x=y=0$ follows, which fails to hold water because $[0:0:0]$ is not defined in $P^2(\mathbb R)$).  Thus in this case, there are no infinity points on the conic, so the conic is an ellipse.  This is identical to what has been stated in Exercise 9 of Section 2.6.
+
+If $\mathfrak b^2-4\mathfrak a\mathfrak c=0$, then we must have $\mathfrak ax+\frac{\mathfrak b}2y=0$.  If $\mathfrak a$ and $\mathfrak b$ are both zero, then $0=0x^2+0xy+\mathfrak cy^2=\mathfrak cy^2$ from the original equation.  Hence $y=0$ (since $\mathfrak c\ne 0$; by the given conditions $\mathfrak a,\mathfrak b,\mathfrak c$ cannot all be zero).  In this case $[1:0:0]$ is the unique infinity point on the conic.  However, if $\mathfrak a,\mathfrak b$ are not both zero, then the equation $\mathfrak ax+\frac{\mathfrak b}2y=0$ (in the $xy$-plane) gives a line through the origin, which, when transferred from $\mathbb R^3$ to $P^2(\mathbb R)$, is the unique infinity point on the conic.  So if $\mathfrak b^2-4\mathfrak a\mathfrak c=0$, there is exactly one infinity point on the conic, making it a parabola.
+
+If $\mathfrak b^2-4\mathfrak a\mathfrak c>0$, then there are two infinity points on the conic, as we see: If $\mathfrak a=0$, then the cross section of the conic in the $xy$-plane in $\mathbb R^3$ has equation $\mathfrak bxy+\mathfrak cy^2=0$, or $y(\mathfrak bx+\mathfrak cy)=0$.  Also, $\mathfrak b\ne 0$ (because $\mathfrak b^2=\mathfrak b^2-4\mathfrak a\mathfrak c>0$).  Thus, the infinity points are the distinct lines given by $y=0$ and $x=-\frac{\mathfrak c}{\mathfrak b}y$.
+
+Now suppose $\mathfrak a\ne 0$.  Then we must have $y\ne 0$ (if $y=0$ then $\mathfrak ax^2=0$, hence $x=0$ since $\mathfrak a\ne 0$, but this is a contradiction because $[0:0:0]$ does not exist).  Letting $u=\frac xy$ and dividing the last equation by $y^2$ throughout gives $\left(\mathfrak au+\frac{\mathfrak b}2\right)^2=\frac{\mathfrak b^2-4\mathfrak a\mathfrak c}4$.  Since the right side is strictly positive, we get that $\mathfrak au+\frac{\mathfrak b}2$ is one of two distinct square roots $\frac{\pm\sqrt{\mathfrak b^2-4\mathfrak a\mathfrak c}}2$, so that $u=\frac{-\mathfrak b\pm\sqrt{\mathfrak b^2-4\mathfrak a\mathfrak c}}{2\mathfrak a}$ (which hopefully looks familiar).  In each case $x=uy$ gives an infinity point on the conic, and these are the only two.  Hence the conic is a hyperbola.
+
+Here are a few pictures of some conics.
+\begin{center}
+\begin{tabular}{ccc}
+\includegraphics[scale=.5]{ProjEllipse.png} &
+\includegraphics[scale=.3]{ProjParabola.png} &
+\includegraphics[scale=.25]{ProjHyperbola.png} \\
+Ellipse, given by &
+Parabola, given by &
+Hyperbola, given by \\
+$\frac{x^2}9+\frac{y^2}4=1$ & $x^2=4y$ & $\frac{y^2}4-\frac{x^2}9=1$
+\end{tabular}
+\end{center}
+On the above parabola, the infinity point is the same infinity point that the $y$-axis possesses.  On the above hyperbola, the infinity points are the infinity points on the projective lines given by $y=\pm\frac 23x$, the asymptotes of the hyperbola.  It is clear from these examples how a general conic looks in the projective plane.\\
+
+\noindent\textbf{INTERIOR POINTS OF A CONIC}\\
+
+\noindent In the Euclidean plane, the interior of the circle $x^2+y^2=1$ is given by the inequality $x^2+y^2<1$.  It is the open disk centered at the origin, and is preserved by any isometry of $\mathbb R^2$.  Projective conics have a similar notion, which is surprisingly intrinsic:\\
+
+\noindent\textbf{Definition.} \emph{Let $\omega$ be a conic, and $p\in P^2(\mathbb R)-\omega$.  If every line through $p$ intersects $\omega$, $p$ is said to be an \textbf{interior point} of the conic $\omega$.  If at least one line through $p$ is disjoint from $\omega$, $p$ is said to be an \textbf{exterior point} of $\omega$.}\\
+
+\noindent Note that points of $\omega$ are not considered to be either interior or exterior.  From this definition, it is clear that if $T$ is a projective transformation, then $T$ sends interior (resp., exterior) points of $\omega$ to interior (resp., exterior) points of $T(\omega)$.
+
+Now if $\omega$ is the unit circle, then the reader can easily verify that a point $p\notin\omega$ is interior if and only if $p=(x,y)$ with $x^2+y^2<1$, and $p$ is exterior if and only if either $p\in\ell_\infty$ or $p=(x,y)$ with $x^2+y^2>1$.  Thus the interior of the circle is exactly what we see it as in the Euclidean plane.  By the previous paragraph, every projective transformation which fixes the unit circle \emph{must} preserve these interior points, hence also fix the closed disk.  [This is worth contrasting with the unit circle of the Riemann sphere, which will be introduced in Chapter 4.]
+
+Here are the pictures of the previously shown conics, with the interiors shaded.
+\begin{center}
+\begin{tabular}{ccc}
+\includegraphics[scale=.5]{ProjEllipse_int.png} &
+\includegraphics[scale=.3]{ProjParabola_int.png} &
+\includegraphics[scale=.25]{ProjHyperbola_int.png} \\
+Interior of ellipse, &
+Interior of parabola, &
+Interior of hyperbola, \\
+given by $\frac{x^2}9+\frac{y^2}4<1$ & given by $x^2<4y$ & given by $\frac{y^2}4-\frac{x^2}9>1$
+\end{tabular}
+\end{center}
+
+The unit circle in the projective plane $P^2(\mathbb R)$, along with its interior, will play a major role in Section 4.8.
+
+\subsection*{Exercises 3.5. (Conics)}
+\begin{enumerate}
+\item\emph{(Spectral Theorem.)} \---- (a) If $A$ is an $n\times n$ matrix with real entries, and there is an orthogonal matrix $S$ such that $S^{-1}AS$ is diagonal (in this case we say that $A$ is \textbf{orthogonally diagonalizable}), show that $A$ is symmetric.
+
+The aim of the rest of this exercise is prove the converse.  We assume $A$ is a symmetric matrix.  We wish to prove that it is orthogonally diagonalizable.
+
+(b) If $\vec v_1$ and $\vec v_2$ are eigenvectors of $A$ with distinct eigenvalues $\lambda_1\ne\lambda_2$, show that $\vec v_1\cdot\vec v_2=0$.  [Recall that $A\vec v_1\cdot\vec v_2=\vec v_1\cdot A^T\vec v_2$.  Use the bilinearity of the dot product and the fact that $A$ is symmetric.]
+
+(c) Show that all complex eigenvalues of $A$ are real.  [Suppose $p+iq$ (with $p,q\in\mathbb R,q\ne 0$) is an eigenvalue.  Express its eigenvector as $\vec a+i\vec b$, where $\vec a,\vec b\in\mathbb R^n$.  Then $p-iq$ is an eigenvalue with eigenvector $\vec a-i\vec b$ (why?).  Adapt the proof of part (b) to show that the bilinear map $((z_1,\dots,z_n),(w_1,\dots,w_n))\mapsto z_1w_1+\dots+z_nw_n$ from $\mathbb C^n\times\mathbb C^n\to\mathbb C$ sends $(\vec a+i\vec b,\vec a-i\vec b)$ to zero.\footnote{This bilinear map is \emph{not} an inner product; an inner product of complex vector spaces is merely sesquilinear, like $z_1\overline{w_1}+\dots+z_n\overline{w_n}$.  Some complex conjugation (the $\overline{w_j}$) must appear in the formula for a complex inner product.}  Yet the bilinear map also sends it to $\|\vec a\|^2+\|\vec b\|^2$; why?]
+
+(d) Now show that $A$ is orthogonally diagonalizable.  [$A$ has an eigenvalue $\lambda$, which must be real by part (c).  Let $\vec v$ be an eigenvector of $\lambda$; by dividing it by its magnitude, assume $\|\vec v\|=1$.  Use the Gram-Schmidt process to extend $\vec v$ to an orthonormal basis.  Putting these vectors together as columns, we get an orthogonal matrix $S$ with $\vec v$ at the left column.  Then $S^{-1}AS$ has $(\lambda,0,\dots,0)$ as its left column, hence also as its top row, because it is symmetric.  Thus, $S^{-1}AS=\begin{bmatrix}\lambda&0\\0&B\end{bmatrix}$ where $B$ is an $(n-1)\times(n-1)$ matrix.  Now use induction.]
+
+\item\emph{(Definiteness of Matrices.)} \---- Let $A$ be a symmetric $n\times n$ matrix with real entries.  By Exercise 1, it is orthogonally diagonalizable.  Thus, it has some orthonormal eigenbasis $\vec u_1,\dots,\vec u_n$; let $\lambda_1,\dots,\lambda_n\in\mathbb R$ be the respective eigenvalues.
+
+(a) If $\vec x=a_1\vec u_1+\dots+a_n\vec u_n$, show that $\vec x\cdot A\vec x=\lambda_1a_1^2+\dots+\lambda_na_n^2$.
+
+Now show that:
+
+(b) The $\lambda_j$ are all positive $\iff$ $\vec x\cdot A\vec x>0$ for all $\vec x\ne\vec 0$.  [In this case $A$ is \textbf{positive definite}.]
+
+(c) The $\lambda_j$ are all nonnegative $\iff$ $\vec x\cdot A\vec x\geqslant 0$ for all $\vec x$.  [In this case $A$ is \textbf{positive semidefinite}.]
+
+(d) The $\lambda_j$ are all negative $\iff$ $\vec x\cdot A\vec x<0$ for all $\vec x\ne\vec 0$.  [In this case $A$ is \textbf{negative definite}.]
+
+(e) The $\lambda_j$ are all nonpositive $\iff$ $\vec x\cdot A\vec x\leqslant 0$ for all $\vec x$.  [In this case $A$ is \textbf{negative semidefinite}.]
+
+(f) There exist both positive and negative $\lambda_j$ $\iff$ $\vec x\cdot A\vec x$ is positive for some $\vec x$ and negative for some $\vec x$.  [In this case $A$ is \textbf{indefinite}.]
+
+(g) Show that $\vec x\cdot A\vec x=0$ gives a quadric hypersurface in $P^{n-1}(\mathbb R)$ (in other words, it is nonempty) if and only if $A$ is neither positive definite nor negative definite.
+
+\item If $A$ and $B$ are symmetric $n\times n$ matrices with real entries, then $A$ is said to be \textbf{congruent} to $B$ if there exists a nonsingular matrix $P$ with real entries, such that $B=P^TAP$.  [Note that $A$ and $B$ need not be similar matrices, as $P^T$ is generally different from $P^{-1}$.]  It is clear that this is an equivalence relation.
+
+(a) Congruent matrices have the same rank.
+
+(b) The \textbf{signature} of a symmetric matrix is defined to be the number of positive eigenvalues minus the number of negative ones, counted with multiplicity.  [Any eigenvalues of zero are ignored in the case that the matrix is singular.]  For example, if $A=\begin{bmatrix}2\\&3\\&&-4\end{bmatrix}$, then $A$ has two positive and one negative eigenvalue, so its signature is $2-1=1$.  The identity matrix $I_n$ has signature $n$.  Note that if there are more negative eigenvalues than positive ones, the signature is negative.
+
+If $A$ and $B$ are symmetric $n\times n$ matrices with real entries, show that $A$ and $B$ are congruent if and only if they have the same rank and signature.  [Use the Spectral Theorem, and think about what diagonal matrices would be congruent to.]  This is \textbf{Sylvester's Law of Inertia}.
+
+(c) If $A$ and $B$ are congruent matrices, then there is an invertible linear map $\varphi:\mathbb R^n\to\mathbb R^n$, which sends the set $\vec x\cdot A\vec x=0$ exactly to the set $\vec x\cdot B\vec x=0$.
+
+\item A conic in $P^2(\mathbb R)$ is a hyperbola if and only if some of its interior points are at infinity.
+
+\item Let $\omega$ be a conic, and $p\in P^2(\mathbb R)$.
+
+(a) If $p$ is an interior point, there is no line through $p$ tangent to $\omega$.
+
+(b) If $p\in\omega$, there is exactly one line through $p$ tangent to $\omega$.
+
+(c) If $p$ is an exterior point, there are exactly two lines through $p$ tangent to $\omega$.
+
+\item If $\omega_1$ and $\omega_2$ are distinct conics, show that $|\omega_1\cap\omega_2|\leqslant 4$.  [By Proposition 3.9, we may assume $\omega_1$ is the unit circle.]  This is a special case of Bezout's Theorem.
+
+\item Let $\omega$ be a conic, and $G$ be the group of projective transformations that fix $\omega$.  Show that $G$ acts transitively on each of the following sets:
+
+(a) The set of points on $\omega$;
+
+(b) The set of interior points;
+
+(c) The set of exterior points.
+
+\item\emph{(Sylvester's Criterion.)} \---- Let $A=\begin{bmatrix}a_{11}&\dots&a_{1n}\\\vdots&\ddots&\vdots\\a_{1n}&\dots&a_{nn}\end{bmatrix}$ be an $n\times n$ symmetric matrix with real entries.  Show that the following are equivalent:
+
+~~~~(i) $A$ is positive definite;
+
+~~~~(ii) $A=B^2$ for some nonsingular symmetric matrix $B$ with real entries;
+
+~~~~(iii) $A=B^TB$ for some nonsingular matrix $B$ with real entries;
+
+~~~~(iv) For each $1\leqslant k\leqslant n$, the upper-left hand submatrix $\begin{bmatrix}a_{11}&\dots&a_{1k}\\\vdots&\ddots&\vdots\\a_{1k}&\dots&a_{kk}\end{bmatrix}$ has a positive determinant.
+
+[(i) $\implies$ (ii): Pick an orthonormal eigenbasis of $A$, and use it to define the linear operator $B$.  (ii) $\implies$ (iii) because if $B$ is symmetric, $B^2=B^TB$.  (iii) $\implies$ (i): verify that $\vec x\cdot A\vec x=\|B\vec x\|^2$.  (iii) $\implies$ (iv): the $k\times k$ upper-left hand submatrix of $A$ is $P^TP$, where $P$ is the $n\times k$ matrix consisting of the first $k$ columns of $B$.  This is positive definite since $\vec x\cdot P^TP\vec x=\|P\vec x\|^2$; now look back at Exercise 2.  (iv) $\implies$ (iii): Note that the entries of $A$ are supposed to be the dot products of $B$'s columns.  Now use induction on $n$ to show that there exists an \emph{upper triangular} matrix $B$ such that $A=B^TB$.] % I thought (ii) $\implies$ (iii) would be obvious, but I'll add it.
+
+Sylvester's Criterion states the equivalence (i) $\iff$ (iv).
+
+\item\emph{(Cross Ratios on a Conic.)} \---- Let $\omega$ be a conic in $P^2(\mathbb R)$.
+
+(a) Let $p\in\omega$ be a point, and $\ell$ any line of $P^2(\mathbb R)$ not containing $p$.  We define \textbf{stereographic projection} $\varphi:\omega\to\ell$ as follows.  If $q\ne p$ is a point in $\omega$, $\varphi(q)=\overset{\longleftrightarrow}{p~q}\cap\ell$.  Finally, set $\varphi(p)=\ell'\cap\ell$ where $\ell'$ is the line through $p$ tangent to $\omega$.  Show that this is a bijection from $\omega$ to $\ell$.  [It is, in fact, a continuous one, but the details of that will not be important to us.]
+
+Now let $a,b,c,d\in\omega$ be points.  Assume that given any three of them, they are not all equal.
+
+We define the \textbf{conic cross ratio} $[\![a,b,c,d]\!]_\omega$ as follows: Let $p\in\omega$ be a point, and $\ell$ any line of $P^2(\mathbb R)$ not containing $p$.  Then if $\varphi:\omega\to\ell$ is the stereographic projection of part (a), we set $[\![a,b,c,d]\!]_\omega=[\![\varphi(a),\varphi(b),\varphi(c),\varphi(d)]\!]$.
+
+(b) Show that this cross ratio depends on only the conic $\omega$ and the points $a,b,c,d$, and does not depend on the point $p$ or the line $\ell$.  [Verify that the stereographic projections from the same point to different lines differ by the perspective projection between the lines from the point.  By Proposition 3.3, this shows independence of the line $\ell$.  To show independence of $p$, assume $\omega$ is the unit circle.  Show that a (Euclidean) rotation of the circle, when conjugated by the stereographic projection, becomes a projective transformation of the line.  Use this to show that a rotation of $a,b,c,d$ leaves the cross ratio unchanged.  Yet changing $p$ can be achieved by rotating $a,b,c,d$ and then applying a projective transformation of $P^2(\mathbb R)$ to everything: why?]
+
+(c) The cross ratios on the conic satisfy Proposition 3.6(i)-(iii).  Also, if $T:P^2(\mathbb R)\to P^2(\mathbb R)$ is a projective transformation, $\omega$ is a conic and $a,b,c,d\in\omega$, then $[\![T(a),T(b),T(c),T(d)]\!]_{T(\omega)}=[\![a,b,c,d]\!]_\omega$.
+
+(d) Let $\omega_1$ be another conic also containing $a,b,c,d$.  Are $[\![a,b,c,d]\!]_\omega$ and $[\![a,b,c,d]\!]_{\omega_1}$ necessarily equal?  Prove or give a counterexample.
+\end{enumerate}
+
+\subsection*{3.6. Duality}
+\addcontentsline{toc}{section}{3.6. Duality}
+After reading the statements of Proposition 3.1, you may have observed a similarity between them.  Part (i) associates each pair of points to a line; part (ii) associates each pair of lines to a point.  There is a clever correlation between these: one can correspond each point with a line, such that if two points correspond to two lines, then the line through the points corresponds to the intersection point of the two lines.  This will be the main theme of this section.
+
+The concept is referred to as \textbf{duality} in the projective plane.  If $\mathcal L^2$ is the set of lines in $P^2(\mathbb R)$ [including the line at infinity], then a \textbf{duality correspondence} is defined to be a bijection $\sigma:P^2(\mathbb R)\to\mathcal L^2$, such that whenever $p,q\in P^2(\mathbb R)$, we have $p\in\sigma(q)$ if and only if $q\in\sigma(p)$.  In other words, it makes each point correspond to a line in such a way, that a point $p$ is on a line $\ell$ if and only if the line corresponding to $p$ contains the point corresponding to $\ell$.
+
+The reader can verify that a duality correspondence matches the two things in each row of the following chart.  Here, it is assumed that $p_0$ is the point corresponding to the line at infinity.
+\begin{center}
+\begin{tabular}{c|c}
+A point&A line\\\hline
+A point on a line&A line containing a point\\\hline
+Line determined by two points&Intersection of two lines\\\hline
+Collinear points&Concurrent lines\\\hline
+$p_0$&Line at infinity\\\hline
+Points at infinity&Lines through $p_0$
+\end{tabular}
+\end{center}
+It is easy to show that duality correspondences exist; here is one of them.  Let us use the standard dot product of $\mathbb R^3$.  Whenever $V$ is a vector subspace of $\mathbb R^3$, the set $V^\perp=\{\vec x\in\mathbb R^3:\vec x\cdot\vec v=0\text{ for all }\vec v\in V\}$, called the \textbf{orthogonal complement} of $V$, is a vector subspace such that $\mathbb R^3=V\oplus V^\perp$.  Moreover, $\dim(V)+\dim(V^\perp)=3$.  Thus if $\dim(V)=1$ then $\dim(V^\perp)=2$, so that $V\mapsto V^\perp$ is a correspondence from one-dimensional subspaces to two-dimensional subspaces; i.e., from points to lines in $P^2(\mathbb R)$.  Yet also, since $(V^\perp)^\perp=V$ (verify!), we have the correspondence $V\mapsto V^\perp$ from two-dimensional to one-dimensional subspaces (i.e., lines to points), and it is a two-sided inverse of the first one.
+
+Thus the orthogonal complement in $\mathbb R^3$ gives a bijection between points and lines in $P^2(\mathbb R)$.  Since $V\subset W$ implies $ V^\perp\supset W^\perp$ (because if $\vec x\in W^\perp$, $\vec x\cdot\vec v=0$ for all $\vec v\in W$, hence in particular if $\vec v\in V$, and therefore $\vec x\in V^\perp$), this bijection indeed satisfies the law that a point is on a line $\iff$ the corresponding line is on the corresponding point.  Thus we have a duality correspondence.  [Note that $p_0=(0,0)$ in this case, as the line spanned by $(0,0,1)$ has the $xy$-plane as its orthogonal complement; i.e., the line at infinity.]  Here is an example of a diagram and its dual, color-coded.  The lines have only been partially drawn, to make the concept of what we are going over clear to the reader.
+
+\begin{center}
+\includegraphics[scale=.4]{DiagAndDual.png}
+
+\emph{Red point (on left) is $(-\frac 32,-1)$.  Red line (on right) is $3x+2y=2$.}
+
+\emph{Green line (on left) is $4x-3y=-3$.  Green point (on right) is $(\frac 43,-1)$.}
+
+\emph{Blue point (on left) is $(0,1)$.  Blue line (on right) is $y=-1$.}
+
+\emph{Purple line (on left) is $3x+2y=2$.  Purple point (on right) is $(-\frac 32,-1)$.}
+
+\emph{Orange point (on left) is $(1,-\frac 12)$.  Orange line (on right) is $2x-y=-2$.}
+\end{center}
+
+A duality correspondence can turn any intrinsic-geometry statement about the projective plane, into an ``opposite'' statement where the lines take the role of the points and the points take the role of the lines.  Simply make the replacements in the above chart, along with any other correspondences deduced from the main property that a point is on a line $\iff$ the corresponding line contains the corresponding point.  Thus we have:\\
+
+\noindent\textbf{Principle of Duality.} \emph{If any statement in the projective plane is true, so is the \textbf{dual} statement obtained by exchanging ``points'' with ``lines'', ``point on line'' with ``line containing point'', ``line determined by two points'' with ``intersection of two lines'', and ``collinear points'' with ``concurrent lines'' throughout.}\\
+
+\noindent The dual statement must keep all logical quantifiers exactly how they are.  For instance, if the original statement involves three fixed points that are not collinear, then the dual statement involves three fixed lines that are not concurrent.  If the original statement states ``for every point, there exists another point such that the line determined by them...'' then the dual statement states, ``for every line, there exists another line such that their intersection point...''
+
+Section 3.7 will make many uses of this.  For example, the dual statement of Pascal's Theorem is Brianchon's Theorem, and the dual statement of Desargues' Theorem is its own converse.
+
+Duality can be extended to higher-dimensional projective spaces; via the orthogonal complement in $\mathbb R^{n+1}$, one gets a correspondence between $k$-planes and $(n-1-k)$-planes in $P^n(\mathbb R)$ for each $k$ [in particular, between points and hyperplanes], which overall reverses inclusion (just like the inclusion of a point in a line in the case $n=2$).  However, we will not delve into this.\\
+
+\noindent\textbf{COMPATIBILITY WITH CONICS}\\
+
+\noindent It is natural to ask how the conics from the previous section relate to the duality concept.  Indeed, let us use our orthogonal-complement duality correspondence: if $\omega$ is an arbitrary conic, what can be said about the lines corresponding to the points on the conic?  It turns out that there is another conic $\omega_1$ for which these are precisely the lines tangent to $\omega_1$ [Exercise 7].  $\omega_1$ is generally a different conic from $\omega$, but it would be especially interesting if they were the same.
+
+Thus, we say that a duality correspondence is \textbf{compatible with $\omega$} if it makes all points on $\omega$ correspond to lines tangent to $\omega$.  For instance, if $\omega$ is the unit circle $x^2+y^2=1$, then the orthogonal-complement duality correspondence is compatible with $\omega$, because it makes a typical unit-circle point $(\cos\theta,\sin\theta)$ correspond with the line $(\cos\theta)x+(\sin\theta)y=-1$, as the reader can verify by transforming to the linear-algebra setting.  This line shares the unique point $(-\cos\theta,-\sin\theta)$ with $\omega$, hence is tangent.
+
+Note, by the way, that though this line is tangent to the circle, it is not tangent \emph{through the corresponding point}.  In fact, in the orthogonal-complement correspondence, it is impossible for any conic that the line be tangent through the corresponding point, because no line in $P^2(\mathbb R)$ contains the corresponding point.  However, there are other duality correspondences that go around this difficulty, as we will see later.  We say that a duality correspondence is \textbf{strongly compatible with $\omega$} if it makes every point on $\omega$ correspond with the tangent line to $\omega$ through that particular point.
+
+The existence of duality correspondences which are compatible with $\omega$ can readily be proved.  In fact, we have that\\
+
+\noindent\textbf{Proposition 3.9.} \emph{If $\omega$ is a conic, then there is a unique duality correspondence which is strongly compatible with $\omega$.}\\
+
+\noindent It is worth remarking that, though the strongly compatible correspondence is unique, there are many compatible correspondences which are not strong (such as the orthogonal complement in the case that $\omega$ is the unit circle).  This will not be important to us, however, so we will not establish it.
+\begin{proof}
+Let $\vec x\cdot A\vec x=0$ be an equation for the conic, with $A$ symmetric.  For each subspace $V$, we let $V^*=(AV)^\perp=\{\vec x\in\mathbb R^3:\vec x\cdot A\vec v=0\text{ for all }\vec v\in V\}$.  Since $A$ is nonsingular and symmetric, it is easy to see that $(V^*)^*=V$ and $\dim(V)+\dim(V^*)=3$.  However, $\mathbb R^3$ need not be the direct sum of $V$ and $V^*$, as we will see soon.
+
+Given these conditions, it is clear that $V\mapsto V^*$, from one-dimensional to two-dimensional subspaces, gives a duality correspondence in $P^2(\mathbb R)$.  Thus, we must show that it is strongly compatible with $\omega$.  Suppose $V=\operatorname{span}(\vec x)$ is point on the conic; i.e., $\vec x$ is a nonzero vector with $\vec x\cdot A\vec x=0$.  Then $\vec x\in V^*$ by definition of $V^*$.\footnote{Incidentally, this proves that $\vec 0\ne\vec x\in V\cap V^*$, and hence $\mathbb R^3$ is not the direct sum of $V$ and $V^*$.}  Moreover, to show tangency, we must show that if $\vec y$ is both in the conic and on the line $V^*$ (which equates to $\vec y\cdot A\vec y=\vec y\cdot A\vec x=0$), then $\vec y$ represents the same point as $\vec x$.
+
+Well, since $\vec x\cdot A\vec x=\vec y\cdot A\vec x=0$, we have $(\vec x+\vec y)\cdot A\vec x=0$ from bilinearity.  But also, since $\vec y\cdot A\vec y=0$, we obtain $\vec y\cdot A(\vec x+\vec y)=0$ (via bilinearity on the right).  Therefore $(\vec x+\vec y)\cdot A\vec y=0$ by symmetry of $A$, and adding the left-hand side to $(\vec x+\vec y)\cdot A\vec x$ entails $(\vec x+\vec y)\cdot A(\vec x+\vec y)=0$.  This means that $\vec x+\vec y$ is on the conic $\omega$.  Since $\vec x,\vec y,\vec x+\vec y$ are linearly dependent for obvious reasons, (assuming they are all nonzero), they represent collinear points in $P^2(\mathbb R)$, all of which are on $\omega$.  Since a conic and a line can't intersect in more than two points, at least two of $\vec x,\vec y,\vec x+\vec y$ must represent the same point.  Raising that assumption for any two of them entails that $\vec x,\vec y$ are scalar multiples of one another, hence represent the same point in $P^2(\mathbb R)$ as desired.
+
+Therefore, $V\mapsto V^*$ is a duality correspondence which is strongly compatible with $\omega$.
+
+As for uniqueness, let $\sigma,\tau:P^2(\mathbb R)\to\mathcal L^2$ be strongly compatible duality correspondences; we show $\sigma=\tau$.  First, every $\sigma(p)=\tau(p)$ is determined for $p\in\omega$, because both must be the tangent line to $\omega$ through $p$.  If $p$ is an exterior point, then by Exercise 5(c) of the previous section, there are two lines $\ell_1,\ell_2$ through $p$ tangent to $\omega$.  If they meet $\omega$ at $q_1,q_2$ respectively, then $\sigma(q_j)=\ell_j$ for $j=1,2$.  Just as $p$ is on both $\ell_1$ and $\ell_2$, the lines $\sigma(p),\tau(p)$ must pass through the corresponding points $q_1,q_2$; as two points determine a line, this means that $\sigma(p)=\tau(p)$ for exterior points $p$.
+
+Finally, if $p$ is an interior point, then let $\ell$ be a line through $p$.  $\ell$ must meet $\omega$ at exactly two points; and when the tangent lines to these points are constructed, their intersection is the point corresponding to $\ell$ (by the previous paragraph).  Whatever point this is must be in $\sigma(p)$ because $p\in\ell$.  Since this argument works for \emph{any} line $\ell$ through $p$, one can take any such line, construct the corresponding point, and reason that it must be in $\sigma(p)$.  These points must be in $\tau(p)$ too, and clearly the resulting points are not all the same, hence $\sigma(p)=\tau(p)$.
+\end{proof}
+
+\noindent According to the proof above, if $\ell$ is a secant line of $\omega$, then the strongly compatible duality correspondence must make $\ell$ correspond to the point obtained by taking the intersection points of $\ell$ with $\omega$, forming the tangent lines to $\omega$ at these points, then taking their intersection:
+\begin{center}
+\includegraphics[scale=.3]{PolePoint.png}
+
+\emph{Construction of the point corresponding to the blue line.}
+\end{center}
+This point is called the \textbf{pole point} of $\ell$ via $\omega$.  The concept of pole points is usually dealt with for circles in Euclidean geometry.  It's just that diameters do not have pole points in the Euclidean plane, because the tangent lines described in the previous paragraph are parallel.  However, one can take the pole point of a diameter in the projective plane, and such a point is at infinity.  [See Exercise 3.]
+
+Since duality correspondences can be arranged to be compatible with conics, we can generalize the principle of duality for situations involving one conic in the plane:\\
+
+\noindent\textbf{Principle of Duality (Conic-Compatible Version).} \emph{If any statement in the projective plane which uses exactly one conic $\omega$ is true, so is the \textbf{dual} statement obtained by exchanging ``points'' with ``lines'', ``point on line'' with ``line containing point'', ``line determined by two points'' with ``intersection of two lines'', ``collinear points'' with ``concurrent lines'', ``points on $\omega$'' with ``lines tangent to $\omega$'', ``exterior points of $\omega$'' with ``lines secant to $\omega$'', and ``interior points of $\omega$'' with ``lines disjoint from $\omega$'' throughout.}\\
+
+\noindent As we will see later, this principle gives the equivalence between Pascal's Theorem and Brianchon's Theorem.
+
+\subsection*{Exercises 3.6. (Duality)} % Explain the concept first.  Then establish a genuine bijection between lines and points (via orthogonal complement in \mathbb R^3).
+% Given a fixed conic, there is another bijection which corresponds points on the conic to lines tangent to it.  Also mention higher dimensions.
+\begin{enumerate}
+\item (a) If $(a,b)\ne(0,0)$ in $P^2(\mathbb R)$, then $(a,b)$ corresponds to the line $ax+by=-1$ in the orthogonal-complement duality correspondence.
+
+(b) Let $p$ and $\ell$ be a point and a line in $P^2(\mathbb R)$.  Then $p$ and $\ell$ correspond in the orthogonal-complement duality correspondence if and only if, either $p=(0,0)$ and $\ell$ is the line at infinity, or $p$ is at infinity and $\ell$ is the line through the origin perpendicular (in the Euclidean sense) to lines containing $p$, or else $\ell$ is the line perpendicular to the vector $\vec p$ passing through $-\frac 1{\|\vec p\|^2}\vec p$.
+
+\item Draw the dual of the following diagram via the orthogonal-complement duality correspondence.  [One of the points is at infinity.]
+\begin{center}
+\includegraphics[scale=.4]{DualExercise.png}
+\end{center}
+\item Let $\omega$ be the unit circle $x^2+y^2=1$.
+
+(a) A chord in $\omega$ is a diameter if and only if its pole point is at infinity.
+
+(b) Let $a,b$ be fixed real numbers with $a^2+b^2>1$.  Show that $ax+by=1$ is a chord of the circle and that its pole point is $(a,b)$.  [Use the strongly compatible duality correspondence.]
+
+(c) If $0<c<1$ is a fixed real number, then part (b) implies that the pole point of $x=c$ is $(\frac 1c,0)$.  Give an alternate geometric approach to this fact.
+
+\item If $\omega$ is a hyperbola, then the line $\ell_\infty$ at infinity is secant to $\omega$.  What is the pole point?
+
+\item If $\omega$ is a parabola and $\ell$ is a secant line, give necessary and sufficient conditions on $\ell$ for the pole point to be an infinity point.
+
+\item (a) Let $A$ be an arbitrary nonsingular symmetric $3\times 3$ matrix with real entries.  For vector subspaces $V$ of $\mathbb R^3$, set $V^*=(AV)^\perp=\{\vec x\in\mathbb R^3:\vec x\cdot A\vec v=0\text{ for all }\vec v\in V\}$.  Then $V\mapsto V^*$ is a duality correspondence.
+
+(b) Is every duality correspondence in $P^2(\mathbb R)$ necessarily of this form?
+
+\item (a) Let $\omega$ be the conic given by $\vec x\cdot A\vec x=0$ ($A$ nonsingular and symmetric), and let $\omega_1$ be the conic given by $\vec x\cdot A^{-1}\vec x=0$.  Show that in the orthogonal-complement duality correspondence, points on $\omega$ correspond exactly to lines tangent to $\omega_1$.
+
+(b) More generally, let $A$ be a nonsingular symmetric $3\times 3$ matrix with real entries, and let $\omega$ be a conic.  Under the duality correspondence induced by $A$ given in Exercise 6(a), show that there is a conic $\omega_1$ such that points on $\omega$ correspond exactly to lines tangent to $\omega_1$.
+\end{enumerate}
+
+\subsection*{3.7. Some Famous Results}
+\addcontentsline{toc}{section}{3.7. Some Famous Results}
+In the previous sections of this chapter, we have thoroughly introduced the basic concept of projective geometry.  In this section, we will state and prove some famous results that dated back from the first few centuries of the common era, along with the 17th century.  These results have originally been thought of in the Euclidean plane; projective geometry was only later considered popular by mathematicians in the 19th century,\footnote{Conrad, A. ``Projective Geometry: The early years.'' From \emph{sites.math.rutgers.edu} \---- Retrieved from http://sites.math.rutgers.edu/$\sim$cherlin/History/Papers2000/conrad.html} and then it was established that it was an easier setting to prove the results.\\
+
+\noindent\textbf{Theorem 3.10.} \textsc{(Desargues' Theorem)} \emph{Let $\triangle ABC$ and $\triangle A'B'C'$ be triangles in $P^2(\mathbb R)$.  Then the lines $\overset{\longleftrightarrow}{AA'},\overset{\longleftrightarrow}{BB'},\overset{\longleftrightarrow}{CC'}$ are concurrent if and only if the points $\overset{\longleftrightarrow}{AC}\cap\overset{\longleftrightarrow}{A'C'}$, $\overset{\longleftrightarrow}{CB}\cap\overset{\longleftrightarrow}{C'B'}$ and $\overset{\longleftrightarrow}{BA}\cap\overset{\longleftrightarrow}{B'A'}$ are collinear.}\\
+
+\noindent The triangles are said to be \textbf{in perspective centrally} if the lines $\overset{\longleftrightarrow}{AA'}$, etc.~named in the theorem are concurrent; and they are said to be \textbf{in perspective axially} if the points named in the theorem are collinear.  Thus Desargues' theorem states that two triangles in $P^2(\mathbb R)$ are in perspective centrally if and only if they are in perspective axially.  Here is a picture of such triangles.
+\begin{center}
+\includegraphics[scale=.4]{Desargues.png}
+\end{center}
+\begin{proof}
+Suppose first that $\overset{\longleftrightarrow}{AA'},\overset{\longleftrightarrow}{BB'},\overset{\longleftrightarrow}{CC'}$ are concurrent, say $P=\overset{\longleftrightarrow}{AA'}\cap\overset{\longleftrightarrow}{BB'}\cap\overset{\longleftrightarrow}{CC'}$.  By applying a projective transformation, we may assume $P=[1:0:0]$, $\overset{\longleftrightarrow}{AC}\cap\overset{\longleftrightarrow}{A'C'}=[0:1:0]$ and $B=(0,0)$ [these points are not collinear].  Then $\overset{\longleftrightarrow}{AC}$ and $\overset{\longleftrightarrow}{A'C'}$ are vertical, and corresponding vertices of the triangles share the same horizontal line (because the line through them meets $P$), so we can conveniently write
+$$A=(x_1,y_1),B=(0,0),C=(x_1,y_2)$$
+$$A'=(x'_1,y_1),B'=(x'_2,0),C'=(x'_1,y_2)$$
+(unless any of these points are infinity points; the reader is encouraged to work out these cases).  With that, algebraic manipulation shows that:
+$$\overset{\longleftrightarrow}{AB}\cap\overset{\longleftrightarrow}{A'B'}=\left(\frac{x_1x'_2}{x'_2-x'_1+x_1},\frac{y_1x'_2}{x'_2-x'_1+x_1}\right)$$
+$$\overset{\longleftrightarrow}{BC}\cap\overset{\longleftrightarrow}{B'C'}=\left(\frac{x_1x'_2}{x'_2-x'_1+x_1},\frac{y_2x'_2}{x'_2-x'_1+x_1}\right)$$
+(unless the denominators are zero).  Since they have the same $x$-coordinate, the line going through them is vertical, hence contains $[0:1:0]=\overset{\longleftrightarrow}{AC}\cap\overset{\longleftrightarrow}{A'C'}$.  This proves that the three points stated are collinear, as desired.
+
+The converse follows from the Principle of Duality, as one can see that the central perspectivity and the axial perspectivity are exactly dual statements.
+\end{proof}
+
+\noindent There is another famous result concerning the collinearity of three points, due to Pappus from Alexandria.  Incidentally, the German mathematician Gerhard Hessenberg showed that this theorem implies Desargues' Theorem (3.10), and Exercise 1 will outline such a proof.\\
+
+\noindent\textbf{Theorem 3.11.} \textsc{(Pappus' Hexagon Theorem)} \emph{If $A,B,C$ are points on a line $\ell$ and $A',B',C'$ are points on another line $\ell'$, then the points $\overset{\longleftrightarrow}{AC'}\cap\overset{\longleftrightarrow}{A'C}$, $\overset{\longleftrightarrow}{CB'}\cap\overset{\longleftrightarrow}{C'B}$ and $\overset{\longleftrightarrow}{BA'}\cap\overset{\longleftrightarrow}{B'A}$ are collinear.}
+\begin{proof}
+\includegraphics[scale=.5]{Pappus.png}
+
+The theorem is trivial unless $(A,C,A',C')$ is a projective frame.  Thus, by Theorem 3.8, we may assume $A=(1,0),A'=(0,1),C=[1:0:0],C'=[0:1:0]$.  This means that $\ell$ is the horizontal line $y=0$, and $\ell'$ is the vertical line $x=0$.  Moreover, we may write $B=(b,0)$ and $B'=(0,b')$ with $b,b'\in\mathbb R$.
+
+Since $B=(b,0)$ and $C'=[0:1:0]$, the lines through $C'$ are precisely the vertical lines and the line at infinity.  Moreover, $\overset{\longleftrightarrow}{BC'}$ is the vertical line $x=b$.  Similarly, $\overset{\longleftrightarrow}{B'C}$ is the horizontal line $y=b'$.  Furthermore, $\overset{\longleftrightarrow}{BC'}\cap\overset{\longleftrightarrow}{B'C}=(b,b')$.  Similar reasoning shows that $\overset{\longleftrightarrow}{AC'}\cap\overset{\longleftrightarrow}{A'C}=(1,1)$.
+
+As for $\overset{\longleftrightarrow}{AB'}\cap\overset{\longleftrightarrow}{A'B}$, we use the fact that $A,B,A',B'$ are on the coordinate axes, to easily derive equations for the lines.  Since $A=(1,0)$ and $B'=(0,b')$, we see that $\overset{\longleftrightarrow}{AB'}$ is given by the equation $x+\frac y{b'}=1$, or what is the same thing, $b'x+y=b'$.  By the same token, $\overset{\longleftrightarrow}{A'B}$ is given by $x+by=b$.  Solving the system of equations, we arrive at
+$$\overset{\longleftrightarrow}{AB'}\cap\overset{\longleftrightarrow}{A'B}=\left(\frac{bb'-b}{bb'-1},\frac{bb'-b'}{bb'-1}\right)$$
+(unless $bb'-1=0$; the reader is encouraged to work this case out).
+
+Thus we wish to show that the points $\left(\frac{bb'-b}{bb'-1},\frac{bb'-b'}{bb'-1}\right),(1,1),(b,b')$ are collinear.  Well, this follows from the fact that they all lie on the line $(b'-1)x-(b-1)y=b'-b$; each point can be directly substituted in the equation.  (If $b'-1=b-1=0$, then $B=A$ and $B'=A'$; what does the theorem statement become in this case?)
+\end{proof}
+\noindent\textbf{Corollary 3.12.} \emph{Let $\ell_1,\ell_2,\ell_3$ be lines passing through a point $P$, and let $\ell'_1,\ell'_2,\ell'_3$ be lines passing through another point $Q$.  Then, if $A_{ij}=\ell_i\cap\ell'_j$ for each $i,j=1,2,3$, then the lines $\overset{\longleftrightarrow}{A_{12}A_{21}},\overset{\longleftrightarrow}{A_{23}A_{32}},\overset{\longleftrightarrow}{A_{31}A_{13}}$ are concurrent.}
+\begin{proof}
+Theorem 3.11 and the Principle of Duality.
+\end{proof}
+
+\noindent It turns out that Pappus' theorem is a special case of a theorem involving a conic:\\
+
+\noindent\textbf{Theorem 3.13.} \textsc{(Pascal's Theorem)} \emph{If $A,B,C,A',B',C'$ are points on a conic $\omega$, then the points $\overset{\longleftrightarrow}{AC'}\cap\overset{\longleftrightarrow}{A'C}$, $\overset{\longleftrightarrow}{CB'}\cap\overset{\longleftrightarrow}{C'B}$ and $\overset{\longleftrightarrow}{BA'}\cap\overset{\longleftrightarrow}{B'A}$ are collinear.}\\
+
+\noindent If $\omega$ is taken to be a degenerate conic (a union of two lines), then this theorem is Pappus' hexagon theorem.  However, in the previous sections, we have considered all conics to be nondegenerate, and so to be conscientious, we keep the proofs of the theorems separate.
+\begin{proof}
+\includegraphics[scale=.5]{PascalExpl.png}
+
+We shall use the concept of cross ratios on a conic, introduced in Exercise 9 of Section 3.5.  Points have been labeled on the above diagram to make the proof comprehensible.
+
+Observe first that $[\![A,B,C,B']\!]_\omega=[\![A,X,F,B']\!]$, because the stereographic projection from $\omega$ to $\overset{\longleftrightarrow}{AB'}$ with respect to $A'$ sends $A,B,C,B'$ to $A,X,F,B'$ respectively (see Exercise 9 of Section 3.5).
+
+The same reasoning \---- this time stereographically projecting to $\overset{\longleftrightarrow}{B'C}$ with respect to $C'$ \---- shows $[\![A,B,C,B']\!]_\omega=[\![G,Z,C,B']\!]$.  Therefore, $[\![A,X,F,B']\!]=[\![G,Z,C,B']\!]$.
+
+Now let $\psi:\overset{\longleftrightarrow}{AB'}\to\overset{\longleftrightarrow}{B'C}$ be the perspective projection from $Y$.  It is clear that $\psi(A)=G$, $\psi(F)=C$ and $\psi(B')=B'$.  Therefore, since $\psi$ is a projective transformation, we have
+$$[\![G,\psi(X),C,B']\!]=[\![\psi(A),\psi(X),\psi(F),\psi(B')]\!]=[\![A,X,F,B']\!]=[\![G,Z,C,B']\!],$$
+from which the cancellation law for cross ratios implies $\psi(X)=Z$.  By definition, this means that $Z$ is the point $\overset{\longleftrightarrow}{YX}\cap\overset{\longleftrightarrow}{B'C}$; therefore $Z\in\overset{\longleftrightarrow}{YX}$, and the points $X,Y,Z$ are collinear as desired.
+\end{proof}
+
+\noindent By using the conic-compatible version of Principle of Duality, we instantly get\\
+
+\noindent\textbf{Theorem 3.14.} \textsc{(Brianchon's Theorem)} \emph{If $\ell_1,\ell_2,\ell_3,\ell'_1,\ell'_2,\ell'_3$ are lines tangent to a conic $\omega$, then let $A_{ij}=\ell_i\cap\ell'_j$ for each $i,j=1,2,3$.  Then the lines $\overset{\longleftrightarrow}{A_{12}A_{21}},\overset{\longleftrightarrow}{A_{23}A_{32}},\overset{\longleftrightarrow}{A_{31}A_{13}}$ are concurrent.}\\
+
+\noindent Here is an illustration of Brianchon's Theorem, with the lines $\ell_1,\ell'_2,\ell_3,\ell'_1,\ell_2,\ell'_3$ in clockwise order:
+\begin{center}
+\includegraphics[scale=.5]{Brianchon.png}
+\end{center}
+
+\subsection*{Exercises 3.7. (Some Famous Results)} % Desargues' theorem, Pappus' hexagon, Pascal's theorem, Brianchon's theorem
+% Try to find proofs that use cross ratios instead of conveniencing a projective frame.  (We want to make use of Section 3.3.)
+% POTENTIAL EXERCISE: HOW DESARGUES' FOLLOWS FROM PAPPUS' THEOREM
+\begin{enumerate}
+\item The goal of this exercise is to show how Pappus' hexagon theorem can be used to prove Desargues' theorem. %http://math.ucdenver.edu/~tvis/Teaching/4220spring09/Notes/Desarguescompleted.pdf
+
+Suppose Pappus' hexagon theorem holds.  Now let $\triangle ABC$ and $\triangle A'B'C'$ be triangles which are in perspective centrally; i.e., the lines $\overset{\longleftrightarrow}{AA'},\overset{\longleftrightarrow}{BB'},\overset{\longleftrightarrow}{CC'}$ are concurrent.  Let $V=\overset{\longleftrightarrow}{AA'}\cap\overset{\longleftrightarrow}{BB'}\cap\overset{\longleftrightarrow}{CC'}$.
+
+(a) Set $S=\overset{\longleftrightarrow}{B'C'}\cap\overset{\longleftrightarrow}{AC}$, $L=\overset{\longleftrightarrow}{BC}\cap\overset{\longleftrightarrow}{B'C'}$, $T=\overset{\longleftrightarrow}{B'A}\cap\overset{\longleftrightarrow}{CC'}$, and $U=\overset{\longleftrightarrow}{BA}\cap\overset{\longleftrightarrow}{VS}$.  Show that the points $U,T,L$ are collinear.  [Apply Pappus' theorem with $V,B,B'$ on one line, and $A,S,C$ on the other.]
+
+(b) Set $P=\overset{\longleftrightarrow}{B'A'}\cap\overset{\longleftrightarrow}{VS}$, and $M=\overset{\longleftrightarrow}{CA}\cap\overset{\longleftrightarrow}{C'A'}$.  Show that $P,M,T$ are collinear.  [Apply Pappus' theorem with $V,A,A'$ on one line, and $B',C',S$ on the other.]
+
+(c) If $N=\overset{\longleftrightarrow}{AB}\cap\overset{\longleftrightarrow}{A'B'}$.  Show that $L,M,N$ are collinear.  [Apply Pappus' theorem with $U,S,P$ on one line, and $B',T,A$ on the other.]  Conclude that the triangles are in perspective axially, proving one direction of Desargues' theorem.  The Principle of Duality will then imply the converse.
+
+\item Give geometric interpretations of Pascal's and Brianchon's theorems, where the conic is a parabola.
+\end{enumerate}
+
+\end{document}
